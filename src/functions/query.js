@@ -15,7 +15,7 @@ module.exports.listProfile = () => { return [
     }
   }, {
     $project: {
-      _id: 0,
+      _id: 1,
       uf: "$local.uf",
       name: 1,
       picture: 1,
