@@ -132,6 +132,51 @@ module.exports = {
                     throw err
                 })
         },
+        update: async (req, res) => {
+            var data = {
+                picture: req.body.picture,
+                name:  req.body.name,
+                resume:  req.body.resume,
+                category: {
+                    type: req.body.category.type,
+                    categories:  req.body.category.categories
+                },
+                informations:  req.body.informations,
+                telephone: {
+                    whatsapp:  req.body.telephone.whatsapp,
+                    telephone:  req.body.telephone.telephone
+                },
+                local: {
+                    cep:  req.body.local.cep,
+                    uf:  req.body.local.uf,
+                    city:  req.body.local.city,
+                    neighborhood:  req.body.local.neighborhood,
+                    street:  req.body.local.street,
+                    number:  req.body.local.number,
+                    complement:  req.body.local.complement
+                },
+                movie:  req.body.movie,
+                promotion:  req.body.promotion
+            }
+            // get id
+            const id = (req.body._id || '').trim()
+            if (!id) throw new Error(verifyInput.id.IsEmpy)
+            if (!ObjectId.isValid(id)) throw new Error(verifyInput.id.invalid)
+
+            
+            // Validation input datas
+            try { data = validation(data) }
+            catch (err) { throw err }
+
+            // Update data
+                Database.profile.update(id, data)
+                .then((resp) => {
+                    return res.send(resp)
+                })
+                .catch(err => {
+                    throw err
+                })
+        },
         delete: async (req, res) => {
             var id = (req.body.id || '').trim()
             if (!id) throw new Error(verifyInput.id.IsEmpy)
