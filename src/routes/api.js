@@ -5,6 +5,9 @@ const use = fn => (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next)
 }
 
-router.get('/profile/insert', use(controllerApi.profile.insert))
+router.get('/profile/get', use(controllerApi.profile.get))
+router.get('/profile/getList', use(controllerApi.profile.getList))
+router.post('/profile/insert', use(controllerApi.profile.insert))
+router.post('/profile/delete', use(controllerApi.profile.delete))
 
 module.exports = router
