@@ -46,6 +46,7 @@ module.exports.profile = (id) => { return  [
     $project: {
       _id: 0,
       created: 1,
+      name: 1,
       informations: 1,
       telephone: 1,
       local: 1,
@@ -58,7 +59,7 @@ module.exports.profile = (id) => { return  [
       },
       promotion: "$promoDocs.percentage",
     },
-  }, { $unwind: "$promotion" },
+  }, { $unwind: "$promotion" }, { $limit: 1 }
 ]}
 module.exports.homePageProfile = () => { return [
   {

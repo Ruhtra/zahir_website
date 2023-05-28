@@ -4,7 +4,7 @@ module.exports = {
     verifyInput: {
         id: {
             invalid: 'The id passed is invalid',
-            IsEmpy: 'Id is empty',
+            IsEmpyt: 'Id is empty',
         },
         name: {
             IsEmpy: 'Name is empty',

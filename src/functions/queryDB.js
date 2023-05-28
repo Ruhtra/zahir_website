@@ -70,11 +70,50 @@ const profile = {
         
        return await db.collection('profile').insertOne(base)
     },
-    update: async (id, dataUpdate) => {
+    update: async (id, data) => {
         const db = await connect();
+        
+        // verify categorie
+        for (const id of data.category.categories) {
+            let resp = await db.collection('categories').findOne({_id: new ObjectId(id)})
+            if ( !resp )throw new Error(queryDB.profile.insert.categorieNotFound)
+        }
+        // verify promotion
+        let promo = await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)})
+        if (!promo) throw new Error(queryDB.profile.insert.promotionNotFound)
+
+
+        let base = {
+            created: new Date(),
+            picture: data.picture,
+            name: data.name,
+            resume: data.resume,
+            category: {
+              type: data.category.type,
+              categories: data.category.categories.map((e) => {
+                return new ObjectId(e)
+              })
+            },
+            informations: data.informations,
+            telephone: {
+              whatsapp: data.telephone.whatsapp,
+              telephone: data.telephone.telephone
+            },
+            local: {
+              cep: { "$numberInt": data.local.cep },
+              uf:  data.local.uf,
+              city: data.local.city,
+              neighborhood: data.local.neighborhood,
+              street: data.local.street,
+              number: { "$numberInt": data.local.number },
+              complement: data.local.complement
+            },
+            movie: data.movie,
+            promotion: new ObjectId(data.promotion)
+        }
 
         return await db.collection('profile').replaceOne(
-            {_id: new ObjectId(id)}, dataUpdate
+            {_id: new ObjectId(id)}, base
         )
     },
     delete: async (id) => {
