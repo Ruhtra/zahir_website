@@ -1,8 +1,9 @@
 require('dotenv').config()
 const express = require("express");
 const http = require('http');
+var bodyParser = require('body-parser');
 
-const configEngine = require("./config/viewEngine.js")
+const configEngine = require("./config/viewEngine.js");
 const Database = require("./functions/queryDB.js");
 
 async function startingModules() {
@@ -26,6 +27,11 @@ const main = async () => {
             app.use(express.static('src/public'));
         // Config ejs
             configEngine(app)
+        // parse application
+            // x-www-form-urlencoded
+                // app.use(bodyParser.urlencoded({ extended: false }))
+            // json parser
+                app.use(bodyParser.json())
 
     // Routes
         app.use('/api', require('./routes/api.js'))

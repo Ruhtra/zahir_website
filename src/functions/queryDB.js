@@ -2,7 +2,7 @@ const { ObjectId } = require("mongodb");
 
 const { connect } = require('../config/mongoDB.js')
 const query = require("./query.js");
-const { queryDB } = require('../Errors.js')
+const { queryDB, verifyInput } = require('../Errors.js')
 
 async function testConnect() {
     const db = await connect();
@@ -29,6 +29,15 @@ const profile = {
     },
     insert: async (data) => {
         const db = await connect();
+
+        // verify categorie
+        for (const id of data.category.categories) {
+            let resp = await db.collection('categories').findOne({_id: new ObjectId(id)})
+            if ( !resp )throw new Error(queryDB.profile.insert.categorieNotFound)
+        }
+        // verify promotion
+        let promo = await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)})
+        if (!promo) throw new Error(queryDB.profile.insert.promotionNotFound)
 
         let base = {
             created: new Date(),
@@ -57,7 +66,7 @@ const profile = {
             },
             movie: data.movie,
             promotion: new ObjectId(data.promotion)
-          }
+        }
         
        return await db.collection('profile').insertOne(base)
     },
@@ -99,20 +108,16 @@ const homePageProfile = {
         if (profile == null) throw new Error(queryDB.homePageProfile.insert.profileNotFound)
 
 
-        return await db.collection('home_page_promotions').insertOne(
-            {
-                id_profile: new ObjectId(id),
-                order: order
-            }
-        )
+        return await db.collection('home_page_promotions').insertOne({
+            id_profile: new ObjectId(id),
+            order: order
+        })
     }
 }
-
-
 
 module.exports = {
     testConnect,
     getLogin,
     profile,
-    homePageProfile
+    homePageProfile,
 }
