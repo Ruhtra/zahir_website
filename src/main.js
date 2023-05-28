@@ -39,6 +39,9 @@ const main = async () => {
         app.get('/profiles', (req, res) => {
             res.render('profiles.ejs')
         })
+        app.get('/profile', (req, res) => {
+            res.render('profile.ejs')
+        })
 
     // Erros
         app.use((err, req, res, next) => {

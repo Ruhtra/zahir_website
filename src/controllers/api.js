@@ -85,9 +85,13 @@ function validation(data) {
 module.exports = {
     profile: {
         get: async (req, res) => {
-            let { id } = req.query || ''
+            let id = (req.query.id || '').trim()
+            console.log('id: '+id)
+            if (!id) throw new Error(verifyInput.id.IsEmpyt)
+            if (!ObjectId.isValid(id)) throw new Error(verifyInput.id.invalid)
 
             let data = await Database.profile.get(id)
+            console.log(data)
             return res.send(data)
         },
         getList: async (req, res) => {
@@ -160,7 +164,7 @@ module.exports = {
             }
             // get id
             const id = (req.body._id || '').trim()
-            if (!id) throw new Error(verifyInput.id.IsEmpy)
+            if (!id) throw new Error(verifyInput.id.IsEmpyt)
             if (!ObjectId.isValid(id)) throw new Error(verifyInput.id.invalid)
 
             
@@ -179,7 +183,7 @@ module.exports = {
         },
         delete: async (req, res) => {
             var id = (req.body.id || '').trim()
-            if (!id) throw new Error(verifyInput.id.IsEmpy)
+            if (!id) throw new Error(verifyInput.id.IsEmpyt)
             if (!ObjectId.isValid(id)) throw new Error(verifyInput.id.invalid)
 
             Database.profile.delete(id)
