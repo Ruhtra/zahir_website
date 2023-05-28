@@ -73,9 +73,8 @@ const profile = {
     update: async (id, dataUpdate) => {
         const db = await connect();
 
-        return await db.collection('profile').updateOne(
-            {_id: new ObjectId(id)},
-            { $set: dataUpdate }
+        return await db.collection('profile').replaceOne(
+            {_id: new ObjectId(id)}, dataUpdate
         )
     },
     delete: async (id) => {
