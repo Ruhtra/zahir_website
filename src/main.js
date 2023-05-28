@@ -35,9 +35,9 @@ const main = async () => {
 
     // Routes
         app.use('/api', require('./routes/api.js'))
-
-        app.get('/', (req, res) => {
-            res.render('./index.ejs')
+        app.use('/', require('./routes/main.js'))
+        app.get('/profiles', (req, res) => {
+            res.render('profiles.ejs')
         })
 
     // Erros

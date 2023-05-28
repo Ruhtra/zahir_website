@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="table"></div>
+
+    <script>
+        const table = document.querySelector('#table')
+
+        function resultNull() {
+            var screen = document.createElement('div')
+            screen.innerHTML = 'Nada foi encontrado, tente redefinir as pesquisas!'
+            table.appendChild(screen)
+        }
+        function insert(data) {
+            var card = document.createElement('div')
+            card.setAttribute('id', data._id)
+
+            card.innerHTML = `
+                _id: ${data._id}, <br>
+                name: ${data.name}, <br>
+                picture: ${data.picture}, <br>
+                promotion: ${data.promotion}, <br>
+                uf: ${data.uf}, <br>
+                category: {<br>
+                    &nbsp;&nbsp; type: ${data.category.type}, <br>
+                    &nbsp;&nbsp; categories: ${data.category.categories} <br>
+                }<br>
+            `
+            table.appendChild(card)
+        }
+
+        // query
+        fetch('http://localhost:4000/api/profile/getList')
+            .then((res) => { return res.json() })
+            .then((data) => {
+                if (data.length == 0) return resultNull()
+
+                data.forEach(e => {
+                    insert(e)
+                });
+                console.log(data)
+            })
+            .catch((err) => { console.log(err) })
+    </script>
+</body>
+</html>
