@@ -1,5 +1,3 @@
-const infos = require('./config/infos.json')
-
 module.exports = {
     verifyInput: {
         id: {
@@ -8,11 +6,11 @@ module.exports = {
         },
         name: {
             IsEmpy: 'Name is empty',
-            maxCaractere: `${infos.name.maxCaractere} character maximum exceeded`
+            // maxCaractere: `${infos.name.maxCaractere} character maximum exceeded`
         },
         resume: {
             IsEmpy: 'Resume is empty',
-            maxCaractere: `${infos.resume.maxCaractere} character maximum exceeded`
+            // maxCaractere: `${infos.resume.maxCaractere} character maximum exceeded`
         },
         category: {
             type: {
@@ -30,7 +28,7 @@ module.exports = {
             cep: {
                 IsEmpy: 'Cep is empty',
                 notNumber: 'This is not a number',
-                lenCaractere: `Zip code size is different from ${infos.local.city.lenCaractere}`
+                // lenCaractere: `Zip code size is different from ${infos.local.city.lenCaractere}`
             },
             uf: {
                 IsEmpy: 'Uf is empty',
@@ -38,23 +36,23 @@ module.exports = {
             },
             city: {
                 IsEmpy: 'City is empty',
-                maxCaractere: `${infos.local.city.maxCaractere} character maximum exceeded`
+                // maxCaractere: `${infos.local.city.maxCaractere} character maximum exceeded`
             },
             neighborhood: {
                 IsEmpy: 'Neighborhood is empty',
-                maxCaractere: `${infos.local.neighborhood.maxCaractere} character maximum exceeded`
+                // maxCaractere: `${infos.local.neighborhood.maxCaractere} character maximum exceeded`
             },
             street: {
                 IsEmpy: 'Street is empty',
-                maxCaractere: `${infos.local.street.maxCaractere} character maximum exceeded`
+                // maxCaractere: `${infos.local.street.maxCaractere} character maximum exceeded`
             },
             number: {
                 IsEmpy: 'Number is empty',
                 notNumber: 'This is not a number',
-                maxCaractere: `${infos.local.number.maxCaractere} character maximum exceeded`
+                // maxCaractere: `${infos.local.number.maxCaractere} character maximum exceeded`
             },
             complement: {
-                maxCaractere: `${infos.local.complement.maxCaractere} character maximum exceeded`
+                // maxCaractere: `${infos.local.complement.maxCaractere} character maximum exceeded`
             }
 
         },
