@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require("express");
 const http = require('http');
 var bodyParser = require('body-parser');
+const Joi = require('joi');
 
 const configEngine = require("./config/viewEngine.js");
 const Database = require("./functions/queryDB.js");
@@ -45,9 +46,12 @@ const main = async () => {
 
     // Erros
         app.use((err, req, res, next) => {
-            console.log('error middleware');
+            if (err instanceof Joi.ValidationError) {
+                console.log(err.details)
+                return res.status(500).send(err.details)
+            }
             console.log(err)
-            res.sendStatus(500);
+            res.status(500).send({message: err.message});
         })
 
     // Starting Modules

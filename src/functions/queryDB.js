@@ -2,7 +2,39 @@ const { ObjectId } = require("mongodb");
 
 const { connect } = require('../config/mongoDB.js')
 const query = require("./query.js");
-const { queryDB, verifyInput } = require('../Errors.js')
+const { queryDB } = require('../Errors.js')
+
+const structure = (obj) => {
+    return {
+        created: new Date(),
+        picture: obj.picture,
+        name: obj.name,
+        resume: obj.resume,
+        category: {
+          type: obj.category.type,
+          categories: obj.category.categories.map((e) => {
+            return new ObjectId(e)
+          })
+        },
+        informations: obj.informations,
+        telephone: {
+          whatsapp: obj.telephone.whatsapp,
+          telephone: obj.telephone.telephone
+        },
+        local: {
+          cep: obj.local.cep,
+          uf:  obj.local.uf,
+          city: obj.local.city,
+          neighborhood: obj.local.neighborhood,
+          street: obj.local.street,
+          number: obj.local.number,
+          complement: obj.local.complement
+        },
+        movie: obj.movie,
+        promotion: new ObjectId(obj.promotion)
+    }
+}
+
 
 async function testConnect() {
     const db = await connect();
@@ -29,91 +61,37 @@ const profile = {
     },
     insert: async (data) => {
         const db = await connect();
-
-        // verify categorie
-        for (const id of data.category.categories) {
-            let resp = await db.collection('categories').findOne({_id: new ObjectId(id)})
-            if ( !resp )throw new Error(queryDB.profile.insert.categorieNotFound)
-        }
-        // verify promotion
-        let promo = await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)})
-        if (!promo) throw new Error(queryDB.profile.insert.promotionNotFound)
-
-        let base = {
-            created: new Date(),
-            picture: data.picture,
-            name: data.name,
-            resume: data.resume,
-            category: {
-              type: data.category.type,
-              categories: data.category.categories.map((e) => {
-                return new ObjectId(e)
-              })
-            },
-            informations: data.informations,
-            telephone: {
-              whatsapp: data.telephone.whatsapp,
-              telephone: data.telephone.telephone
-            },
-            local: {
-              cep: { "$numberInt": data.local.cep },
-              uf:  data.local.uf,
-              city: data.local.city,
-              neighborhood: data.local.neighborhood,
-              street: data.local.street,
-              number: { "$numberInt": data.local.number },
-              complement: data.local.complement
-            },
-            movie: data.movie,
-            promotion: new ObjectId(data.promotion)
-        }
         
-       return await db.collection('profile').insertOne(base)
+        // validate ids
+        let promises = {
+            categories: data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) ),
+            promotion: (async () => await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)}))()
+        }
+        await Promise.all(Object.values(promises).reduce((acc, cv) => acc.concat(cv), []))
+        for (let e of await promises['categories']) {
+            if (!e) throw new Error(queryDB.profile.insert.categorieNotFound)
+        }
+        if (!await promises['promotion']) throw new Error(queryDB.profile.insert.promotionNotFound)
+
+        
+       return await db.collection('profile').insertOne(structure(data))
     },
-    update: async (id, data) => {
+    update: async (data) => {
         const db = await connect();
         
-        // verify categorie
-        for (const id of data.category.categories) {
-            let resp = await db.collection('categories').findOne({_id: new ObjectId(id)})
-            if ( !resp )throw new Error(queryDB.profile.insert.categorieNotFound)
+        // validate ids
+        let promises = {
+            categories: data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) ),
+            promotion: (async () => await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)}))()
         }
-        // verify promotion
-        let promo = await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)})
-        if (!promo) throw new Error(queryDB.profile.insert.promotionNotFound)
-
-
-        let base = {
-            created: new Date(),
-            picture: data.picture,
-            name: data.name,
-            resume: data.resume,
-            category: {
-              type: data.category.type,
-              categories: data.category.categories.map((e) => {
-                return new ObjectId(e)
-              })
-            },
-            informations: data.informations,
-            telephone: {
-              whatsapp: data.telephone.whatsapp,
-              telephone: data.telephone.telephone
-            },
-            local: {
-              cep: { "$numberInt": data.local.cep },
-              uf:  data.local.uf,
-              city: data.local.city,
-              neighborhood: data.local.neighborhood,
-              street: data.local.street,
-              number: { "$numberInt": data.local.number },
-              complement: data.local.complement
-            },
-            movie: data.movie,
-            promotion: new ObjectId(data.promotion)
+        await Promise.all(Object.values(promises).reduce((acc, cv) => acc.concat(cv), []))
+        for (let e of await promises['categories']) {
+            if (!e) throw new Error(queryDB.profile.insert.categorieNotFound)
         }
+        if (!await promises['promotion']) throw new Error(queryDB.profile.insert.promotionNotFound)
 
         return await db.collection('profile').replaceOne(
-            {_id: new ObjectId(id)}, base
+            {_id: new ObjectId(data.id)}, structure(data)
         )
     },
     delete: async (id) => {
