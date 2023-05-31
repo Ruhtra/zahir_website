@@ -31,7 +31,7 @@ const main = async () => {
             configEngine(app)
         // parse application
             // x-www-form-urlencoded
-                // app.use(express.urlencoded({ extended: false }))
+                app.use(express.urlencoded({ extended: true }))
             // json parser
                 app.use(express.json())
 
@@ -40,6 +40,9 @@ const main = async () => {
         app.use('/', require('./routes/main.js'))
         app.get('/profiles', (req, res) => {
             res.render('profiles.ejs')
+        })
+        app.get('/config', (req, res) => {
+            res.render('config.ejs')
         })
         app.get('/profile', (req, res) => {
             res.render('profile.ejs')
