@@ -18,11 +18,13 @@
   },
   "homepage": "https://github.com/Ruhtra/zahir_website#readme",
   "dependencies": {
-    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "joi": "^17.9.2",
-    "mongodb": "^5.5.0"
+    "mime": "^3.0.0",
+    "mongodb": "^5.5.0",
+    "multer": "^1.4.5-lts.1"
   }
 }
