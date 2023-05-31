@@ -1,8 +1,8 @@
 require('dotenv').config()
 const express = require("express");
 const http = require('http');
-var bodyParser = require('body-parser');
 const Joi = require('joi');
+const cors = require('cors')
 
 const configEngine = require("./config/viewEngine.js");
 const Database = require("./functions/queryDB.js");
@@ -26,13 +26,14 @@ const main = async () => {
 
         // Config publics
             app.use(express.static('src/public'));
+            // app.use(cors());
         // Config ejs
             configEngine(app)
         // parse application
             // x-www-form-urlencoded
-                // app.use(bodyParser.urlencoded({ extended: false }))
+                // app.use(express.urlencoded({ extended: false }))
             // json parser
-                app.use(bodyParser.json())
+                app.use(express.json())
 
     // Routes
         app.use('/api', require('./routes/api.js'))

@@ -7,7 +7,7 @@ const idScheme = Joi.string().hex().length(24)
 const telephoneScheme = Joi.array().items(Joi.string().length(14))
 
 const profileScheme = Joi.object().keys({
-    picture: Joi.string(), // working
+    picture: Joi.string(),
     name: Joi.string().max(15).required(),
     resume: Joi.string().max(250),
     category: Joi.object({
@@ -28,7 +28,7 @@ const profileScheme = Joi.object().keys({
         number: Joi.string().max(10).required(),
         complement: Joi.string().max(250)
     }).required(),
-    movie: Joi.string(), // working
+    movie: Joi.string().uri(),
     promotion: idScheme
 })
 const updateScheme = profileScheme.keys({
