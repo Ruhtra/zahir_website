@@ -5,16 +5,13 @@ const query = require("./query.js");
 const { queryDB } = require('../Errors.js')
 
 const structure = (obj) => {
-    return {
+    let data = {
         created: new Date(),
         picture: obj.picture,
         name: obj.name,
         resume: obj.resume,
         category: {
-          type: obj.category.type,
-          categories: obj.category.categories.map((e) => {
-            return new ObjectId(e)
-          })
+          type: obj.category.type
         },
         informations: obj.informations,
         telephones: {
@@ -33,6 +30,9 @@ const structure = (obj) => {
         movie: obj.movie,
         promotion: new ObjectId(obj.promotion)
     }
+    if (obj.category.categories != undefined) data['category']['categories'] = obj.category.categories.map((e) => new ObjectId(e))
+    
+    return data
 }
 
 
@@ -63,14 +63,16 @@ const profile = {
         const db = await connect();
         
         // validate ids
-        let promises = {
-            categories: data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) )
-        }
+        let promises = {}
+        if (data.categories != undefined) promises['categories'] = data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) )
         if (data.promotion != undefined) promises['promotion'] =  (async () => await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)}))()
 
         await Promise.all(Object.values(promises).reduce((acc, cv) => acc.concat(cv), []))
-        for (let e of await promises['categories']) {
-            if (!e) throw new Error(queryDB.profile.insert.categorieNotFound)
+        
+        if (data.categories != undefined) {
+            for (let e of await promises['categories']) {
+                if (!e) throw new Error(queryDB.profile.insert.categorieNotFound)
+            }
         }
         if (data.promotion != undefined && !await promises['promotion']) throw new Error(queryDB.profile.insert.promotionNotFound)
 

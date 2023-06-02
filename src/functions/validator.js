@@ -12,7 +12,11 @@ const profileScheme = Joi.object().keys({
     resume: Joi.string().max(250),
     category: Joi.object({
         type: Joi.string().valid('restaurante', 'hotel').required(),
-        categories: Joi.array().items(idScheme)
+        categories: Joi.when('type', {
+            is: 'restaurante',
+            then: Joi.array().items(idScheme).required(),
+            otherwise: Joi.forbidden()
+        })
     }).required(),
     informations: Joi.string().max(250),
     telephones: Joi.object({
