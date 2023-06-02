@@ -1,10 +1,15 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Config</title>
+    <style>
+        span.error {
+            background-color: red;
+        }
+    </style>
 </head>
 <body>
     <h1>Config</h1>
@@ -22,19 +27,19 @@
             <label for="resume">Resume: </label>
             <textarea name="resume" cols="30" rows="10"></textarea>
         </div>
-        <div id="caregory">
+        <div id="category">
             <select name="type" id="type">
                 <option value="restaurante" selected>restaurante</option>
                 <option value="hotel">hotel</option>
             </select>
             <div id="categories">
-                <div id="pizza" class="item">
-                    <label for="sushi">sushi</label>
-                    <input type="checkbox" name="sushi">
-                </div>
                 <div id="sushi" class="item">
-                    <label for="pizza">pizza</label>
-                    <input type="checkbox" name="sushi">
+                    <label for="sushi">sushi</label>
+                    <input type="checkbox" name="6469b487fe95b07f7414afed">
+                </div>
+                <div id="pastel" class="item">
+                    <label for="pastel">pastel</label>
+                    <input type="checkbox" name="6469b496fe95b07f7414afee">
                 </div>
             </div>
         </div> 
@@ -42,18 +47,49 @@
             <label for="informations">Informations: </label>
             <textarea name="informations" cols="30" rows="10"></textarea>
         </div>
-        <div id="telephone">
-            <label for="telephone">Telephone:</label>
-            <input type="text" name="telephone">
+        <div id="telephones">
+
+            <div id="insert">
+                <input type="button" value="telephone" onclick="phoneFunctions.addTelephone()">
+                <input type="button" value="whatsapp" onclick="phoneFunctions.addWhatsapp()">
+            </div>
         </div>
         <div id="local">
             <div id="cep">
                 <label for="cep">Cep:</label>
-                <input type="text" name="cep">
+                <input type="text" name="cep" onkeyup="maskCep(this)">
             </div>
             <div id="uf">
-                <label for="uf">Uf:</label>
-                <input type="text" name="uf">
+                <select name="uf">
+                    <option value="" selected>None</option>
+                    <option value="AC">AC</option>
+                    <option value="AL">AL</option>
+                    <option value="AM">AM</option>
+                    <option value="AP">AP</option>
+                    <option value="BA">BA</option>
+                    <option value="CE">CE</option>
+                    <option value="DF">DF</option>
+                    <option value="ES">ES</option>
+                    <option value="GO">GO</option>
+                    <option value="MA">MA</option>
+                    <option value="MG">MG</option>
+                    <option value="MS">MS</option>
+                    <option value="MT">MT</option>
+                    <option value="PA">PA</option>
+                    <option value="PB">PB</option>
+                    <option value="PE">PE</option>
+                    <option value="PI">PI</option>
+                    <option value="PR">PR</option>
+                    <option value="RJ">RJ</option>
+                    <option value="RN">RN</option>
+                    <option value="RO">RO</option>
+                    <option value="RR">RR</option>
+                    <option value="RS">RS</option>
+                    <option value="SC">SC</option>
+                    <option value="SE">SE</option>
+                    <option value="SP">SP</option>
+                    <option value="TO">TO</option>
+                </select>
             </div>
             <div id="city">
                 <label for="city">City:</label>
@@ -67,7 +103,7 @@
                 <label for="street">Street:</label>
                 <input type="text" name="street">
             </div>
-            <div id="number">
+            <div id="number" maxlength="10">
                 <label for="numbert">Number:</label>
                 <input type="text" name="number">
             </div>
@@ -78,25 +114,52 @@
         </div>
         <div id="movie">
             <label for="movie">Movie:</label>
-            <input type="file" name="movie" id="movie">
+            <input type="text" name="movie">
         </div>
-        <select name="promotion" id="promotion">
-            <option value="null">vazio</option>
-        </select>
+        <div id="promotion">
+            <select>
+                <option value="" selected>None</option>
+            </select>
+        </div>
 
-        <input type="button" value="send" onclick="getForm()">
+        <input id="send" type="button" value="send">
         
     </form>
-    <script>
-        const form = document.querySelector('form#form')
-        function getForm() {
-            console.log('ok')
-            let img = form.querySelector('#picture input')
-        }
-    </script>
-
+    <script src="main.js"></script>
     <script type="module" >
+        import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
         import validate from '/validator.js'
+
+
+        document.querySelector('#form input[type=button]#send').addEventListener('click', (e) => {
+            try {               
+                const data = getForm()
+
+                const {error, value} = validate.insert(data)
+                if (error) throw error
+
+                console.log('comunicando api')
+                fetch('/api/profile/insert', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(res => res.json())  // converter para json
+                    .then(json => console.log(json))
+                    .catch(err => {
+                        console.log(err)
+                    })
+                    
+            } catch (err) {
+                if (err instanceof Joi.ValidationError) {
+                    err.details.forEach(e => {
+                        Erros.insert(e.path, e.message)
+                    })
+                } else { console.error(err) }
+            }
+        })
     </script>
     <script>
     </script>

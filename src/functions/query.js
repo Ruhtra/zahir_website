@@ -48,7 +48,7 @@ module.exports.profile = (id) => { return  [
       created: 1,
       name: 1,
       informations: 1,
-      telephone: 1,
+      telephones: 1,
       local: 1,
       movie: 1,
       picture: 1,

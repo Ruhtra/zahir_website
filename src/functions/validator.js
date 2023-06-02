@@ -15,7 +15,7 @@ const profileScheme = Joi.object().keys({
         categories: Joi.array().items(idScheme)
     }).required(),
     informations: Joi.string().max(250),
-    telephone: Joi.object({
+    telephones: Joi.object({
         telephone: telephoneScheme, 
         whatsapp: telephoneScheme
     }).required(),

@@ -17,9 +17,9 @@ const structure = (obj) => {
           })
         },
         informations: obj.informations,
-        telephone: {
-          whatsapp: obj.telephone.whatsapp,
-          telephone: obj.telephone.telephone
+        telephones: {
+          whatsapp: obj.telephones.whatsapp,
+          telephone: obj.telephones.telephone
         },
         local: {
           cep: obj.local.cep,
@@ -64,14 +64,15 @@ const profile = {
         
         // validate ids
         let promises = {
-            categories: data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) ),
-            promotion: (async () => await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)}))()
+            categories: data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) )
         }
+        if (data.promotion != undefined) promises['promotion'] =  (async () => await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)}))()
+
         await Promise.all(Object.values(promises).reduce((acc, cv) => acc.concat(cv), []))
         for (let e of await promises['categories']) {
             if (!e) throw new Error(queryDB.profile.insert.categorieNotFound)
         }
-        if (!await promises['promotion']) throw new Error(queryDB.profile.insert.promotionNotFound)
+        if (data.promotion != undefined && !await promises['promotion']) throw new Error(queryDB.profile.insert.promotionNotFound)
 
         
        return await db.collection('profile').insertOne(structure(data))
