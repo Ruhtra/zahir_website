@@ -129,6 +129,14 @@
     <script type="module" >
         import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
         import validate from '/validator.js'
+        
+        // change type category
+        let type = document.querySelector('#form #category #type')
+        let categories = document.querySelector('#form #category #categories')
+        type.addEventListener('change', () => {
+            if (type.value == 'restaurante') categories.style.display = 'block'
+            else categories.style.display = 'none'
+        })
 
 
         document.querySelector('#form input[type=button]#send').addEventListener('click', (e) => {
@@ -151,7 +159,7 @@
                     .catch(err => {
                         console.log(err)
                     })
-                    
+
             } catch (err) {
                 if (err instanceof Joi.ValidationError) {
                     err.details.forEach(e => {
