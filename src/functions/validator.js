@@ -25,7 +25,7 @@ const profileScheme = Joi.object().keys({
     }).required(),
     local: Joi.object({
         cep: Joi.string().length(8).required(),
-        uf : Joi.string().length(2).required(),
+        uf : Joi.valid('AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MG', 'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR', 'RS', 'SC', 'SE', 'SP', 'TO').required(),
         city: Joi.string().max(100).required(),
         neighborhood: Joi.string().max(100).required(),
         street: Joi.string().max(100).required(),
