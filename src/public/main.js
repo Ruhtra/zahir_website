@@ -14,13 +14,12 @@ function removeEmptyValues(obj) {
     return obj
 }
 function getForm() {
-    return removeEmptyValues({
+    let data = {
         picture: form.querySelector('#picture input').value,
         name: form.querySelector('#name input').value,
         resume: form.querySelector('#resume textarea').value,
         category: {
-            type: form.querySelector('#category select').value,
-            categories: [ ... form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
+            type: form.querySelector('#category select').value
         },
         informations: form.querySelector('#informations textarea').value,
         telephones: {
@@ -38,7 +37,10 @@ function getForm() {
         },
         movie: form.querySelector('#movie input').value,
         promotion: form.querySelector("#promotion select").value
-    })
+    }
+    if (data.category.type == 'restaurante') data.category['categories'] = [ ... form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
+
+    return removeEmptyValues(data)
 }
 class TelephoneFunctions {
     constructor(form) {
