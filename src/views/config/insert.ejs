@@ -131,38 +131,40 @@
         import validate from '/validator.js'
         import f from '/functions.js'
 
-        const form = document.querySelector('form#form')
-
-        function getForm() {
-            let data = {
-                picture: form.querySelector('#picture input').value,
-                name: form.querySelector('#name input').value,
-                resume: form.querySelector('#resume textarea').value,
-                category: {
-                    type: form.querySelector('#category select').value
-                },
-                informations: form.querySelector('#informations textarea').value,
-                telephones: {
-                    telephone: [ ... form.querySelectorAll('div#telephones .telephone input[type="text"]') ].map(e => '+55'+e.value.replace(/\D/g, '')),
-                    whatsapp: [ ... form.querySelectorAll('div#telephones .whatsapp input[type="text"]') ].map(e => '+55'+e.value.replace(/\D/g, ''))
-                },
-                local: {
-                    cep: form.querySelector('#local #cep input').value.replace(/\D/g, ''),
-                    uf: form.querySelector('#local #uf select').value,
-                    city: form.querySelector('#local #city input').value,
-                    neighborhood: form.querySelector('#local #neighborhood input').value,
-                    street: form.querySelector('#local #street input').value,
-                    number: form.querySelector('#local #number input').value,
-                    complement: form.querySelector('#local #complement textarea').value,
-                },
-                movie: form.querySelector('#movie input').value,
-                promotion: form.querySelector("#promotion select").value
+        class FormFunctions {
+            constructor(form) {
+                this.form = form
             }
-            if (data.category.type == 'restaurante') data.category['categories'] = [ ... form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
+            get() {
+                let data = {
+                    picture: this.form.querySelector('#picture input').value,
+                    name: this.form.querySelector('#name input').value,
+                    resume: this.form.querySelector('#resume textarea').value,
+                    category: {
+                        type: this.form.querySelector('#category select').value
+                    },
+                    informations: this.form.querySelector('#informations textarea').value,
+                    telephones: {
+                        telephone: [ ... this.form.querySelectorAll('div#telephones .telephone input[type="text"]') ].map(e => '+55'+e.value.replace(/\D/g, '')),
+                        whatsapp: [ ... this.form.querySelectorAll('div#telephones .whatsapp input[type="text"]') ].map(e => '+55'+e.value.replace(/\D/g, ''))
+                    },
+                    local: {
+                        cep: this.form.querySelector('#local #cep input').value.replace(/\D/g, ''),
+                        uf: this.form.querySelector('#local #uf select').value,
+                        city: this.form.querySelector('#local #city input').value,
+                        neighborhood: this.form.querySelector('#local #neighborhood input').value,
+                        street: this.form.querySelector('#local #street input').value,
+                        number: this.form.querySelector('#local #number input').value,
+                        complement: this.form.querySelector('#local #complement textarea').value,
+                    },
+                    movie: this.form.querySelector('#movie input').value,
+                    promotion: this.form.querySelector("#promotion select").value
+                }
+                if (data.category.type == 'restaurante') data.category['categories'] = [ ... this.form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
 
-            return f.removeEmptyValues(data)
+                return f.removeEmptyValues(data)
+            }
         }
-        
         class TelephoneFunctions {
             constructor(form) {
                 form.querySelector('#insert [value="whatsapp"]').addEventListener('click', () => this.addWhatsapp())
@@ -252,6 +254,9 @@
             }
         }
 
+        const form = document.querySelector('form#form')
+
+        const formFunctions = new FormFunctions(form)
         const phoneFunctions = new TelephoneFunctions(form.querySelector('#telephones'))
         const categoryFunctions = new CategoryFunctions(form.querySelector('#category'))
         const localFunctions = new LocalFunctions(form.querySelector('#local'))
@@ -260,10 +265,8 @@
 
         // main
         document.querySelector('#form input[type=button]#send').addEventListener('click', (e) => {
-            try {               
-                const data = getForm()
-
-                const {error, value} = validate.insert(data)
+            try {
+                const {error, value} = validate.insert(formFunctions.get())
                 if (error) throw error
 
                 console.log('comunicando api')
