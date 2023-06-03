@@ -272,7 +272,7 @@
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(value)
                 })
                     .then(res => res.json())  // converter para json
                     .then(json => console.log(json))

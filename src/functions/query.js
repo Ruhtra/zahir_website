@@ -21,11 +21,24 @@ module.exports.listProfile = () => { return [
       picture: 1,
       category: {
         type: 1,
-        categories: "$categoryDocs.name"
+        categories: {
+          $cond: {
+            if: {
+              $gt: [ { $size: "$categoryDocs" }, 0],
+            },
+            then: "$categoryDocs.name",
+            else: "$$REMOVE",
+          },
+        },
       },
       promotion: "$promoDocs.percentage",
     }
-  }, { $unwind: "$promotion" }
+  }, {
+      $unwind: {
+      path: "$promotion",
+      preserveNullAndEmptyArrays: true
+    }
+  }
 ]}
 module.exports.profile = (id) => { return  [
   { $match: {_id: id} }, {
@@ -55,11 +68,24 @@ module.exports.profile = (id) => { return  [
       resume: 1,
       category: {
         type: 1,
-        categories: "$categoryDocs.name"
+        categories: {
+          $cond: {
+            if: {
+              $gt: [ { $size: "$categoryDocs" }, 0],
+            },
+            then: "$categoryDocs.name",
+            else: "$$REMOVE",
+          },
+        },
       },
       promotion: "$promoDocs.percentage",
     },
-  }, { $unwind: "$promotion" }, { $limit: 1 }
+  }, {
+      $unwind: {
+      path: "$promotion",
+      preserveNullAndEmptyArrays: true
+    }
+  }, { $limit: 1 }
 ]}
 module.exports.homePageProfile = () => { return [
   {
