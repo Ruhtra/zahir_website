@@ -67,20 +67,22 @@ const profile = {
         const db = await connect();
         
         // validate ids
-        let promises = {}
-        if (data.category.categories != undefined) promises['categories'] = data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) )
-        if (data.promotion != undefined) promises['promotion'] =  (async () => await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)}))()
-
-        await Promise.all(Object.values(promises).reduce((acc, cv) => acc.concat(cv), []))
-        
+        let promises = []
         if (data.category.categories != undefined) {
-            for (let e of promises['categories']) {
-                if (! await e) throw new Error(queryDB.profile.insert.categorieNotFound)
-            }
+            promises = data.category.categories.map(async (id) => {
+                let find = await db.collection('categories').findOne({_id: new ObjectId(id)})
+                if (!find) throw new Error(queryDB.profile.insert.categorieNotFound)
+            })
         }
-        if (data.promotion != undefined && !await promises['promotion']) throw new Error(queryDB.profile.insert.promotionNotFound)
-     
-       return await db.collection('profile').insertOne(structure(data))
+        if (data.promotion != undefined) {
+            promises.push((async () => {
+                let find = await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)})
+                if (!find) throw new Error(queryDB.profile.insert.promotionNotFound)
+            })() )
+        }
+        await Promise.all(promises)
+
+        return await db.collection('profile').insertOne(structure(data))
     },
     update: async (data) => {
         const db = await connect();
