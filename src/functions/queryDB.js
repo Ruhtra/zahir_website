@@ -88,15 +88,20 @@ const profile = {
         const db = await connect();
         
         // validate ids
-        let promises = {
-            categories: data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) ),
-            promotion: (async () => await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)}))()
+        let promises = []
+        if (data.category.categories != undefined) {
+            promises = data.category.categories.map(async (id) => {
+                let find = await db.collection('categories').findOne({_id: new ObjectId(id)})
+                if (!find) throw new Error(queryDB.profile.insert.categorieNotFound)
+            })
         }
-        await Promise.all(Object.values(promises).reduce((acc, cv) => acc.concat(cv), []))
-        for (let e of await promises['categories']) {
-            if (!e) throw new Error(queryDB.profile.insert.categorieNotFound)
+        if (data.promotion != undefined) {
+            promises.push((async () => {
+                let find = await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)})
+                if (!find) throw new Error(queryDB.profile.insert.promotionNotFound)
+            })() )
         }
-        if (!await promises['promotion']) throw new Error(queryDB.profile.insert.promotionNotFound)
+        await Promise.all(promises)
 
         return await db.collection('profile').replaceOne(
             {_id: new ObjectId(data.id)}, structure(data)
