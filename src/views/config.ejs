@@ -33,14 +33,12 @@
                 <option value="hotel">hotel</option>
             </select>
             <div id="categories">
-                <div id="sushi" class="item">
-                    <label for="sushi">sushi</label>
-                    <input type="checkbox" name="6469b487fe95b07f7414afed">
-                </div>
-                <div id="pastel" class="item">
-                    <label for="pastel">pastel</label>
-                    <input type="checkbox" name="6469b496fe95b07f7414afee">
-                </div>
+                <% categories.forEach(e => { %>
+                    <div id="<%= e.name %>" class="item">
+                        <label for="<%= e.name %>"><%= e.name %></label>
+                        <input type="checkbox" name="<%= e._id.toString() %>">
+                    </div>
+                <% }); %>
             </div>
         </div> 
         <div id="informations">
@@ -119,6 +117,9 @@
         <div id="promotion">
             <select>
                 <option value="" selected>None</option>
+                <% promotions.forEach(e => { %>
+                    <option value="<%= e._id.toString() %>"><%= e.percentage %></option>
+                <% }); %>
             </select>
         </div>
 
@@ -176,7 +177,7 @@
             }
             addTelephone() {
                 this.form.insertAdjacentHTML("beforeend", this.getTemp('telephone'));
-                let element = this.form.querySelectorAll('.telephone')[0]
+                let element = [ ... this.form.querySelectorAll('.telephone')].slice(-1)[0]
 
                 element.addEventListener('change', () => Erros.clear(element))
                 element.addEventListener('keyup', () => this.mask(element.querySelector('input[type="text"]')))
@@ -184,7 +185,7 @@
             }
             addWhatsapp() {
                 this.form.insertAdjacentHTML("beforeend", this.getTemp('whatsapp'));
-                let element = this.form.querySelectorAll('.whatsapp')[0]
+                let element = [ ... this.form.querySelectorAll('.whatsapp')].slice(-1)[0]
 
                 element.addEventListener('change', () => Erros.clear(element))
                 element.addEventListener('keyup', () => this.mask(element.querySelector('input[type="text"]')))

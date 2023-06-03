@@ -134,9 +134,24 @@ const homePageProfile = {
     }
 }
 
+const promotions = {
+    getAll: async () => {
+        const db = await connect();
+        return await db.collection('promotions').find({}).toArray()
+    }
+}
+const categories = {
+    getAll: async () => {
+        const db = await connect();
+        return await db.collection('categories').find({}).toArray()
+    }
+}
+
 module.exports = {
     testConnect,
     getLogin,
     profile,
     homePageProfile,
+    categories,
+    promotions
 }
