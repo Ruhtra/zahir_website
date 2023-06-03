@@ -10,54 +10,55 @@
 
     <div id="main"></div>
 
-    <script>
-        const main = document.querySelector('#main')
-        const id = '647087b38f028872f63d53ad'
+    <script type="module">
+        import validate from "./validator.js";
 
-        function insert(data) {
-            var card = document.createElement('div')
-            card.setAttribute('id', data._id)
-
-            console.log(data.local.cep)
-
-            card.innerHTML = `
-                _id: ${id}, <br>
-                created: ${data.created}, <br>
-                name: ${data.name}, <br>
-                resume: ${data.resume}, <br>
-                picture: ${data.picture}, <br>
-                promotion: ${data.promotion}, <br>
-                local: {<br>
-                    &nbsp;&nbsp; cep: ${data.local.cep.$numberInt}, <br>
-                    &nbsp;&nbsp; uf: ${data.local.uf}, <br>
-                    &nbsp;&nbsp; city: ${data.local.city}, <br>
-                    &nbsp;&nbsp; neighborhood: ${data.local.neighborhood}, <br>
-                    &nbsp;&nbsp; street: ${data.local.street}, <br>
-                    &nbsp;&nbsp; number: ${data.local.number.$numberInt}, <br>
-                    &nbsp;&nbsp; complement: ${data.local.complement}, <br>
-                },<br>
-                informations: ${data.informations}, <br>
-                category: {<br>
-                    &nbsp;&nbsp; type: ${data.category.type}, <br>
-                    &nbsp;&nbsp; categories: ${data.category.categories} <br>
-                },<br>
-                telephone: { <br>
-                    &nbsp;&nbsp; telephone: ${data.telephone.telephone}, <br>
-                    &nbsp;&nbsp; whatsapp: ${data.telephone.whatsapp} <br>
-                }, <br>
-                movie: ${data.movie}, <br>
-            `
-            main.appendChild(card)
+        class ProfileFunctions {
+            constructor(base) {
+                this.base = base
+                this.template = (data) => `<div id="${data._id}">
+                    _id: ${data._id}, <br>
+                    created: ${data.created}, <br>
+                    name: ${data.name}, <br>
+                    resume: ${data.resume}, <br>
+                    picture: ${data.picture}, <br>
+                    promotion: ${data.promotion}, <br>
+                    local: {<br>
+                        &nbsp;&nbsp; cep: ${data.local.cep}, <br>
+                        &nbsp;&nbsp; uf: ${data.local.uf}, <br>
+                        &nbsp;&nbsp; city: ${data.local.city}, <br>
+                        &nbsp;&nbsp; neighborhood: ${data.local.neighborhood}, <br>
+                        &nbsp;&nbsp; street: ${data.local.street}, <br>
+                        &nbsp;&nbsp; number: ${data.local.number}, <br>
+                        &nbsp;&nbsp; complement: ${data.local.complement}, <br>
+                    },<br>
+                    informations: ${data.informations}, <br>
+                    category: {<br>
+                        &nbsp;&nbsp; type: ${data.category.type}, <br>
+                        &nbsp;&nbsp; categories: ${data.category.categories} <br>
+                    },<br>
+                    telephones: { <br>
+                        &nbsp;&nbsp; telephone: ${data.telephones.telephone}, <br>
+                        &nbsp;&nbsp; whatsapp: ${data.telephones.whatsapp} <br>
+                    }, <br>
+                    movie: ${data.movie}, <br>
+                </div>`
+            }
+            insert(data) {
+                data['_id'] = searchParams.get('id')
+                this.base.insertAdjacentHTML("beforeend", this.template(data))
+            }
         }
 
+        const searchParams = new URLSearchParams(document.location.search); 
+        const profileFunctions = new ProfileFunctions(document.querySelector('#main'))
+
         // query
-        fetch('http://localhost:4000/api/profile/get?id='+id)
+        fetch('http://localhost:4000/api/profile/get?id='+searchParams.get('id'))
             .then((res) => { return res.json() })
             .then((data) => {
-                data.forEach(e => {
-                    insert(e)
-                });
-                console.log(data[0])
+                console.log(data)
+                // profileFunctions.insert(data[0])
             })
             .catch((err) => { console.log(err) })
     </script>

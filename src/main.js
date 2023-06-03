@@ -38,24 +38,6 @@ const main = async () => {
     // Routes
         app.use('/api', require('./routes/api.js'))
         app.use('/', require('./routes/main.js'))
-        app.get('/profiles', (req, res) => {
-            res.render('profiles.ejs')
-        })
-        app.get('/config/insert', async (req, res) => {
-            let promotions = await Database.promotions.getAll()
-            let categories = await Database.categories.getAll()
-
-            res.render('config/insert.ejs', {
-                categories: categories,
-                promotions: promotions
-            })
-        })
-        app.get('/config/profiles', (req, res) => {
-            res.render('config/profiles.ejs')
-        })
-        app.get('/profile', (req, res) => {
-            res.render('profile.ejs')
-        })
 
     // Erros
         app.use((err, req, res, next) => {
