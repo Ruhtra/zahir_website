@@ -36,11 +36,11 @@ const profileScheme = Joi.object().keys({
     promotion: idScheme
 })
 const updateScheme = profileScheme.keys({
-    id: idScheme
+    id: idScheme.required()
 })
 
 module.exports = {
-    id: validator(idScheme),
+    id: validator(idScheme.required()),
     insert: validator(profileScheme),
     update: validator(updateScheme)
 }
