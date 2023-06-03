@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Profiles</title>
+
+    <style>
+        #profiles {
+            display: flex;
+        }
+        .profile {
+            background-color: #ddd;
+            padding: 10px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="profiles"></div>
+
+    <script>
+        class ProfileFunctions {
+            constructor(base) {
+                this.base = base
+
+                this.template = (data) => `<div id="${data._id}" class="profile">
+                    <div>_id : ${data._id}</div>
+                    <div class="name">name : ${data.name}</div>
+                    <div class="category">
+                        category : 
+                            <div class="type">&nbsp;&nbsp;&nbsp;&nbsp;type: ${data.category.type}</div>
+                            <div class="categories">&nbsp;&nbsp;&nbsp;categories: ${data.category.categories}</div>
+                    </div>
+                    <div class="promotion">promotion :  ${data.promotion}</div>
+                    <div class="picture">picture :  ${data.picture}</div>
+                    <div class="uf"> uf :  ${data.uf}</div>
+                </div>`
+            }
+            insert(data) {
+                this.base.insertAdjacentHTML("beforeend", this.template(data))
+
+            }
+        }
+        const profileFunctions = new ProfileFunctions(document.querySelector('div#profiles'))
+
+
+         fetch('/api/profile/getList')
+                    .then(res => res.json())  // converter para json
+                    .then(json => {
+                        console.log(json);
+                        json.forEach(e => {
+                            profileFunctions.insert(e)
+                        });
+
+                    })
+                    .catch(err => { console.log(err) })
+    </script>
+</body>
+</html>

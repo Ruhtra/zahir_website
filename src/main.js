@@ -41,14 +41,17 @@ const main = async () => {
         app.get('/profiles', (req, res) => {
             res.render('profiles.ejs')
         })
-        app.get('/config', async (req, res) => {
+        app.get('/config/insert', async (req, res) => {
             let promotions = await Database.promotions.getAll()
             let categories = await Database.categories.getAll()
 
-            res.render('config.ejs', {
+            res.render('config/insert.ejs', {
                 categories: categories,
                 promotions: promotions
             })
+        })
+        app.get('/config/profiles', (req, res) => {
+            res.render('config/profiles.ejs')
         })
         app.get('/profile', (req, res) => {
             res.render('profile.ejs')
