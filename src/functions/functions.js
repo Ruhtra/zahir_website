@@ -12,6 +12,6 @@ function removeEmptyValues(obj) {
     return obj
 }
 
-export default {
+module.exports = {
     removeEmptyValues
 }

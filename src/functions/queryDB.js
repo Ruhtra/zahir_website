@@ -4,9 +4,10 @@ const { connect } = require('../config/mongoDB.js')
 const query = require("./query.js");
 const { queryDB } = require('../Errors.js')
 
+const f = require('../functions/functions.js')
+
 const structure = (obj) => {
     let data = {
-        created: new Date(),
         picture: obj.picture,
         name: obj.name,
         resume: obj.resume,
@@ -28,10 +29,13 @@ const structure = (obj) => {
           complement: obj.local.complement
         },
         movie: obj.movie,
-        promotion: new ObjectId(obj.promotion)
     }
+    data = f.removeEmptyValues(data)
+
+    data['created'] = new Date()
+    if (obj.promotion != undefined) data['promotion'] = new ObjectId(obj.promotion)
     if (obj.category.categories != undefined) data['category']['categories'] = obj.category.categories.map((e) => new ObjectId(e))
-    
+
     return data
 }
 
@@ -64,19 +68,18 @@ const profile = {
         
         // validate ids
         let promises = {}
-        if (data.categories != undefined) promises['categories'] = data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) )
+        if (data.category.categories != undefined) promises['categories'] = data.category.categories.map(async (id) => await db.collection('categories').findOne({_id: new ObjectId(id)}) )
         if (data.promotion != undefined) promises['promotion'] =  (async () => await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)}))()
 
         await Promise.all(Object.values(promises).reduce((acc, cv) => acc.concat(cv), []))
         
-        if (data.categories != undefined) {
-            for (let e of await promises['categories']) {
-                if (!e) throw new Error(queryDB.profile.insert.categorieNotFound)
+        if (data.category.categories != undefined) {
+            for (let e of promises['categories']) {
+                if (! await e) throw new Error(queryDB.profile.insert.categorieNotFound)
             }
         }
         if (data.promotion != undefined && !await promises['promotion']) throw new Error(queryDB.profile.insert.promotionNotFound)
-
-        
+     
        return await db.collection('profile').insertOne(structure(data))
     },
     update: async (data) => {

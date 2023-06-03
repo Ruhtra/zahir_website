@@ -65,7 +65,7 @@ module.exports = {
         profile: {
             insert: {
                 categorieNotFound: 'Categorie not found',
-                promotionNotFound: 'promotion not found'
+                promotionNotFound: 'Promotion not found'
             }
         },
         homePageProfile: {
