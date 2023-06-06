@@ -7,55 +7,77 @@
     <title>Config Profiles</title>
 
     <style>
+        #filter {
+            display: flex;
+        }
+
         #profiles {
             display: flex;
         }
-        .profile {
+        #profiles > div {
             background-color: #ddd;
+            width: 200px;
             padding: 10px;
             margin: 10px;
         }
+
+        .unvisible { display: none; }
+
+        /* btn */
+            /* promotion */
+                .btn.promotion {
+                    padding: 10px;
+                    border-radius: 2px;
+                    background-color: red;
+                }
+                .btn.promotion:hover {cursor: pointer;}
+
+                div#promotion input {display: none;}
+                div#promotion input:checked ~ label.promotion { background-color: green; }
+
+            /* categorie */
+                div#categories div {
+                    padding: 10px;
+                }
+                div#categories div label {
+                    padding: 10px;
+                    border: 1px solid black;
+                    border-radius: 5px;
+                }
+                div#categories div label:hover {cursor: pointer;}
+
+                div#categories input {display: none;}
+                div#categories input:checked ~ label.categorie { background-color: green; }
     </style>
 </head>
 <body>
-    <div id="profiles"></div>
+    <%- include('../profile/filter.ejs', {categories: categories}) %>
+    <%- include('../profile/table.ejs') %>
 
-    <script>
-        class ProfileFunctions {
-            constructor(base) {
-                this.base = base
+    <script type="module">
+        import FilterFunctions from '/profiles/FilterFunctions.js'
+        import TableFunctions from '/profiles/TableFunctions.js'
 
-                this.template = (data) => `<div id="${data._id}" class="profile">
-                    <div>_id : ${data._id}</div>
-                    <div class="name">name : ${data.name}</div>
-                    <div class="category">
-                        category : 
-                            <div class="type">&nbsp;&nbsp;&nbsp;&nbsp;type: ${data.category.type}</div>
-                            <div class="categories">&nbsp;&nbsp;&nbsp;categories: ${data.category.categories}</div>
-                    </div>
-                    <div class="promotion">promotion :  ${data.promotion}</div>
-                    <div class="picture">picture :  ${data.picture}</div>
-                    <div class="uf"> uf :  ${data.uf}</div>
-                </div>`
-            }
-            insert(data) {
-                this.base.insertAdjacentHTML("beforeend", this.template(data))
+        var arrayElements = []
 
-            }
-        }
-        const profileFunctions = new ProfileFunctions(document.querySelector('div#profiles'))
-
+        const filterfunction = new FilterFunctions(
+            document.querySelector('#filter'),
+            document.querySelector('#profiles'),
+            arrayElements
+        )
+        const filterfunctions = new TableFunctions(document.querySelector('div#profiles'))
 
          fetch('/api/profile/getList')
-                    .then(res => res.json())  // converter para json
-                    .then(json => {
-                        console.log(json);
-                        json.forEach(e => {
-                            profileFunctions.insert(e)
-                        });
+            .then(res => res.json())  // converter para json
+            .then(data => {
+                filterfunction.setArray(data)
 
-                    })
-                    .catch(err => { console.log(err) })
+                data.forEach(e => {
+                    filterfunctions.insert(e)
+                });
+                filterfunction.filterMain()
+            })
+            .catch(err => { console.log(err) })
     </script>
 </body>
 </html>
