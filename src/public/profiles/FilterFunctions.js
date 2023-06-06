@@ -18,10 +18,29 @@ class FilterSstructure {
             return 0
         });
     }
+    filterUf(uf) {
+        this.arrFilter = this.data.map((e, i) => {
+            if (this.arrFilter[i])
+            if (e['uf'] == uf.toUpperCase()) return 1
+            return 0
+        })
+    }
+    filterCategories(categories) {
+        categories = categories.filter(e => e != undefined)
+
+        this.arrFilter = this.data.map((e, i) => {
+            if (this.arrFilter[i]) {
+                let result = categories.map(name => {
+                    return e['category']['categories'].includes(name)
+                })
+                if (result.filter(e => e == false).length == 0) return 1
+            }
+            return 0
+        })
+    }
     filterClean() {
         this.arrFilter = this.data.map(() => 1)
     }
-
 }
 
 export default class FilterFunctions extends FilterSstructure  {
@@ -35,7 +54,10 @@ export default class FilterFunctions extends FilterSstructure  {
 
         this.btn = {
             promotion: this.baseFilter.querySelector('#promotion'),
-            type: this.baseFilter.querySelector('#type')
+            type: this.baseFilter.querySelector('#type'),
+            uf: this.baseFilter.querySelector('#uf'),
+            categories: this.baseFilter.querySelector('#categories'),
+            clear: this.baseFilter.querySelector('#clear')
         }
 
         this.btn.promotion.addEventListener('click', (e) => {
@@ -50,6 +72,40 @@ export default class FilterFunctions extends FilterSstructure  {
         this.btn.type.addEventListener('change', (e) => {
             e.preventDefault()
 
+            // change visible categories
+            if (this.btn.type.querySelector('select').value == 'restaurante') this.btn.categories.style.display = 'block'
+            else this.btn.categories.style.display = 'none'
+
+            this.filterMain()
+        })
+        this.btn.uf.addEventListener('change', (e) => {
+            e.preventDefault()
+
+            this.filterMain()
+        })
+        this.btn.categories.querySelectorAll('div').forEach(div => {
+            div.addEventListener('click', (e) => {
+                e.preventDefault()
+
+
+                // update checkbox
+                let cb = div.querySelector('input') 
+                cb.checked ? cb.checked = false : cb.checked = true
+
+                this.filterMain()
+            })
+        })
+        this.btn.clear.addEventListener('click', (e) => {
+            e.preventDefault()
+            
+            this.btn.promotion.querySelector('input').checked = false
+            this.btn.type.querySelector('select').value = 'restaurante'
+            this.btn.uf.querySelector('select').value = ''
+            this.btn.categories.style.display = 'block'
+            this.btn.categories.querySelectorAll('input').forEach(e => {
+                e.checked = false
+            })
+
             this.filterMain()
         })
     }
@@ -61,6 +117,18 @@ export default class FilterFunctions extends FilterSstructure  {
         let type = this.btn.type.querySelector('select').value
         this.filterCategory(type)
     }
+    uf() {
+        let uf = this.btn.uf.querySelector('select').value
+        if (uf) this.filterUf(uf)
+    }
+    categories() {
+        if (this.btn.type.querySelector('select').value != 'restaurante') return
+
+        let categories = [ ... this.btn.categories.querySelectorAll('input') ].map(e => {
+            if (e.checked) return e.getAttribute('name')
+        })
+        this.filterCategories(categories)
+    }
 
     filterMain() {
         this.filterClean()
@@ -68,6 +136,8 @@ export default class FilterFunctions extends FilterSstructure  {
 
         this.type()
         this.promotion()
+        this.uf()
+        this.categories()
         
         this.cardsShow()
     }
