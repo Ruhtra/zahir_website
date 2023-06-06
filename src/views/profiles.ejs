@@ -5,47 +5,81 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profiles</title>
+
+    
+    <style>
+        #filter {
+            display: flex;
+        }
+
+        #table {
+            display: flex;
+        }
+        #table > div {
+            background-color: #ddd;
+            width: 200px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .unvisible { display: none; }
+
+        /* btn */
+            .btn.promotion {
+                padding: 10px;
+                border-radius: 2px;
+                background-color: red;
+            }
+            .btn.promotion:hover {cursor: pointer;}
+            /* div#promotion input {display: none;} */
+            div#promotion input:checked ~ label.promotion {background-color: green;}
+    </style>
 </head>
 <body>
+    <div id="filter">
+        <div id="promotion">
+            <input id="cb_promotion" type="checkbox">
+            <label class="btn promotion" for="cb_promotion">Promotion</label>
+        </div>
+        <div id="type">
+            <select id="sl_type">
+                <option value="restaurante">Restaurante</option>
+                <option value="hotel">hotel</option>
+            </select>
+        </div>
+    </div>
+    <div id="table">
 
-    <div id="table"></div>
+        <div id="empty" class="unvisible">
+            <h2>Vazio, tente redefinir as pesquisas</h2>
+        </div>
+    </div>
 
-    <script>
-        const table = document.querySelector('#table')
+    <script type="module">
+        import FilterFunctions from './FilterFunctions.js'
+        import TableFunctions from './TableFunctions.js'
 
-        function resultNull() {
-            var screen = document.createElement('div')
-            screen.innerHTML = 'Nada foi encontrado, tente redefinir as pesquisas!'
-            table.appendChild(screen)
-        }
-        function insert(data) {
-            var card = document.createElement('div')
-            card.setAttribute('id', data._id)
+        var arrayElements = []
 
-            card.innerHTML = `
-                _id: ${data._id}, <br>
-                name: ${data.name}, <br>
-                picture: ${data.picture}, <br>
-                promotion: ${data.promotion}, <br>
-                uf: ${data.uf}, <br>
-                category: {<br>
-                    &nbsp;&nbsp; type: ${data.category.type}, <br>
-                    &nbsp;&nbsp; categories: ${data.category.categories} <br>
-                }<br>
-            `
-            table.appendChild(card)
-        }
+        const filterfunction = new FilterFunctions(
+            document.querySelector('#filter'),
+            document.querySelector('#table'),
+            arrayElements
+        )
+        const tableFunctions = new TableFunctions(document.querySelector('#table'))
 
         // query
         fetch('http://localhost:4000/api/profile/getList')
             .then((res) => { return res.json() })
             .then((data) => {
-                if (data.length == 0) return resultNull()
+                if (data.length == 0) return tableFunctions.resultNull()
+
+                filterfunction.setArray(data)
 
                 data.forEach(e => {
-                    insert(e)
+                    tableFunctions.insert(e)
                 });
-                console.log(data)
+                filterfunction.filterMain()
             })
             .catch((err) => { console.log(err) })
     </script>
