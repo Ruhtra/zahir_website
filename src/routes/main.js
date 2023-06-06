@@ -9,8 +9,12 @@ const use = fn => (req, res, next) => {
 
 router.get('/', use(controllerMain.index))
 
-router.get('/profiles', (req, res) => {
-    res.render('profiles.ejs')
+router.get('/profiles', async (req, res) => {
+    let categories = await Database.categories.getAll()
+
+    res.render('profiles.ejs', {
+        categories: categories
+    })
 })
 router.get('/config/insert', async (req, res) => {
     let promotions = await Database.promotions.getAll()

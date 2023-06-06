@@ -25,14 +25,30 @@
         .unvisible { display: none; }
 
         /* btn */
-            .btn.promotion {
-                padding: 10px;
-                border-radius: 2px;
-                background-color: red;
-            }
-            .btn.promotion:hover {cursor: pointer;}
-            /* div#promotion input {display: none;} */
-            div#promotion input:checked ~ label.promotion {background-color: green;}
+            /* promotion */
+                .btn.promotion {
+                    padding: 10px;
+                    border-radius: 2px;
+                    background-color: red;
+                }
+                .btn.promotion:hover {cursor: pointer;}
+
+                div#promotion input {display: none;}
+                div#promotion input:checked ~ label.promotion { background-color: green; }
+
+            /* categorie */
+                div#categories div {
+                    padding: 10px;
+                }
+                div#categories div label {
+                    padding: 10px;
+                    border: 1px solid black;
+                    border-radius: 5px;
+                }
+                div#categories div label:hover {cursor: pointer;}
+
+                div#categories input {display: none;}
+                div#categories input:checked ~ label.categorie { background-color: green; }
     </style>
 </head>
 <body>
@@ -44,12 +60,52 @@
         <div id="type">
             <select id="sl_type">
                 <option value="restaurante">Restaurante</option>
-                <option value="hotel">hotel</option>
+                <option value="hotel">Hotel</option>
             </select>
         </div>
+        <div id="uf">
+            <select id="sl_uf">
+                <option value="" selected>None</option>
+                <option value="AC">AC</option>
+                <option value="AL">AL</option>
+                <option value="AM">AM</option>
+                <option value="AP">AP</option>
+                <option value="BA">BA</option>
+                <option value="CE">CE</option>
+                <option value="DF">DF</option>
+                <option value="ES">ES</option>
+                <option value="GO">GO</option>
+                <option value="MA">MA</option>
+                <option value="MG">MG</option>
+                <option value="MS">MS</option>
+                <option value="MT">MT</option>
+                <option value="PA">PA</option>
+                <option value="PB">PB</option>
+                <option value="PE">PE</option>
+                <option value="PI">PI</option>
+                <option value="PR">PR</option>
+                <option value="RJ">RJ</option>
+                <option value="RN">RN</option>
+                <option value="RO">RO</option>
+                <option value="RR">RR</option>
+                <option value="RS">RS</option>
+                <option value="SC">SC</option>
+                <option value="SE">SE</option>
+                <option value="SP">SP</option>
+                <option value="TO">TO</option>
+            </select>
+        </div>
+        <div id="categories">
+            <% categories.forEach(e => { %>
+                <div id="<%= e.name %>" class="item">
+                    <input type="checkbox" id="<%= e._id.toString() %>" name="<%= e.name %>">
+                    <label for="<%= e._id.toString() %>" class="categorie"><%= e.name %></label>
+                </div>
+            <% }); %>
+        </div>
+        <div id="clear"><input type="button" value="clear"></div>
     </div>
     <div id="table">
-
         <div id="empty" class="unvisible">
             <h2>Vazio, tente redefinir as pesquisas</h2>
         </div>
