@@ -25,8 +25,12 @@ router.get('/config/insert', async (req, res) => {
         promotions: promotions
     })
 })
-router.get('/config/profiles', (req, res) => {
-    res.render('config/profiles.ejs')
+router.get('/config/profiles', async (req, res) => {
+    let categories = await Database.categories.getAll()
+
+    res.render('config/profiles.ejs', {
+        categories: categories
+    })
 })
 router.get('/profile', async (req, res) => {
     res.render('profile.ejs')
