@@ -9,6 +9,8 @@ export default class TableFunctions {
     }
     insert(data) {
         let card = `<div id="_${data._id}"} >
+            <input class="openCard" type="button" value="Abrir"> <br>
+
             _id: ${data._id}, <br>
             name: ${data.name}, <br>
             picture: ${data.picture}, <br>
@@ -20,5 +22,11 @@ export default class TableFunctions {
             }
         </div>`
         this.base.insertAdjacentHTML("beforeend", card)
+
+        this.base.querySelector(`#_${data._id} > input.openCard`).addEventListener('click', e => {
+            e.preventDefault()
+
+            location.href = 'http://localhost:4000/profile?id='+data._id
+        })
     }
 }
