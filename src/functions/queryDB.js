@@ -113,7 +113,7 @@ const profile = {
     }
 }
 
-const homePageProfile = {
+const homePage = {
     get: async () => {
         const db = await connect();
         return await db.collection('home_page_promotions').aggregate(query.homePageProfile()).toArray()
@@ -137,11 +137,21 @@ const homePageProfile = {
         if (hppProfile.length > 0) throw new Error(queryDB.homePageProfile.insert.occupiedProfile)
         if (profile == null) throw new Error(queryDB.homePageProfile.insert.profileNotFound)
 
-        return 'ok'
-        // return await db.collection('home_page_promotions').insertOne({
-        //     id_profile: new ObjectId(id),
-        //     order: order
-        // })
+        return await db.collection('home_page_promotions').insertOne({
+            id_profile: new ObjectId(id),
+            order: order
+        })
+    },
+    delete: async (order) => {
+        const db = await connect();
+
+        let hppOrder = await db.collection('home_page_promotions').find(
+            {order: order}, {projection: {_id: 0}}
+        ).toArray()
+
+        if (hppOrder.length == 0) throw new Error(queryDB.homePageProfile.delete.ordertNotFound)
+
+        return await db.collection('home_page_promotions').deleteOne({order: order})
     }
 }
 
@@ -162,7 +172,7 @@ module.exports = {
     testConnect,
     getLogin,
     profile,
-    homePageProfile,
+    homePage,
     categories,
     promotions
 }

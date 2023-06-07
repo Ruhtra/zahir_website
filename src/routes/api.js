@@ -14,5 +14,6 @@ router.post('/profile/delete', use(controllerApi.profile.delete))
 
 router.get('/homePage/getAll', use(controllerApi.homePage.getAll))
 router.post('/homePage/insert', use(controllerApi.homePage.insert))
+router.post('/homePage/delete', use(controllerApi.homePage.delete))
 
 module.exports = router
