@@ -69,13 +69,13 @@
 <body>
     <h2>Home Page</h2>
     <div id="homePages">
-        <div id="order_0">none</div>
-        <div id="order_1">none</div>
-        <div id="order_2">none</div>
-        <div id="order_3">none</div>
-        <div id="order_4">none</div>
-        <div id="order_5">none</div>
-        <div id="order_6">none</div>
+        <div id="order_0"></div>
+        <div id="order_1"></div>
+        <div id="order_2"></div>
+        <div id="order_3"></div>
+        <div id="order_4"></div>
+        <div id="order_5"></div>
+        <div id="order_6"></div>
     </div>
 
 
@@ -89,120 +89,146 @@
         import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
         import validate from "/validator.js";
 
-        class HomePage {
-            constructor(base) {
-                this.base = base
-
-                this.apiGetAll()
+        class Observable {
+            constructor() {
+                this.observers = [];
             }
-
-            apiGetAll() {
-                fetch('/api/homePage/getAll')
-                    .then(res => res.json())
-                    .then(data => {
-                        homePage.insert(data)
-                    })
-                    .catch(err => { console.log(err) })
+            subscribe(f) {
+                this.observers.push(f);
             }
-
-            insert(data) {
-                this.clear()
-
-                data.forEach(e => {
-                    this.base.querySelector('div#order_'+e.order).innerHTML = e.profile.name
-                });
+            unsubscribe(f) {
+                this.observers = this.observers.filter(subscriber => subscriber !== f);
             }
-            clear() {
-                this.base.querySelectorAll('div').forEach(e => {
-                    e.innerHTML = 'none'
-                })
+            notify(data) {
+                this.observers.forEach(observer => observer(data));
             }
         }
 
 
-        class TableFunctions {
-            constructor (base) {
-                this.base = base
-
-                this.apiGetAll()
+        class ApiHomePage {
+            async apiGetAll() {
+                return await fetch('/api/homePage/getAll')
             }
+        }
+        class HomePageFunctions extends ApiHomePage {
+            constructor() { super(); this.data = [] }
 
-            apiGetAll() {
-                fetch('/api/profile/getList')
+            getTemplate(data) {
+                return ` ${data.name} `
+            }
+            build(data) {
+                this.clear()
+                data.forEach(e => {
+                    this.homePage.querySelector('div#order_'+e.order).innerHTML = this.getTemplate(e.profile)
+                });
+            }
+            clear() { this.homePage.querySelectorAll('div').forEach(e => { e.innerHTML = '' }) }
+        }
+        class MainHomePage extends HomePageFunctions {
+            constructor(homePage) {
+                super()
+                this.homePage = homePage
+
+                this.buildHTML()
+            }
+            buildHTML() {
+                this.apiGetAll()
                     .then(res => res.json())
                     .then(data => {
-                        data.forEach(e => {
-                            this.insert(e)
-                        });
+                        this.build(data)
                     })
                     .catch(err => { console.log(err) })
             }
-            apiInsert(data) {
-                fetch('/api/homePage/insert', {
+        }
+
+        class ApiProfiles {
+            async apiGetAll() {
+                return await fetch('/api/profile/getList')
+            }
+            async apiInsert(data) {
+                return await fetch('/api/homePage/insert', {
                     method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(data)
                 })
+            }
+        }
+        class ProfileFunctions extends ApiProfiles {
+            constructor () { super() }
+
+            getTemplate(data) {
+                return `<div id="_${data._id}"} > 
+                        <input class="insertOrd" type="number" placeholder="order" max="6" min="0"><br>  
+                        <input class="insertCard" type="button" value="Inserir"><br>
+
+                        _id: ${data._id}, <br>
+                        name: ${data.name}, <br>
+                        picture: ${data.picture}, <br>
+                        promotion: ${data.promotion}, <br>
+                        uf: ${data.uf}, <br>
+                        category: {<br>
+                            &nbsp;&nbsp; type: ${data.category.type}, <br>
+                            &nbsp;&nbsp; categories: ${data.category.categories} <br>
+                        }
+                    </div>`
+            }
+            build(data) {
+                this.clear()
+                data.forEach(e => {
+                    let template = this.getTemplate(e)
+                    this.profiles.insertAdjacentHTML('beforeend', template)
+
+           
+                    this.profiles.querySelector(`#_${e._id} input.insertCard`).addEventListener('click', evt => {
+                        evt.preventDefault()
+                        let order =  this.profiles.querySelector(`#_${e._id} input.insertOrd`).value || undefined
+                        this.insert(e._id, order)
+                    })
+                });
+            }
+
+            clear() { this.profiles.innerHTML = '' }
+        }
+        class MainProfile extends ProfileFunctions {
+            constructor(profiles, observer) {
+                super()
+                this.profiles = profiles
+                this.observer = observer
+
+                this.buildHTML()
+            }
+            buildHTML() {
+                this.apiGetAll()
                     .then(res => res.json())
-                    .then(json => console.log(json))
-                    .catch(err => {
-                        console.log(err)
+                    .then(data => {
+                        this.build(data)
                     })
+                    .catch(err => { console.log(err) })
             }
 
-
-            resultNull() {
-                var screen = document.createElement('div')
-                screen.innerHTML = 'Nada foi encontrado, tente redefinir as pesquisas!'
-                this.base.appendChild(screen)
-            }
-            insert(data) {
-                let card = `<div id="_${data._id}"} > 
-                    <input class="insertOrd" type="number" placeholder="order" max="6" min="0"><br>  
-                    <input class="insertCard" type="button" value="Inserir"><br>
-                         
-                    _id: ${data._id}, <br>
-                    name: ${data.name}, <br>
-                    picture: ${data.picture}, <br>
-                    promotion: ${data.promotion}, <br>
-                    uf: ${data.uf}, <br>
-                    category: {<br>
-                        &nbsp;&nbsp; type: ${data.category.type}, <br>
-                        &nbsp;&nbsp; categories: ${data.category.categories} <br>
-                    }
-                </div>`
-                this.base.insertAdjacentHTML("beforeend", card)
-
-                this.base.querySelector(`#_${data._id} > input.insertCard`).addEventListener('click', e => {
-                    e.preventDefault()
-
-                    let order = this.base.querySelector(`#_${data._id} > input.insertOrd`).value || undefined
-
-                    this.insertHomePage(data._id, order)
+            insert(id, order) {
+                this.apiInsert({
+                    id: id,
+                    order: order
+                }).then(e => {
+                    this.observer.notify()
                 })
-            }
-            insertHomePage(id, order) {
-                try {
-                    const {error, value} = validate.homePageProfile.insert({
-                        id: id,
-                        order: order
-                    })
-                    if (error) throw error
-
-                    this.apiInsert(value)
-                } catch (err) {
-                    if (err instanceof Joi.ValidationError) {
-                        console.log(err);
-                    } else { console.error(err) }
-                }
-                 
             }
         }
 
-        const homePage = new HomePage(document.querySelector('#homePages'))
-        const tableFunctions = new TableFunctions(document.querySelector('#profiles'))
+
+        const observerInsert = new Observable()
+        
+        const eHomePage = document.querySelector('#homePages')
+        const eProfiles =document.querySelector('#profiles')
+        const mainHomePage = new MainHomePage(eHomePage, observerInsert)
+        const mainProfile = new MainProfile(eProfiles, observerInsert)
+
+        // transferir subscrição pra dentro das classes 
+        observerInsert.subscribe((msg) => mainHomePage.buildHTML())
+        observerInsert.subscribe((msg) => mainProfile.buildHTML())
     </script>
 </body>
 </html>
