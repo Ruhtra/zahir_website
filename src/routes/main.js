@@ -16,6 +16,8 @@ router.get('/profiles', async (req, res) => {
         categories: categories
     })
 })
+
+// config
 router.get('/config/insert', async (req, res) => {
     let promotions = await Database.promotions.getAll()
     let categories = await Database.categories.getAll()
@@ -32,6 +34,11 @@ router.get('/config/profiles', async (req, res) => {
         categories: categories
     })
 })
+router.get('/config/homePage', async (req, res) => {
+    res.render('config/homePage.ejs')
+})
+
+
 router.get('/profile', async (req, res) => {
     res.render('profile.ejs')
 })

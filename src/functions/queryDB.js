@@ -116,11 +116,12 @@ const profile = {
 const homePageProfile = {
     get: async () => {
         const db = await connect();
-        return await db.collection('home_page_promotions').aggregate(homePageProfile()).toArray()
+        return await db.collection('home_page_promotions').aggregate(query.homePageProfile()).toArray()
     },
     insert: async (id, order) => {
         const db = await connect();
 
+        // atualizar isso com um Promise.all 
         let hppOrder = await db.collection('home_page_promotions').find(
             {order: order}, {projection: {_id: 0}}
         ).toArray()
@@ -136,11 +137,11 @@ const homePageProfile = {
         if (hppProfile.length > 0) throw new Error(queryDB.homePageProfile.insert.occupiedProfile)
         if (profile == null) throw new Error(queryDB.homePageProfile.insert.profileNotFound)
 
-
-        return await db.collection('home_page_promotions').insertOne({
-            id_profile: new ObjectId(id),
-            order: order
-        })
+        return 'ok'
+        // return await db.collection('home_page_promotions').insertOne({
+        //     id_profile: new ObjectId(id),
+        //     order: order
+        // })
     }
 }
 

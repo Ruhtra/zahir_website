@@ -266,7 +266,7 @@
         // main
         document.querySelector('#form input[type=button]#send').addEventListener('click', (e) => {
             try {
-                const {error, value} = validate.insert(formFunctions.get())
+                const {error, value} = validate.profile.insert(formFunctions.get())
                 if (error) throw error
 
                 console.log('comunicando api')
