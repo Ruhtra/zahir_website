@@ -39,9 +39,19 @@ const updateScheme = profileScheme.keys({
     id: idScheme.required()
 })
 
+const insertHomePageScheme = Joi.object().keys({
+    id: idScheme.required(),
+    order: Joi.number().min(0).max(6).required()
+})
+
 module.exports = {
-    id: validator(idScheme.required()),
-    insert: validator(profileScheme),
-    update: validator(updateScheme)
+    profile: {
+        id: validator(idScheme.required()),
+        insert: validator(profileScheme),
+        update: validator(updateScheme),
+    },
+    homePageProfile: {
+        insert: validator(insertHomePageScheme)
+    }
 }
   

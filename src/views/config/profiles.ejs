@@ -65,7 +65,7 @@
             document.querySelector('#profiles'),
             arrayElements
         )
-        const filterfunctions = new TableFunctions(document.querySelector('div#profiles'))
+        const tableFunctions = new TableFunctions(document.querySelector('div#profiles'))
 
          fetch('/api/profile/getList')
             .then(res => res.json())  // converter para json
@@ -73,7 +73,7 @@
                 filterfunction.setArray(data)
 
                 data.forEach(e => {
-                    filterfunctions.insert(e)
+                    tableFunctions.insert(e)
                 });
                 filterfunction.filterMain()
             })

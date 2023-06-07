@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+
+    <style>
+        #homePages {
+            display: flex;
+            gap: 5px;
+        }
+        #homePages * {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 10px;
+            width: 100px;
+            height: 100px;
+            background-color: #ddd;
+        }
+    </style>
+    <style>
+        #filter {
+            display: flex;
+        }
+
+        #profiles {
+            display: flex;
+        }
+        #profiles > div {
+            background-color: #ddd;
+            width: 200px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .unvisible { display: none; }
+
+        /* btn */
+            /* promotion */
+                .btn.promotion {
+                    padding: 10px;
+                    border-radius: 2px;
+                    background-color: red;
+                }
+                .btn.promotion:hover {cursor: pointer;}
+
+                div#promotion input {display: none;}
+                div#promotion input:checked ~ label.promotion { background-color: green; }
+
+            /* categorie */
+                div#categories div {
+                    padding: 10px;
+                }
+                div#categories div label {
+                    padding: 10px;
+                    border: 1px solid black;
+                    border-radius: 5px;
+                }
+                div#categories div label:hover {cursor: pointer;}
+
+                div#categories input {display: none;}
+        div#categories input:checked ~ label.categorie { background-color: green; }
+</style>
+</head>
+<body>
+    <h2>Home Page</h2>
+    <div id="homePages">
+        <div id="order_0">none</div>
+        <div id="order_1">none</div>
+        <div id="order_2">none</div>
+        <div id="order_3">none</div>
+        <div id="order_4">none</div>
+        <div id="order_5">none</div>
+        <div id="order_6">none</div>
+    </div>
+
+
+    <div id="profiles">
+        <div id="empty" class="unvisible">
+            <h2>Vazio, tente redefinir as pesquisas</h2>
+        </div>
+    </div>
+
+    <script type="module">
+        import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
+        import validate from "/validator.js";
+
+        class HomePage {
+            constructor(base) {
+                this.base = base
+
+                this.apiGetAll()
+            }
+
+            apiGetAll() {
+                fetch('/api/homePage/getAll')
+                    .then(res => res.json())
+                    .then(data => {
+                        homePage.insert(data)
+                    })
+                    .catch(err => { console.log(err) })
+            }
+
+            insert(data) {
+                this.clear()
+
+                data.forEach(e => {
+                    this.base.querySelector('div#order_'+e.order).innerHTML = e.profile.name
+                });
+            }
+            clear() {
+                this.base.querySelectorAll('div').forEach(e => {
+                    e.innerHTML = 'none'
+                })
+            }
+        }
+
+
+        class TableFunctions {
+            constructor (base) {
+                this.base = base
+
+                this.apiGetAll()
+            }
+
+            apiGetAll() {
+                fetch('/api/profile/getList')
+                    .then(res => res.json())
+                    .then(data => {
+                        data.forEach(e => {
+                            this.insert(e)
+                        });
+                    })
+                    .catch(err => { console.log(err) })
+            }
+            apiInsert(data) {
+                fetch('/api/homePage/insert', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(res => res.json())
+                    .then(json => console.log(json))
+                    .catch(err => {
+                        console.log(err)
+                    })
+            }
+
+
+            resultNull() {
+                var screen = document.createElement('div')
+                screen.innerHTML = 'Nada foi encontrado, tente redefinir as pesquisas!'
+                this.base.appendChild(screen)
+            }
+            insert(data) {
+                let card = `<div id="_${data._id}"} > 
+                    <input class="insertOrd" type="number" placeholder="order" max="6" min="0"><br>  
+                    <input class="insertCard" type="button" value="Inserir"><br>
+                         
+                    _id: ${data._id}, <br>
+                    name: ${data.name}, <br>
+                    picture: ${data.picture}, <br>
+                    promotion: ${data.promotion}, <br>
+                    uf: ${data.uf}, <br>
+                    category: {<br>
+                        &nbsp;&nbsp; type: ${data.category.type}, <br>
+                        &nbsp;&nbsp; categories: ${data.category.categories} <br>
+                    }
+                </div>`
+                this.base.insertAdjacentHTML("beforeend", card)
+
+                this.base.querySelector(`#_${data._id} > input.insertCard`).addEventListener('click', e => {
+                    e.preventDefault()
+
+                    let order = this.base.querySelector(`#_${data._id} > input.insertOrd`).value || undefined
+
+                    this.insertHomePage(data._id, order)
+                })
+            }
+            insertHomePage(id, order) {
+                try {
+                    const {error, value} = validate.homePageProfile.insert({
+                        id: id,
+                        order: order
+                    })
+                    if (error) throw error
+
+                    this.apiInsert(value)
+                } catch (err) {
+                    if (err instanceof Joi.ValidationError) {
+                        console.log(err);
+                    } else { console.error(err) }
+                }
+                 
+            }
+        }
+
+        const homePage = new HomePage(document.querySelector('#homePages'))
+        const tableFunctions = new TableFunctions(document.querySelector('#profiles'))
+    </script>
+</body>
+</html>
