@@ -73,6 +73,9 @@ module.exports = {
                 occupiedOrder: 'This order is occupied',
                 occupiedProfile: 'This profile has already been used',
                 profileNotFound: 'This profile was not found'
+            },
+            delete: {
+                ordertNotFound: 'This order in homePage not found'
             }
         }
     }

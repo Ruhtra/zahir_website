@@ -34,13 +34,19 @@ module.exports = {
     },
     homePage: {
         getAll: async (req, res) => {
-            return res.send(await Database.homePageProfile.get())
+            return res.send(await Database.homePage.get())
         },
         insert: async (req, res) => {
-            const {error, value} = validate.homePageProfile.insert(req.body)
+            const {error, value} = validate.homePage.insert(req.body)
             if (error) throw error
           
-            return res.send(await Database.homePageProfile.insert(value.id, value.order))
+            return res.send(await Database.homePage.insert(value.id, value.order))
+        },
+        delete: async (req, res) => {
+            const {error, value} = validate.homePage.order(req.body.order)
+            if (error) throw error
+          
+            return res.send(await Database.homePage.delete(value))
         }
     }
 }
