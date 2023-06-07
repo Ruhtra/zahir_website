@@ -121,21 +121,22 @@ const homePage = {
     insert: async (id, order) => {
         const db = await connect();
 
-        // atualizar isso com um Promise.all 
-        let hppOrder = await db.collection('home_page_promotions').find(
-            {order: order}, {projection: {_id: 0}}
-        ).toArray()
-        let hppProfile = await db.collection('home_page_promotions').find(
-            {id_profile: new ObjectId(id)}, {projection: {_id: 0}}
-        ).toArray()
-        let profile = await db.collection('profile').findOne(
-            {_id: new ObjectId(id)}, {projection: {_id: 1}}
-        )
+        // validate values
+        let promises = []
+        promises.push((async () => {
+            let hppOrder = await db.collection('home_page_promotions').find( {order: order}, {projection: {_id: 0}} ).toArray()
+            if (hppOrder.length > 0)  throw new Error(queryDB.homePageProfile.insert.occupiedOrder)
+        })() )
+        promises.push((async () => {
+            let hppProfile = await db.collection('home_page_promotions').find( {id_profile: new ObjectId(id)}, {projection: {_id: 0}} ).toArray()
+            if (hppProfile.length > 0) throw new Error(queryDB.homePageProfile.insert.occupiedProfile)
+        })() )
+        promises.push((async () => {
+            let profile = await db.collection('profile').findOne( {_id: new ObjectId(id)}, {projection: {_id: 1}} )
+            if (profile == null) throw new Error(queryDB.homePageProfile.insert.profileNotFound)
+        })() )
 
-
-        if (hppOrder.length > 0) throw new Error(queryDB.homePageProfile.insert.occupiedOrder)
-        if (hppProfile.length > 0) throw new Error(queryDB.homePageProfile.insert.occupiedProfile)
-        if (profile == null) throw new Error(queryDB.homePageProfile.insert.profileNotFound)
+        await Promise.all(promises)
 
         return await db.collection('home_page_promotions').insertOne({
             id_profile: new ObjectId(id),
