@@ -8,25 +8,28 @@ export default class TableFunctions {
         this.base.appendChild(screen)
     }
     insert(data) {
-        let card = `<div id="_${data._id}"} >
-            <input class="openCard" type="button" value="Abrir"> <br>
+        data.forEach(e => {
+            let card = `<div id="_${e._id}"} >
+                <input class="openCard" type="button" value="Abrir"> <br>
+                <input class="updateCard" type="button" value="Update"> <br>
 
-            _id: ${data._id}, <br>
-            name: ${data.name}, <br>
-            picture: ${data.picture}, <br>
-            promotion: ${data.promotion}, <br>
-            uf: ${data.uf}, <br>
-            category: {<br>
-                &nbsp;&nbsp; type: ${data.category.type}, <br>
-                &nbsp;&nbsp; categories: ${data.category.categories} <br>
-            }
-        </div>`
-        this.base.insertAdjacentHTML("beforeend", card)
+                _id: ${e._id}, <br>
+                name: ${e.name}, <br>
+                picture: ${e.picture}, <br>
+                promotion: ${e.promotion}, <br>
+                uf: ${e.uf}, <br>
+                category: {<br>
+                    &nbsp;&nbsp; type: ${e.category.type}, <br>
+                    &nbsp;&nbsp; categories: ${e.category.categories} <br>
+                }
+            </div>`
+            this.base.insertAdjacentHTML("beforeend", card)
 
-        this.base.querySelector(`#_${data._id} > input.openCard`).addEventListener('click', e => {
-            e.preventDefault()
-
-            location.href = 'http://localhost:4000/profile?id='+data._id
-        })
+            this.base.querySelector(`#_${e._id} > input.openCard`).addEventListener('click', evt => {
+                evt.preventDefault()
+                
+                location.href = 'http://localhost:4000/profile?id='+e._id
+            })
+        });
     }
 }
