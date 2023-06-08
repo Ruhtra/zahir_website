@@ -28,10 +28,12 @@ router.get('/config/insert', async (req, res) => {
     })
 })
 router.get('/config/profiles', async (req, res) => {
+    let promotions = await Database.promotions.getAll()
     let categories = await Database.categories.getAll()
 
     res.render('config/profiles.ejs', {
-        categories: categories
+        categories: categories,
+        promotions: promotions
     })
 })
 router.get('/config/homePage', async (req, res) => {

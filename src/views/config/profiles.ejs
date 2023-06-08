@@ -25,56 +25,148 @@
 
         /* btn */
             /* promotion */
-                .btn.promotion {
+                div#filter .btn.promotion {
                     padding: 10px;
                     border-radius: 2px;
                     background-color: red;
                 }
-                .btn.promotion:hover {cursor: pointer;}
+                div#filter .btn.promotion:hover {cursor: pointer;}
 
-                div#promotion input {display: none;}
-                div#promotion input:checked ~ label.promotion { background-color: green; }
+                div#filter div#promotion input {display: none;}
+                div#filter div#promotion input:checked ~ label.promotion { background-color: green; }
 
-            /* categorie */
-                div#categories div {
+            /* cdiv#filter ategorie */
+                div#filter div#categories div {
                     padding: 10px;
                 }
-                div#categories div label {
+                div#filter div#categories div label {
                     padding: 10px;
                     border: 1px solid black;
                     border-radius: 5px;
                 }
-                div#categories div label:hover {cursor: pointer;}
+                div#filter div#categories div label:hover {cursor: pointer;}
 
-                div#categories input {display: none;}
-                div#categories input:checked ~ label.categorie { background-color: green; }
+                div#filter div#categories input {display: none;}
+                div#filter div#categories input:checked ~ label.categorie { background-color: green; }
+    </style>
+    <style>
+        #screen {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <%- include('../profile/filter.ejs') %>
     <%- include('../profile/table.ejs') %>
 
+    <input type="button" id="insert" value="insert">
+
+    <div id="screen">
+        <input type="button" value="close" class="close">
+        <%- include('../insertForm.ejs', {categories, promotions})  %>
+    </div>
+
     <script type="module">
         import FilterFunctions from '/profiles/FilterFunctions.js'
         import TableFunctions from '/profiles/TableFunctions.js'
 
-        var arrayElements = []
+        import Form from '/FormFunctions.js'
 
-        const filterfunction = new FilterFunctions(
-            document.querySelector('#filter'),
-            document.querySelector('#profiles'),
-            arrayElements
-        )
-        const tableFunctions = new TableFunctions(document.querySelector('div#profiles'))
+        class ScreenFunctions {
+            constructor(base) {
+                this.base = base
+                this.form = new Form(this.base.querySelector('#form'))
 
-         fetch('/api/profile/getList')
-            .then(res => res.json())  // converter para json
+                
+                // starter button 
+                this.base.querySelector(`input.close`).addEventListener('click', evt => {
+                    evt.preventDefault()
+
+                    this.hide()
+                })
+            }
+            build(data) {
+                this.form.Erros.clear()
+                this.form.functions.clear()
+
+                if(data) this.form.functions.set(data)
+                
+                this.show()
+            }
+
+            show() { this.base.style.display = 'block' }
+            hide() { this.base.style.display = 'none' }
+
+            update(id) {
+                fetch('/api/profile/get?id='+id)
+                    .then(res => res.json())
+                    .then(data => {
+                        data = data[0]
+                        data._id = id
+                        this.build(data)
+                    })
+                    .catch(err => { console.log(err) })
+            }
+        }
+
+
+        class TableFunctionsAdmin extends TableFunctions {
+            constructor (base, screenFunctions) {
+                super()
+                this.base = base
+                this.screenFunctions = screenFunctions
+            }
+            insert(data) {
+                data.forEach(e => {
+                    let card = `<div id="_${e._id}"} >
+                    <input class="openCard" type="button" value="Abrir"> <br>
+                    <input class="updateCard" type="button" value="Update"> <br>
+                    
+                    _id: ${e._id}, <br>
+                    name: ${e.name}, <br>
+                    picture: ${e.picture}, <br>
+                    promotion: ${e.promotion}, <br>
+                    uf: ${e.uf}, <br>
+                    category: {<br>
+                        &nbsp;&nbsp; type: ${e.category.type}, <br>
+                        &nbsp;&nbsp; categories: ${e.category.categories} <br>
+                    }
+                    </div>`
+                    this.base.insertAdjacentHTML("beforeend", card)
+                    
+                    // load buttons
+                    this.base.querySelector(`#_${e._id} > input.openCard`).addEventListener('click', evt => {
+                        evt.preventDefault()
+                        
+                        location.href = 'http://localhost:4000/profile?id='+e._id
+                    })
+                    this.base.querySelector(`#_${e._id} > input.updateCard`).addEventListener('click', evt => {
+                        evt.preventDefault()
+                        
+                        this.screenFunctions.update(e._id)
+                    })
+                });
+            }
+        }
+        // items
+        const eScreen = document.querySelector('div#screen')
+        const eProfiles = document.querySelector('div#profiles')
+        const eFilter = document.querySelector('div#filter')
+
+        // classes
+        const filterfunction = new FilterFunctions( eFilter,  eProfiles, [] )
+        const screenFunctions = new ScreenFunctions(eScreen)
+        const tableFunctions = new TableFunctionsAdmin( eProfiles, screenFunctions)
+
+        document.querySelector('#insert').addEventListener('click', () => {
+            screenFunctions.build()
+        })
+
+        fetch('/api/profile/getList')
+            .then(res => res.json())
             .then(data => {
                 filterfunction.setArray(data)
-
-                data.forEach(e => {
-                    tableFunctions.insert(e)
-                });
+                tableFunctions.insert(data)
                 filterfunction.filterMain()
             })
             .catch(err => { console.log(err) })

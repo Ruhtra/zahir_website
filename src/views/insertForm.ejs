@@ -1,0 +1,115 @@
+<form action="POST" id="form">
+    <div id="id">
+        <input type="hidden" name="id">
+    </div>
+    <div id="picture">
+        <label for="file">Picture: </label>
+        <input type="file" name="picture">
+    </div>
+    <div id="name">
+        <label for="name">Name: </label>
+        <input type="text" name="name">
+    </div>
+    <div id="resume">
+        <label for="resume">Resume: </label>
+        <textarea name="resume" cols="30" rows="10"></textarea>
+    </div>
+    <div id="category">
+        <select name="type" id="type">
+            <option value="restaurante" selected>restaurante</option>
+            <option value="hotel">hotel</option>
+        </select>
+        <div id="categories">
+            <% categories.forEach(e => { %>
+                <div id="<%= e.name %>" class="item">
+                    <label for="<%= e.name %>"><%= e.name %></label>
+                    <input type="checkbox" name="<%= e._id.toString() %>">
+                </div>
+            <% }); %>
+        </div>
+    </div> 
+    <div id="informations">
+        <label for="informations">Informations: </label>
+        <textarea name="informations" cols="30" rows="10"></textarea>
+    </div>
+    <div id="telephones">
+
+        <div id="insert">
+            <input type="button" value="telephone">
+            <input type="button" value="whatsapp">
+        </div>
+    </div>
+    <div id="local">
+        <div id="cep">
+            <label for="cep">Cep:</label>
+            <input type="text" name="cep">
+        </div>
+        <div id="uf">
+            <select name="uf">
+                <option value="" selected>None</option>
+                <option value="AC">AC</option>
+                <option value="AL">AL</option>
+                <option value="AM">AM</option>
+                <option value="AP">AP</option>
+                <option value="BA">BA</option>
+                <option value="CE">CE</option>
+                <option value="DF">DF</option>
+                <option value="ES">ES</option>
+                <option value="GO">GO</option>
+                <option value="MA">MA</option>
+                <option value="MG">MG</option>
+                <option value="MS">MS</option>
+                <option value="MT">MT</option>
+                <option value="PA">PA</option>
+                <option value="PB">PB</option>
+                <option value="PE">PE</option>
+                <option value="PI">PI</option>
+                <option value="PR">PR</option>
+                <option value="RJ">RJ</option>
+                <option value="RN">RN</option>
+                <option value="RO">RO</option>
+                <option value="RR">RR</option>
+                <option value="RS">RS</option>
+                <option value="SC">SC</option>
+                <option value="SE">SE</option>
+                <option value="SP">SP</option>
+                <option value="TO">TO</option>
+            </select>
+        </div>
+        <div id="city">
+            <label for="city">City:</label>
+            <input type="text" name="city">
+        </div>
+        <div id="neighborhood">
+            <label for="neighborhood">Neighborhood:</label>
+            <input type="text" name="neighborhood">
+        </div>
+        <div id="street">
+            <label for="street">Street:</label>
+            <input type="text" name="street">
+        </div>
+        <div id="number" maxlength="10">
+            <label for="numbert">Number:</label>
+            <input type="text" name="number">
+        </div>
+        <div id="complement">
+            <label for="complement">Complement:</label>
+            <textarea name="complement" cols="30" rows="10"></textarea>
+        </div>
+    </div>
+    <div id="movie">
+        <label for="movie">Movie:</label>
+        <input type="text" name="movie">
+    </div>
+    <div id="promotion">
+        <select>
+            <option value="" selected>None</option>
+            <% promotions.forEach(e => { %>
+                <option value="<%= e._id.toString() %>" html="<%= e.percentage %>"><%= e.percentage %></option>
+            <% }); %>
+        </select>
+    </div>
+
+    <input id="insert" type="button" value="insert">
+    <input id="update" type="button" value="update">
+</form>
