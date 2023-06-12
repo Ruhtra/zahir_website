@@ -212,7 +212,7 @@
                     <input class="insertCard" type="button" value="Inserir"><br>
                 `
                 this.hpT.data.forEach(e => {
-                    if (!hpl.includes(e._id)){
+                    if (!hpl.includes(e._id) && e.promotion != undefined){
                         document.querySelector(`#profiles  #_${e._id}`).insertAdjacentHTML('beforeend', template)
                         document.querySelector(`#profiles #_${e._id} input.insertCard`).addEventListener('click', evt => {
                             evt.preventDefault()
@@ -229,7 +229,7 @@
                     order: order
                 })
                 if (error) throw error
-                
+
                 this.apiInsert(value)
                     .then(e => {
                         this.build()
