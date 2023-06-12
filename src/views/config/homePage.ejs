@@ -80,92 +80,105 @@
     </div>
 
 
-    <div id="profiles">
-        <div id="empty" class="unvisible">
-            <h2>Vazio, tente redefinir as pesquisas</h2>
-        </div>
-    </div>
+    <%- include('../profile/filter.ejs') %>
+    <%- include('../profile/table.ejs') %>
 
     <script type="module">
+        function sleep(time) {
+            return new Promise(resolve => setTimeout(resolve, time));
+        } 
         import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
         import validate from "/validator.js";
 
+        import TableFunctions from '/profiles/TableFunctions.js'
+
         class ApiHomePage {
-            async apiGetAll() {
-                return await fetch('/api/homePage/getAll')
-            }
+            async apiGetAll() { return (await fetch('/api/homePage/getAll')).json() }
         }
         class HomePageFunctions extends ApiHomePage {
-            constructor() { super()}
-
+            constructor(homePage) {
+                super()
+                this.homePage = homePage
+                // this.build()
+                this.data = []
+            }
             getTemplate(data) {
                 return `
                     <input class="delete" type="button" value="delete">
                     ${data.name}
                 `
             }
-            build(data) {
+            async build() {
+                let response = await this.apiGetAll()
+                this.data = response
+                this.insert(response)
+            }
+            insert(data) {
                 this.clear()
                 data.forEach(e => {
                     this.homePage.querySelector('div#order_'+e.order).innerHTML = this.getTemplate(e.profile)
 
+                    // Load buttons
                     this.homePage.querySelector(`div#order_${e.order} input.delete`).addEventListener('click', (evt) => {
                         evt.preventDefault()
 
-                        mainFunctions.delete(e.order)
+                        mainFunctions.delete(e.order) // tirar isso daqui
                     })
                 });
             }
             clear() { this.homePage.querySelectorAll('div').forEach(e => { e.innerHTML = '' }) }
         }
-        class MainHomePage extends HomePageFunctions {
-            constructor(homePage) {
-                super()
-                this.homePage = homePage
+        class HomePageTable extends TableFunctions {
+            constructor(base) {
+                super(base)
+                this.base
+                this.data = []
             }
-        }
-
-        class ApiProfiles {
-            async apiGetAll() {
-                return await fetch('/api/profile/getList')
-            }
-        }
-        class ProfileFunctions extends ApiProfiles {
-            constructor () { super() }
-
-            getTemplate(data) {
-                return `<div id="_${data._id}"} > 
-                        _id: ${data._id}, <br>
-                        name: ${data.name}, <br>
-                        picture: ${data.picture}, <br>
-                        promotion: ${data.promotion}, <br>
-                        uf: ${data.uf}, <br>
-                        category: {<br>
-                            &nbsp;&nbsp; type: ${data.category.type}, <br>
-                            &nbsp;&nbsp; categories: ${data.category.categories} <br>
-                        }
-                    </div>`
-            }
-            build(data) {
+            insert(data) {
                 this.clear()
                 data.forEach(e => {
-                    let template = this.getTemplate(e)
-                    this.profiles.insertAdjacentHTML('beforeend', template)
+                    let card = `<div id="_${e._id}" class="profiles" >
+                        <input class="openCard" type="button" value="Abrir"> <br>
+
+                        _id: ${e._id}, <br>
+                        name: ${e.name}, <br>
+                        picture: ${e.picture}, <br>
+                        promotion: ${e.promotion}, <br>
+                        uf: ${e.uf}, <br>
+                        category: {<br>
+                            &nbsp;&nbsp; type: ${e.category.type}, <br>
+                            &nbsp;&nbsp; categories: ${e.category.categories} <br>
+                        }
+                    </div>`
+                    this.base.insertAdjacentHTML("beforeend", card)
+
+                    this.base.querySelector(`#_${e._id} > input.openCard`).addEventListener('click', evt => {
+                        evt.preventDefault()
+                        
+                        location.href = 'http://localhost:4000/profile?id='+e._id
+                    })
                 });
             }
+        
+            async build(permismion) {
+                if (!permismion) return // subscreve função build pai pra só ser executada quando receber um parametro verdadeiro
+                let data = await this.getList()
 
-            clear() { this.profiles.innerHTML = '' }
-        }
-        class MainProfile extends ProfileFunctions {
-            constructor(profiles) {
-                super()
-                this.profiles = profiles
+                this.data = data
+
+                if (data.length == 0) return this.resultNull()
+
+                this.filterfunction.setArray(data)
+                this.insert(data)
+                this.filterfunction.filterMain()
             }
         }
-
 
         class MainFunctions {
             constructor() {
+                this.hpT = new HomePageTable(eProfiles)
+                this.hpF = new HomePageFunctions(eHomePage)
+
                 this.build()
             }
             async apiInsert(data) {
@@ -188,26 +201,19 @@
             }
 
             async build() {
-                let temp = await Promise.all([
-                    mainHomePage.apiGetAll(),
-                    mainProfile.apiGetAll()
+                await Promise.all([
+                    this.hpF.build(),
+                    this.hpT.build(true)
                 ])
-                let [homePageList, profileList] = await Promise.all(temp.map(e => e.json()))
 
-                mainHomePage.build(homePageList)
-                mainProfile.build(profileList)
-
-
-                // passar esse código pra dentro do seu responsável futuramente
-                let hpl = homePageList.map(e => e.profile._id)
+                let hpl = this.hpF.data.map(e => e.profile._id)
                 let template = `
                     <input class="insertOrd" type="number" placeholder="order" max="6" min="0"><br>  
                     <input class="insertCard" type="button" value="Inserir"><br>
                 `
-                profileList.forEach(e => {
+                this.hpT.data.forEach(e => {
                     if (!hpl.includes(e._id)){
-                        document.querySelector(`#profiles #_${e._id}`).insertAdjacentHTML('beforeend', template)
-                    
+                        document.querySelector(`#profiles  #_${e._id}`).insertAdjacentHTML('beforeend', template)
                         document.querySelector(`#profiles #_${e._id} input.insertCard`).addEventListener('click', evt => {
                             evt.preventDefault()
                             let order = document.querySelector(`#profiles #_${e._id} input.insertOrd`).value || undefined
@@ -223,7 +229,7 @@
                     order: order
                 })
                 if (error) throw error
-
+                
                 this.apiInsert(value)
                     .then(e => {
                         this.build()
@@ -243,10 +249,10 @@
         
         const eHomePage = document.querySelector('#homePages')
         const eProfiles = document.querySelector('#profiles')
-        
-        const mainProfile = new MainProfile(eProfiles)
-        const mainHomePage = new MainHomePage(eHomePage)
+
         const mainFunctions = new MainFunctions()
+
+        
     </script>
 </body>
 </html>
