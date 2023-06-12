@@ -56,32 +56,9 @@
     <%- include('./profile/table.ejs') %>
 
     <script type="module">
-        import FilterFunctions from './FilterFunctions.js'
         import TableFunctions from './TableFunctions.js'
 
-        var arrayElements = []
-
-        const filterfunction = new FilterFunctions(
-            document.querySelector('#filter'),
-            document.querySelector('#profiles'),
-            arrayElements
-        )
         const tableFunctions = new TableFunctions(document.querySelector('#profiles'))
-
-        // query
-        fetch('http://localhost:4000/api/profile/getList')
-            .then((res) => { return res.json() })
-            .then((data) => {
-                if (data.length == 0) return tableFunctions.resultNull()
-
-                filterfunction.setArray(data)
-
-                data.forEach(e => {
-                    tableFunctions.insert(e)
-                });
-                filterfunction.filterMain()
-            })
-            .catch((err) => { console.log(err) })
     </script>
 </body>
 </html>

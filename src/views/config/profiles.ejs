@@ -53,6 +53,9 @@
         #screen {
             display: none;
         }
+        #screen #loading {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -60,67 +63,115 @@
     <%- include('../profile/table.ejs') %>
 
     <input type="button" id="insert" value="insert">
+    <div id="messages">
+
+    </div>
 
     <div id="screen">
+        <div id="loading">!!! CARREGANDO</div>
         <input type="button" value="close" class="close">
         <%- include('../insertForm.ejs', {categories, promotions})  %>
     </div>
+    
 
     <script type="module">
-        import FilterFunctions from '/profiles/FilterFunctions.js'
+        function sleep(time) {
+            return new Promise(resolve => setTimeout(resolve, time));
+        } 
         import TableFunctions from '/profiles/TableFunctions.js'
 
         import Form from '/FormFunctions.js'
 
-        class ScreenFunctions {
+        class LoadingFunctions {
             constructor(base) {
                 this.base = base
-                this.form = new Form(this.base.querySelector('#form'))
-
-                
-                // starter button 
-                this.base.querySelector(`input.close`).addEventListener('click', evt => {
-                    evt.preventDefault()
-
-                    this.hide()
-                })
             }
-            build(data) {
-                this.form.Erros.clear()
-                this.form.functions.clear()
-
-                if(data) this.form.functions.set(data)
-                
-                this.show()
-            }
-
             show() { this.base.style.display = 'block' }
             hide() { this.base.style.display = 'none' }
-
-            update(id) {
-                fetch('/api/profile/get?id='+id)
-                    .then(res => res.json())
-                    .then(data => {
-                        data = data[0]
-                        data._id = id
-                        this.build(data)
-                    })
-                    .catch(err => { console.log(err) })
+        }
+        class MessagesFunctions {
+            constructor(base) { this.base = base }
+            insert(msg) {
+                this.base.innerHTML = `
+                    ${msg}
+                `
             }
         }
 
-
-        class TableFunctionsAdmin extends TableFunctions {
-            constructor (base, screenFunctions) {
-                super()
+        // Essa clase ta ok
+        class ScreenFunctions { 
+            constructor(base) {
                 this.base = base
-                this.screenFunctions = screenFunctions
+
+                this.form = new Form(this.base.querySelector('#form'))
+                this.loading = new LoadingFunctions(this.base.querySelector('#loading'))
+                this.message = new MessagesFunctions(document.querySelector('#messages'))
+
+                this.form.obResponses.subscribe((obj) => {
+                    switch (obj.type) {
+                        case 'insert': {}
+                            this.message.insert('Inserido com sucesso')
+                            break;
+                        case 'update':
+                            this.message.insert('Atualizado com sucesso')
+                            break;
+                        case 'delete':
+                            this.message.insert('Deletado com sucesso')
+                            break;
+                    }
+
+                    tableFunctions.build()
+                    this.hide()
+                })
+
+                // load buttons 
+                this.base.querySelector(`input.close`).addEventListener('click', evt => {
+                    evt.preventDefault()
+                    this.hide()
+                })
+                document.querySelector('#insert').addEventListener('click', (evt) => {
+                    evt.preventDefault()
+                    this.build()
+                })
+            }
+            async build(id) {
+                this.form.functions.new()
+                this.show()
+
+                if (id) {
+                    this.loading.show()
+                    await sleep(3000)
+                    let data = await (await fetch('/api/profile/get?id='+id)).json()
+
+                    data = data[0]
+                    data._id = id
+                    this.form.functions.set(data)
+                    this.loading.hide()
+                }
+            }
+            
+            insert() { this.build() }
+            update(id) { this.build(id) }
+            delete(id) { this.form.deleteBd(id) }
+
+            show() { this.base.style.display = 'block' }
+            hide() { this.base.style.display = 'none' }
+        }
+
+
+        // passivel de mudança
+        class TableFunctionsAdmin extends TableFunctions {
+            constructor (base) {
+                super(base)
+                this.base = base
+                this.screenFunctions = new ScreenFunctions( eScreen )
             }
             insert(data) {
                 data.forEach(e => {
-                    let card = `<div id="_${e._id}"} >
+                    let card = `<div id="_${e._id}" class="profiles">
                     <input class="openCard" type="button" value="Abrir"> <br>
                     <input class="updateCard" type="button" value="Update"> <br>
+                    <input class="deleteCard" type="button" value="Delete"> <br>
                     
                     _id: ${e._id}, <br>
                     name: ${e.name}, <br>
@@ -145,31 +196,26 @@
                         
                         this.screenFunctions.update(e._id)
                     })
+                    this.base.querySelector(`#_${e._id} > input.deleteCard`).addEventListener('click', evt => {
+                        evt.preventDefault()
+                        
+                        this.screenFunctions.delete(e._id)
+                    })
                 });
             }
         }
+        
         // items
         const eScreen = document.querySelector('div#screen')
         const eProfiles = document.querySelector('div#profiles')
         const eFilter = document.querySelector('div#filter')
 
         // classes
-        const filterfunction = new FilterFunctions( eFilter,  eProfiles, [] )
-        const screenFunctions = new ScreenFunctions(eScreen)
-        const tableFunctions = new TableFunctionsAdmin( eProfiles, screenFunctions)
+        const tableFunctions = new TableFunctionsAdmin( eProfiles)
 
-        document.querySelector('#insert').addEventListener('click', () => {
-            screenFunctions.build()
-        })
+        
 
-        fetch('/api/profile/getList')
-            .then(res => res.json())
-            .then(data => {
-                filterfunction.setArray(data)
-                tableFunctions.insert(data)
-                filterfunction.filterMain()
-            })
-            .catch(err => { console.log(err) })
+        
     </script>
 </body>
 </html>

@@ -155,7 +155,7 @@ export default class FilterFunctions extends FilterSstructure  {
         this.baseTable.querySelector('#empty').classList.remove(this.cardRemove)
     }
     cardsClean() {
-        this.baseTable.querySelectorAll('*:not(#empty)').forEach(e => {
+        this.baseTable.querySelectorAll('.profiles').forEach(e => {
             e.classList.remove(this.cardRemove)
         })
     }
