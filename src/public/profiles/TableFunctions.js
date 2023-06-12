@@ -1,6 +1,17 @@
+import FilterFunctions from './FilterFunctions.js'
+
+
 export default class TableFunctions {
     constructor (base) {
         this.base = base
+
+        this.filterfunction = new FilterFunctions(
+            document.querySelector('#filter'),
+            this.base,
+            []
+        )
+
+        this.build()
     }
     resultNull() {
         var screen = document.createElement('div')
@@ -9,9 +20,8 @@ export default class TableFunctions {
     }
     insert(data) {
         data.forEach(e => {
-            let card = `<div id="_${e._id}"} >
+            let card = `<div id="_${e._id}" class="profiles" >
                 <input class="openCard" type="button" value="Abrir"> <br>
-                <input class="updateCard" type="button" value="Update"> <br>
 
                 _id: ${e._id}, <br>
                 name: ${e.name}, <br>
@@ -31,5 +41,24 @@ export default class TableFunctions {
                 location.href = 'http://localhost:4000/profile?id='+e._id
             })
         });
+    }
+    clear() {
+        this.base.querySelectorAll('.profiles').forEach(e => {
+            e.remove()
+        })  
+    }
+
+    build(){
+        this.clear()
+        fetch('http://localhost:4000/api/profile/getList')
+            .then((res) => { return res.json() })
+            .then((data) => {
+                if (data.length == 0) return this.resultNull()
+
+                this.filterfunction.setArray(data)
+                this.insert(data)
+                this.filterfunction.filterMain()
+            })
+            .catch((err) => { console.log(err) })
     }
 }

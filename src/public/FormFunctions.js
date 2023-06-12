@@ -4,12 +4,62 @@ import f from '/functions.js'
 
 import Observer from '/Observer.js'
 
+/*
+    Desacoplar todo o código 
+
+    Error precisando ser tradados de forma de disparada quando houver um erro
+    clears precisam ser disparados dinamicamente sem chamada "direto" da aplicação
+    Isto é, caso a class seja Error seja deletada, ela apenas não notificará erros pro usuário
+
+    
+    Function retirada de telephone functions dentro da this, o método só será acesado dentro dessa página
+    Vale tambem para category
+
+    Funções relacionadas a telefones e category apenas como módulo de inicialização dentro Form
+    
+
+    Verificar se existe um jeito melhor de notificar alteraçãos via js do que usando o change
+    Pois quando muda valor via .value, O change event não é disparado (gpt deu um help, da uma olahda la depois)
+*/
+
+class Api {
+    async postInsert(data) {
+        return (await fetch('/api/profile/insert', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })).json()
+    }
+    async postUpdate(data) {
+        return (await fetch('/api/profile/update', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })).json()
+    }
+    async postDelete(data) {
+        return (await fetch('/api/profile/delete', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })).json()
+    }
+}
+
 
 class ErrorsFunctions {
     constructor(form) {
         this.form = form
+    }
+    start() {
         // Clear error when changes
-        form.querySelectorAll('input, select, textarea').forEach(e => {
+        this.form.querySelectorAll('input, select, textarea').forEach(e => {
             e.addEventListener('change', () => {
                 this.clear(e.parentElement)
             })
@@ -31,17 +81,19 @@ class ErrorsFunctions {
         var element = path[0] == 'telephones'
             ? this.form.querySelectorAll(`#telephones .${path[1]}`)[path[2]]
             : this.form.querySelector(`#${path.join(' #')}`)
-        
+
         this.clear(element)
         element.insertAdjacentHTML("beforeend", `<span class="error">${msg}</span>`);
     }
 }
 
 class Functions {
-    constructor(form, telephoneFunctions, categoryFunctions) {
+    constructor(form) {
         this.form = form
-        this.telephoneFunctions = telephoneFunctions
-        this.categoryFunctions = categoryFunctions
+
+        this.telephoneFunctions = new TelephoneFunctions(form.querySelector('#telephones'))
+        new CategoryFunctions(form.querySelector('#category'))
+        new LocalFunctions(form.querySelector('#local'))
     }
     get = {
         id: () => this.form.querySelector('#id input'),
@@ -129,6 +181,7 @@ class Functions {
 
         return f.removeEmptyValues(data)
     }
+
     set(data) {
         console.log(data);
         this.clear()
@@ -140,7 +193,7 @@ class Functions {
         
         // Category
         this.get.category.type().value = data.category.type
-        this.categoryFunctions.changeType()
+        this.get.category.type().dispatchEvent(new Event('change'))
 
         if (data.category.categories) {
             data.category.categories.forEach(e => {
@@ -171,11 +224,17 @@ class Functions {
             this.get.promotion().value = idPromotion
         }
     }
+    new() {
+        errorsFunctions.clear()
+        this.clear()
+    }
     clear() {
+        this.get.id().value = ''
         this.get.name().value = ''
         this.get.resume().value = ''
         this.get.category.type().value = 'restaurante'
-        this.categoryFunctions.changeType()
+        this.get.category.type().dispatchEvent(new Event('change'))
+
         this.get.category.categories().forEach(e => {
             e.checked = false
         })
@@ -200,11 +259,10 @@ class Functions {
     }    
 }
 class TelephoneFunctions  {
-    constructor(form, Erros) {
+    constructor(form) {
         form.querySelector('#insert [value="whatsapp"]').addEventListener('click', () => this.addWhatsapp())
         form.querySelector('#insert [value="telephone"]').addEventListener('click', () => this.addTelephone())
 
-        this.Erros = Erros
 
         this.form = form
         this.getTemp = (name) => `<div class="${name}">
@@ -222,8 +280,8 @@ class TelephoneFunctions  {
             input.value = value
             this.mask(input)
         }
+        obInputInserted.notify(element)
 
-        element.addEventListener('change', () => this.Erros.clear(element))
         element.addEventListener('keyup', () => this.mask(element.querySelector('input[type="text"]')))
         element.querySelector('input[name="delete"]').addEventListener('click', () => this.delete(element))
     }
@@ -236,8 +294,8 @@ class TelephoneFunctions  {
             input.value = value
             this.mask(input)
         }
-        
-        element.addEventListener('change', () => this.Erros.clear(element))
+        obInputInserted.notify(element)
+
         element.addEventListener('keyup', () => this.mask(element.querySelector('input[type="text"]')))
         element.querySelector('input[name="delete"]').addEventListener('click', () => this.delete(element))
     }
@@ -285,78 +343,71 @@ class LocalFunctions {
 class Form {
     constructor(form) {
         this.form = form
-        this.Erros = new ErrorsFunctions(form)
-        
-        this.telephoneFunctions = new TelephoneFunctions(form.querySelector('#telephones'), this.Erros)
-        this.categoryFunctions = new CategoryFunctions(form.querySelector('#category'))
-        new LocalFunctions(form.querySelector('#local'))
+        errorsFunctions.start()
+        this.functions = new Functions( form, this.telephoneFunctions )
 
-        this.functions = new Functions(
-            form,
-            this.telephoneFunctions,
-            this.categoryFunctions
-        )
+        this.obResponses = new Observer()
 
         // Starter button
         this.form.querySelector('input[type=button]#insert').addEventListener('click', (evt) => {
             evt.preventDefault()
-            this.sendler()
+            this.insertBd()
         })
         this.form.querySelector('input[type=button]#update').addEventListener('click', (evt) => {
             evt.preventDefault()
-            this.updater()
+            this.updateBd()
         })
     }
-    sendler() {
+    trycatch(fValidate, data, f) {
         try {
-            const {error, value} = validate.profile.insert(this.functions.getDataInsert())
+            const {error, value} = fValidate(data)
             if (error) throw error
 
-            console.log('fazendo insert')
-            fetch('/api/profile/insert', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(value)
+            f(value)
+        } catch(err) {
+            if (err instanceof Joi.ValidationError) return err.details.forEach(e => {
+                obErrorElement.notify({path: e.path, message: e.message})
             })
-                .then(res => res.json())
-                .then(json => console.log(json))
-                .catch(err => { console.log(err) })
-        } catch (err) {
-            if (err instanceof Joi.ValidationError) {
-                err.details.forEach(e => {
-                    this.Erros.insert(e.path, e.message)
-                })
-            } else { console.error(err) }
+            console.error(err)
         }
     }
-    updater() {
-        try {
-            const {error, value} = validate.profile.update(this.functions.getDataUpdate())
-            if (error) throw error
 
-            console.log('fazendo update')
-            fetch('/api/profile/update', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(value)
-            })
-                .then(res => res.json())
-                .then(json => console.log(json))
-                .catch(err => { console.log(err) })
-        } catch (err) {
-            if (err instanceof Joi.ValidationError) {
-                err.details.forEach(e => {
-                    this.Erros.insert(e.path, e.message)
-                })
-            } else { console.error(err) }
-        }
+    insertBd() {
+        let data = this.functions.getDataInsert()
+        this.trycatch(validate.profile.insert, data, async (value) => {
+            console.log('inserting...')
+            this.obResponses.notify({type: 'insert', response: await api.postInsert(value)})
+        })
+    }
+    updateBd() {
+        let data = this.functions.getDataUpdate()
+        this.trycatch(validate.profile.update, data, async (value) => {
+            console.log('updating...')
+            this.obResponses.notify({type: 'update', response: await api.postUpdate(value)})
+        })
+    }
+    deleteBd(id) {
+        let data = id
+        this.trycatch(validate.profile.id, data, async (value) => {
+            console.log('deleting...')
+            this.obResponses.notify({type: 'delete', response: await api.postDelete({id: value})})
+        })
     }
 }
 
 
+const errorsFunctions =  new ErrorsFunctions(document.querySelector('#form'))
+const api = new Api()
+
+// Observers
+const obInputInserted = new Observer()
+const obErrorElement = new Observer()
+
+obInputInserted.subscribe((element) => {
+    element.addEventListener('change', () => errorsFunctions.clear(element))
+})
+obErrorElement.subscribe((data) => {
+    errorsFunctions.insert(data.path, data.message)
+})
 
 export default Form
