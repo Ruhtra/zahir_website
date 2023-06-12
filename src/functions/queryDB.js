@@ -132,8 +132,9 @@ const homePage = {
             if (hppProfile.length > 0) throw new Error(queryDB.homePageProfile.insert.occupiedProfile)
         })() )
         promises.push((async () => {
-            let profile = await db.collection('profile').findOne( {_id: new ObjectId(id)}, {projection: {_id: 1}} )
+            let profile = await db.collection('profile').findOne( {_id: new ObjectId(id)}, {projection: {_id: 1, promotion: 1}} )  
             if (profile == null) throw new Error(queryDB.homePageProfile.insert.profileNotFound)
+            if (!profile.promotion) throw new Error(queryDB.homePageProfile.insert.promotionIsRequired)
         })() )
 
         await Promise.all(promises)
