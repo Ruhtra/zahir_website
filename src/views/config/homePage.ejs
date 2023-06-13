@@ -86,19 +86,17 @@
     <script type="module">
         function sleep(time) {
             return new Promise(resolve => setTimeout(resolve, time));
-        } 
+        }
         import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
+        import Api from '/api.js'
         import validate from "/validator.js";
 
         import TableFunctions from '/profiles/TableFunctions.js'
 
-        class ApiHomePage {
-            async apiGetAll() { return (await fetch('/api/homePage/getAll')).json() }
-        }
-        class HomePageFunctions extends ApiHomePage {
+        class HomePageFunctions  {
             constructor(homePage) {
-                super()
                 this.homePage = homePage
+                this.api = new Api()
                 // this.build()
                 this.data = []
             }
@@ -109,7 +107,7 @@
                 `
             }
             async build() {
-                let response = await this.apiGetAll()
+                let response = await this.api.homePage.getAll()
                 this.data = response
                 this.insert(response)
             }
@@ -128,7 +126,7 @@
             }
             clear() { this.homePage.querySelectorAll('div').forEach(e => { e.innerHTML = '' }) }
         }
-        class HomePageTable extends TableFunctions {
+        class ProfileTable extends TableFunctions {
             constructor(base) {
                 super(base)
                 this.base
@@ -162,7 +160,7 @@
         
             async build(permismion) {
                 if (!permismion) return // subscreve função build pai pra só ser executada quando receber um parametro verdadeiro
-                let data = await this.getList()
+                let data = await this.api.profile.getList() // atualizar
 
                 this.data = data
 
@@ -176,34 +174,17 @@
 
         class MainFunctions {
             constructor() {
-                this.hpT = new HomePageTable(eProfiles)
+                this.pt = new ProfileTable(eProfiles)
                 this.hpF = new HomePageFunctions(eHomePage)
+                this.api = new Api()
 
                 this.build()
-            }
-            async apiInsert(data) {
-                return await fetch('/api/homePage/insert', {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data)
-                })
-            }
-            async apiDelete(data) {
-                return await fetch('/api/homePage/delete', {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data)
-                })
             }
 
             async build() {
                 await Promise.all([
                     this.hpF.build(),
-                    this.hpT.build(true)
+                    this.pt.build(true)
                 ])
 
                 let hpl = this.hpF.data.map(e => e.profile._id)
@@ -211,7 +192,7 @@
                     <input class="insertOrd" type="number" placeholder="order" max="6" min="0"><br>  
                     <input class="insertCard" type="button" value="Inserir"><br>
                 `
-                this.hpT.data.forEach(e => {
+                this.pt.data.forEach(e => {
                     if (!hpl.includes(e._id) && e.promotion != undefined){
                         document.querySelector(`#profiles  #_${e._id}`).insertAdjacentHTML('beforeend', template)
                         document.querySelector(`#profiles #_${e._id} input.insertCard`).addEventListener('click', evt => {
@@ -230,7 +211,7 @@
                 })
                 if (error) throw error
 
-                this.apiInsert(value)
+                this.api.homePage.insert(value)
                     .then(e => {
                         this.build()
                     })
@@ -239,7 +220,7 @@
                 const {error, value} = validate.homePage.order(order)
                 if (error) throw error
 
-                this.apiDelete({order: value})
+                this.api.homePage.delete({order: value})
                     .then(e => {
                         this.build()
                     })

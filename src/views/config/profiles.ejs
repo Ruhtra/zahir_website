@@ -140,7 +140,7 @@
 
                 if (id) {
                     this.loading.show()
-                    await sleep(3000)
+                    // await sleep(3000)
                     let data = await (await fetch('/api/profile/get?id='+id)).json()
 
                     data = data[0]
