@@ -31,7 +31,7 @@
             }
             async build() {
                 this.clear()
-                let data = await this.api.homePage.get()
+                let data = await this.api.homePage.getAll()
 
                 data.forEach(e => {
                     this.base.insertAdjacentHTML('beforeend', this.getTemplate(e.profile))

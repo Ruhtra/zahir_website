@@ -1,6 +1,7 @@
 import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
 import validate from '/validator.js'
 import f from '/functions.js'
+import Api from '/api.js'
 
 import Observer from '/Observer.js'
 
@@ -21,36 +22,6 @@ import Observer from '/Observer.js'
     Verificar se existe um jeito melhor de notificar alteraçãos via js do que usando o change
     Pois quando muda valor via .value, O change event não é disparado (gpt deu um help, da uma olahda la depois)
 */
-
-class Api {
-    async postInsert(data) {
-        return (await fetch('/api/profile/insert', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        })).json()
-    }
-    async postUpdate(data) {
-        return (await fetch('/api/profile/update', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        })).json()
-    }
-    async postDelete(data) {
-        return (await fetch('/api/profile/delete', {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data)
-        })).json()
-    }
-}
 
 
 class ErrorsFunctions {
@@ -376,21 +347,21 @@ class Form {
         let data = this.functions.getDataInsert()
         this.trycatch(validate.profile.insert, data, async (value) => {
             console.log('inserting...')
-            this.obResponses.notify({type: 'insert', response: await api.postInsert(value)})
+            this.obResponses.notify({type: 'insert', response: await api.profile.insert(value)})
         })
     }
     updateBd() {
         let data = this.functions.getDataUpdate()
         this.trycatch(validate.profile.update, data, async (value) => {
             console.log('updating...')
-            this.obResponses.notify({type: 'update', response: await api.postUpdate(value)})
+            this.obResponses.notify({type: 'update', response: await api.profile.update(value)})
         })
     }
     deleteBd(id) {
         let data = id
         this.trycatch(validate.profile.id, data, async (value) => {
             console.log('deleting...')
-            this.obResponses.notify({type: 'delete', response: await api.postDelete({id: value})})
+            this.obResponses.notify({type: 'delete', response: await api.profile.delete({id: value})})
         })
     }
 }

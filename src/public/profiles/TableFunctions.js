@@ -1,15 +1,10 @@
 import FilterFunctions from './FilterFunctions.js'
+import Api from '/api.js'
 
-class api {
-    async getList() {
-        return (await fetch('http://localhost:4000/api/profile/getList')).json()
-    }
-}
-
-export default class TableFunctions extends api {
+export default class TableFunctions {
     constructor (base) {
-        super()
         this.base = base
+        this.api = new Api()
 
         this.filterfunction = new FilterFunctions(
             document.querySelector('#filter'),
@@ -56,7 +51,7 @@ export default class TableFunctions extends api {
 
     build(){
         this.clear()
-        this.getList()
+        this.api.profile.getList()
             .then((data) => {
                 if (data.length == 0) return this.resultNull()
 
