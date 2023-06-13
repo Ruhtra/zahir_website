@@ -82,6 +82,18 @@ const profile = {
         }
         await Promise.all(promises)
 
+        // insert new categories
+        if (data.category.newCategories != undefined) {
+            let names = data.category.newCategories.map(e => {return {name: e}})
+            if (names.length > 0) {
+                let response = await db.collection('categories').insertMany(names)
+    
+                Object.values(response.insertedIds).forEach(e => {
+                    data.category.categories.push(e.toString())
+                })            
+            }
+        }
+
         return await db.collection('profile').insertOne(structure(data))
     },
     update: async (data) => {
@@ -102,6 +114,18 @@ const profile = {
             })() )
         }
         await Promise.all(promises)
+
+        // insert new categories
+        if (data.category.newCategories != undefined) {
+            let names = data.category.newCategories.map(e => {return {name: e}})
+            if (names.length > 0) {
+                let response = await db.collection('categories').insertMany(names)
+    
+                Object.values(response.insertedIds).forEach(e => {
+                    data.category.categories.push(e.toString())
+                })            
+            }
+        }
 
         return await db.collection('profile').replaceOne(
             {_id: new ObjectId(data.id)}, structure(data)

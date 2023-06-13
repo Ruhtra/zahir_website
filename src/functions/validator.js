@@ -16,6 +16,11 @@ const profileScheme = Joi.object().keys({
             is: 'restaurante',
             then: Joi.array().items(idScheme).required(),
             otherwise: Joi.forbidden()
+        }),
+        newCategories: Joi.when('type', {
+            is: 'restaurante',
+            then: Joi.array().items(Joi.string()).required(),
+            otherwise: Joi.forbidden()
         })
     }).required(),
     informations: Joi.string().max(250),

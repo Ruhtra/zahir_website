@@ -103,3 +103,37 @@ module.exports.homePageProfile = () => { return [
     }
   }, { $unwind: '$profile' }
 ]}
+module.exports.categoriesNotUsed = () => { return [
+  {
+    $lookup: {
+      from: "profile",
+      let: { id: "$_id", },
+      pipeline: [
+        { $match: { "category.type": "restaurante" } },
+        { $unwind: "$category.categories" },
+        {
+          $group: {
+            _id: null,
+            mergedCategories: {
+              $addToSet: "$category.categories",
+            },
+          },
+        }, {
+          $match: {
+            $expr: { $in: ["$$id", "$mergedCategories"] }
+          },
+        }, {
+          $project: {
+            _id: 0,
+          },
+        },
+      ], as: "profile",
+    },
+  }, {
+    $project: {
+      _id: true,
+      name: true,
+      profile: true,
+    },
+  }, { $match: { profile: [], }, },
+]}
