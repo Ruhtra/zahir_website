@@ -1,4 +1,5 @@
 const { MongoClient } = require("mongodb");
+const { categoriesNotUsed } = require('../functions/query.js');
 
 const uri = process.env.MONGOURI
 let singleton;
@@ -17,21 +18,55 @@ async function connect() {
 
 function configFunctions() {
   const profilesCollection = singleton.collection('profile');
-  const carroselCollection = singleton.collection('home_page_promotions');
 
   const pipeline = [
-    { $match: { operationType: 'delete' } },
-    { $project: { documentKey: true } }
+    { $match: { $or: [
+      { operationType: 'delete' },
+      { operationType: 'replace' }
+    ]}
+    },
+    { $project: { documentKey: true, operationType: true, fullDocument: true} }
   ];
 
   const changeStream = profilesCollection.watch(pipeline);
-  changeStream.on('change', (change) => {
+  changeStream.on('change', async (change) => {
     const deletedProfileId = change.documentKey._id;
 
-    carroselCollection.deleteOne({ id_profile: deletedProfileId })
-      .then(() => console.log(`${deletedProfileId} removido da home_page_promotions`))
-      .catch((err) => console.error(`Erro ao remover ${deletedProfileId} da home_page_promotion: ${err}`))
+    switch (change.operationType) {
+      case 'delete': {
+        verify.homePage.delete(deletedProfileId)
+        verify.categories.notUsed()
+        return;
+      }
+      case 'replace': {
+        if (change.fullDocument.promotion == undefined) verify.homePage.delete(deletedProfileId)
+        verify.categories.notUsed()
+        return;
+      }
+    }
   });
+}
+
+// Jogar essas queryes pra dentro da queryDB, mas mantendo essa conexão ("singleton")
+const verify = {
+  categories: {
+    notUsed: async () => {
+      const categoriesCollection = singleton.collection('categories');
+      const response = await categoriesCollection.aggregate(categoriesNotUsed()).toArray()
+        
+      categoriesCollection.deleteMany({_id: { $in: response.map(e => e._id) }})
+        .then(() => console.log(`Categories deletadas com sucesso`))
+        .catch(() => console.log('erro ao delete categories'))
+    }
+  },
+  homePage: {
+    delete: async (id) => {
+      const carroselCollection = singleton.collection('home_page_promotions');
+      carroselCollection.deleteOne({ id_profile: id })
+        .then(() => console.log(`${id} removido da home_page_promotions`))
+        .catch((err) => console.error(`Erro ao remover ${id} da home_page_promotion: ${err}`))
+    }
+  }
 }
 
 module.exports = { 

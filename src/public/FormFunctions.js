@@ -73,7 +73,9 @@ class Functions {
         resume: () => this.form.querySelector('#resume textarea'),
         category: {
             type: () => this.form.querySelector('#category select'),
-            categories: () => [ ... this.form.querySelectorAll('#category #categories input') ]
+            categories: () => [ ... this.form.querySelectorAll('#category #categories .item input[type="checkbox"]') ],
+            newCategories: () => [ ... this.form.querySelectorAll('#category #newCategories .item input[type="checkbox"]') ],
+            newCategorieText: () => this.form.querySelector('#category #newCategories #new input')
         },
         informations: () => this.form.querySelector('#informations textarea'),
         telephones: {
@@ -119,6 +121,7 @@ class Functions {
             promotion: this.get.promotion().value
         }
         if (data.category.type == 'restaurante') data.category['categories'] = [ ... this.form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
+        if (data.category.type == 'restaurante') data.category['newCategories'] = [ ... this.form.querySelectorAll('#category #newCategories input:checked') ].map(e => e.getAttribute('name'))
 
         return f.removeEmptyValues(data)
     }
@@ -149,6 +152,7 @@ class Functions {
             promotion: this.get.promotion().value
         }
         if (data.category.type == 'restaurante') data.category['categories'] = [ ... this.form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
+        if (data.category.type == 'restaurante') data.category['newCategories'] = [ ... this.form.querySelectorAll('#category #newCategories input:checked') ].map(e => e.getAttribute('name'))
 
         return f.removeEmptyValues(data)
     }
@@ -209,6 +213,12 @@ class Functions {
         this.get.category.categories().forEach(e => {
             e.checked = false
         })
+        
+        this.get.category.newCategories().forEach(e => {
+            e.parentElement.remove()
+        })
+        this.get.category.newCategorieText.value = ''
+
         this.get.informations().value = ''
         this.get.telephones.telephone().forEach(e => {
             e.parentElement.remove()
@@ -286,10 +296,28 @@ class CategoryFunctions {
     constructor (form) {
         this.type = form.querySelector('#type')
         this.categories = form.querySelector('#categories')
+        this.newCategories = form.querySelector('#newCategories')
 
-        this.type.addEventListener('change', () => {
+        // Set button
+        this.type.addEventListener('change', (evt) => {
+            evt.preventDefault()
             this.changeType()
         })
+        this.newCategories.querySelector('#new input').addEventListener('change', (evt) => {
+            evt.preventDefault()
+            this.createCategorie()
+        })
+    }
+    createCategorie() {
+        let name = this.newCategories.querySelector('#new input').value
+        this.newCategories.querySelector('#new input').value = ''
+
+        let template = `<div id="${name}" class="item">
+            <label for="cb_${name}">${name}</label>
+            <input id="cb_${name}" type="checkbox" name="${name}" checked>
+        </div>`
+
+        this.newCategories.insertAdjacentHTML('beforeend', template)
     }
     changeType() {
         if (this.type.value == 'restaurante') this.categories.style.display = 'block'
@@ -336,9 +364,7 @@ class Form {
 
             f(value)
         } catch(err) {
-            if (err instanceof Joi.ValidationError) return err.details.forEach(e => {
-                obErrorElement.notify({path: e.path, message: e.message})
-            })
+            if (err instanceof Joi.ValidationError) return obErrorElement.notify(err.details)
             console.error(err)
         }
     }
@@ -378,7 +404,10 @@ obInputInserted.subscribe((element) => {
     element.addEventListener('change', () => errorsFunctions.clear(element))
 })
 obErrorElement.subscribe((data) => {
-    errorsFunctions.insert(data.path, data.message)
+    errorsFunctions.clear()
+    data.forEach(e => {
+        errorsFunctions.insert(e.path, e.message)
+    })
 })
 
 export default Form
