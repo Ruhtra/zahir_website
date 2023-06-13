@@ -4,9 +4,45 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Home page</title>
 </head>
 <body>
-    <h1>Index</h1>
+    <h1>Home page</h1>
+
+    <h2>Carrosel de promotions</h2>
+    <div id="carrosel"></div>
+
+
+    <script type="module">
+        import Api from '/api.js'
+
+        class Carrosel {
+            constructor(base) {
+                this.base = base
+                this.api = new Api()
+
+                this.build()
+            }
+            getTemplate(data) {
+                return `<div class="element">
+                    name: ${data.name} <br>
+                    promotion: ${data.promotion}
+                </div>`
+            }
+            async build() {
+                this.clear()
+                let data = await this.api.homePage.get()
+
+                data.forEach(e => {
+                    this.base.insertAdjacentHTML('beforeend', this.getTemplate(e.profile))
+                });
+            }
+            clear() { this.base.innerHTML = `` }
+        }
+
+        const eCarrosel = document.querySelector('#carrosel')
+        new Carrosel(eCarrosel)
+
+    </script>
 </body>
 </html>
