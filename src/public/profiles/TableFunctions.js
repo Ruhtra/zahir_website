@@ -51,6 +51,7 @@ export default class TableFunctions {
 
     build(){
         this.clear()
+        this.filterfunction.buildCategories()
         this.api.profile.getList()
             .then((data) => {
                 if (data.length == 0) return this.resultNull()

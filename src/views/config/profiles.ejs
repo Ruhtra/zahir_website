@@ -70,7 +70,7 @@
     <div id="screen">
         <div id="loading">!!! CARREGANDO</div>
         <input type="button" value="close" class="close">
-        <%- include('../insertForm.ejs', {categories, promotions})  %>
+        <%- include('../insertForm.ejs')  %>
     </div>
     
 
@@ -111,12 +111,15 @@
                     switch (obj.type) {
                         case 'insert': {}
                             this.message.insert('Inserido com sucesso')
+                            tableFunctions.filterfunction.buildCategories()
                             break;
                         case 'update':
                             this.message.insert('Atualizado com sucesso')
+                            tableFunctions.filterfunction.buildCategories()
                             break;
                         case 'delete':
                             this.message.insert('Deletado com sucesso')
+                            tableFunctions.filterfunction.buildCategories()
                             break;
                     }
 
@@ -145,7 +148,7 @@
 
                     data = data[0]
                     data._id = id
-                    this.form.functions.set(data)
+                    this.form.functions.new(data)
                     this.loading.hide()
                 }
             }

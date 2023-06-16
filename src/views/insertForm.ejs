@@ -20,12 +20,6 @@
             <option value="hotel">hotel</option>
         </select>
         <div id="categories">
-            <% categories.forEach(e => { %>
-                <div id="<%= e.name %>" class="item">
-                    <label for="cb_<%= e.name %>"><%= e.name %></label>
-                    <input id="cb_<%= e.name %>" type="checkbox" name="<%= e._id.toString() %>">
-                </div>
-            <% }); %>
         </div>
         <div id="newCategories">
             <div id="new">
@@ -108,10 +102,6 @@
     </div>
     <div id="promotion">
         <select>
-            <option value="" selected>None</option>
-            <% promotions.forEach(e => { %>
-                <option value="<%= e._id.toString() %>" html="<%= e.percentage %>"><%= e.percentage %></option>
-            <% }); %>
         </select>
     </div>
 

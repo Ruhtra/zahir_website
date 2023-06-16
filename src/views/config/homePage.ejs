@@ -159,6 +159,7 @@
             }
         
             async build(permismion) {
+                this.filterfunction.buildCategories()
                 if (!permismion) return // subscreve função build pai pra só ser executada quando receber um parametro verdadeiro
                 let data = await this.api.profile.getList() // atualizar
 

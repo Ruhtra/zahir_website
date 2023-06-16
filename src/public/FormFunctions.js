@@ -158,8 +158,6 @@ class Functions {
     }
 
     set(data) {
-        console.log(data);
-        this.clear()
         if (data._id) this.get.id().value = data._id
         // picture: this.form.querySelector('#picture input').value,
         this.get.name().value = data.name
@@ -199,9 +197,15 @@ class Functions {
             this.get.promotion().value = idPromotion
         }
     }
-    new() {
+    new(data) {
         errorsFunctions.clear()
         this.clear()
+
+        Promise.all([this.buildCategories(), this.buildPromotions()]).then(() => {
+            if(data) this.set(data)
+        })
+
+        
     }
     clear() {
         this.get.id().value = ''
@@ -237,7 +241,36 @@ class Functions {
         
         this.get.movie().value = ''
         this.get.promotion().value = ''
-    }    
+    }
+
+    async buildPromotions() {
+        let base = this.form.querySelector('#promotion select')
+        base.innerHTML = '<option value="" selected>None</option>' //clear
+
+        const getTemplate = (e) => `<option value="${e._id}" html="${e.percentage}">${e.percentage}</option>`
+
+        let data = await api.promotions.getAll()
+        data.forEach(e => {
+            base.insertAdjacentHTML('beforeend', getTemplate(e))
+        })
+    }
+    async buildCategories() {
+        let base = this.form.querySelector('#categories')
+
+        console.log(base);
+
+        const getTemplate = (e) => `
+        <div id="${e.name}" class="item">
+            <label for="cb_${e.name}">${e.name}</label>
+            <input id="cb_${e.name}" type="checkbox" name="${e._id}">
+        </div>`
+
+        let data = await api.categories.getAll()
+        base.innerHTML = '' //clear
+        data.forEach(e => {
+            base.insertAdjacentHTML('beforeend', getTemplate(e))
+        })
+    }
 }
 class TelephoneFunctions  {
     constructor(form) {
@@ -346,6 +379,8 @@ class Form {
         this.functions = new Functions( form, this.telephoneFunctions )
 
         this.obResponses = new Observer()
+
+        // this.functions.new()
 
         // Starter button
         this.form.querySelector('input[type=button]#insert').addEventListener('click', (evt) => {

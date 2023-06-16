@@ -1,3 +1,5 @@
+import Api from '/api.js'
+
 class FilterSstructure {
     constructor(data) {
         this.data = data
@@ -51,7 +53,6 @@ export default class FilterFunctions extends FilterSstructure  {
         this.baseTable = baseTable
         this.cardRemove = 'unvisible'
 
-
         this.btn = {
             promotion: this.baseFilter.querySelector('#promotion'),
             type: this.baseFilter.querySelector('#type'),
@@ -59,6 +60,8 @@ export default class FilterFunctions extends FilterSstructure  {
             categories: this.baseFilter.querySelector('#categories'),
             clear: this.baseFilter.querySelector('#clear')
         }
+
+        this.api = new Api()
 
         this.btn.promotion.addEventListener('click', (e) => {
             e.preventDefault()
@@ -83,18 +86,7 @@ export default class FilterFunctions extends FilterSstructure  {
 
             this.filterMain()
         })
-        this.btn.categories.querySelectorAll('div').forEach(div => {
-            div.addEventListener('click', (e) => {
-                e.preventDefault()
-
-
-                // update checkbox
-                let cb = div.querySelector('input') 
-                cb.checked ? cb.checked = false : cb.checked = true
-
-                this.filterMain()
-            })
-        })
+        // this.buildCategories()
         this.btn.clear.addEventListener('click', (e) => {
             e.preventDefault()
             
@@ -161,4 +153,30 @@ export default class FilterFunctions extends FilterSstructure  {
     }
 
     setArray(array) {this.data = array}
+
+    buildCategories() {
+        const getTemplate = (e) => `<div id="${e.name}" class="item">
+            <input type="checkbox" id="in_${e._id}" name="${e.name}">
+            <label for="in_${e._id}" class="categorie">${e.name}</label>
+        </div>`
+
+        this.api.categories.getAll()
+            .then(data => {
+                this.btn.categories.innerHTML = ''
+                data.forEach(e => {
+                    this.btn.categories.insertAdjacentHTML('beforeend', getTemplate(e))
+                })
+                this.btn.categories.querySelectorAll('div').forEach(div => {
+                    div.addEventListener('click', (e) => {
+                        e.preventDefault()
+        
+                        // update checkbox
+                        let cb = div.querySelector('input') 
+                        cb.checked ? cb.checked = false : cb.checked = true
+        
+                        this.filterMain()
+                    })
+                })
+        })
+    }
 }
