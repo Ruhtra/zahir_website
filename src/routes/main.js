@@ -9,46 +9,13 @@ const use = fn => (req, res, next) => {
 
 router.get('/', use(controllerMain.index))
 
-router.get('/profiles', async (req, res) => {
-    let categories = await Database.categories.getAll()
-
-    res.render('profiles.ejs', {
-        categories: categories
-    })
-})
+router.get('/profiles', async (req, res) => { res.render('profiles.ejs') })
 
 // config
-router.get('/config/insert', async (req, res) => {
-    let promotions = await Database.promotions.getAll()
-    let categories = await Database.categories.getAll()
+router.get('/config/insert', async (req, res) => { res.render('config/insert.ejs') })
+router.get('/config/profiles', async (req, res) => { res.render('config/profiles.ejs') })
+router.get('/config/homePage', async (req, res) => { res.render('config/homePage.ejs') })
 
-    res.render('config/insert.ejs', {
-        categories: categories,
-        promotions: promotions
-    })
-})
-router.get('/config/profiles', async (req, res) => {
-    let promotions = await Database.promotions.getAll()
-    let categories = await Database.categories.getAll()
-
-    res.render('config/profiles.ejs', {
-        categories: categories,
-        promotions: promotions
-    })
-})
-router.get('/config/homePage', async (req, res) => {
-    let promotions = await Database.promotions.getAll()
-    let categories = await Database.categories.getAll()
-
-    res.render('config/homePage.ejs', {
-        categories: categories,
-        promotions: promotions
-    })
-})
-
-
-router.get('/profile', async (req, res) => {
-    res.render('profile.ejs')
-})
+router.get('/profile', async (req, res) => { res.render('profile.ejs') })
 
 module.exports = router

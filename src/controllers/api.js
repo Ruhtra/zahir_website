@@ -48,5 +48,15 @@ module.exports = {
           
             return res.send(await Database.homePage.delete(value))
         }
+    },
+    categories: {
+        getAll: async (req, res) => {
+            return res.send(await Database.categories.getAll())
+        }
+    },
+    promotions: {
+        getAll: async (req, res) => {
+            return res.send(await Database.promotions.getAll())
+        }
     }
 }

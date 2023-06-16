@@ -42,12 +42,6 @@
         </select>
     </div>
     <div id="categories">
-        <% categories.forEach(e => { %>
-            <div id="<%= e.name %>" class="item">
-                <input type="checkbox" id="<%= e._id.toString() %>" name="<%= e.name %>">
-                <label for="<%= e._id.toString() %>" class="categorie"><%= e.name %></label>
-            </div>
-        <% }); %>
     </div>
     <div id="clear"><input type="button" value="clear"></div>
 </div>

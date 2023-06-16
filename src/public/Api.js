@@ -57,4 +57,14 @@ export default class Api {
             })).json()
         }
     }
+    categories = {
+        getAll: async() => {
+            return (await fetch('/api/categories/getAll')).json()
+        }
+    }
+    promotions = {
+        getAll: async() => {
+            return (await fetch('/api/promotions/getAll')).json()
+        }
+    }
 }
