@@ -1,7 +1,7 @@
 import Notifications from '/helper/Notifications.js'
 import api from '/helper/Api.js'
 
-import Form from '/profiles/profiles/Form.js'
+import Form from '/profiles/Form.js'
 import ProfilesAdmin from '/profiles/profiles/ProfilesAdmin.js'
 
 class LoadingFunctions {
@@ -73,7 +73,7 @@ class ScreenFunctions {
     }
     delete(id, btn) {
         btn.disabled = true
-        this.form.deleteBd(id)
+        this.form.db.delete(id)
             .finally(() => {
                 btn.disabled = false
             })

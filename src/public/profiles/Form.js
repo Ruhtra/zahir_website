@@ -1,11 +1,11 @@
-import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
-import validate from '/validator.js'
 import f from '/helper/functions.js'
 import api from '/helper/api.js'
 import { Filter } from '/helper/Templates.js'
 
-
 import Observer from '/helper/Observer.js'
+
+import DB from '/db.js'
+
 
 class ErrorsFunctions {
     constructor(form) {
@@ -336,6 +336,7 @@ class Form {
         this.functions = new Functions( form, this.telephoneFunctions )
 
         this.obResponses = new Observer()
+        this.db = new DB(this.obResponses, obErrors)
 
         const btn = {
             insert: this.form.querySelector('input[type=button]#insert'),
@@ -346,7 +347,9 @@ class Form {
         btn.insert.addEventListener('click', (evt) => {
             evt.preventDefault()
             btn.insert.disabled = true
-            this.insertBd()
+
+            let data = this.functions.getDataInsert()
+            this.db.profile.insert(data)
                 .finally(() => {
                     btn.insert.disabled = false
                 })
@@ -354,45 +357,12 @@ class Form {
         btn.update.addEventListener('click', (evt) => {
             evt.preventDefault()
             btn.update.disabled = true
-            this.updateBd()
+
+            let data = this.functions.getDataUpdate()
+            this.db.profile.update(data)
                 .finally(() => {
                     btn.update.disabled = false
                 })
-        })
-    }
-    async trycatch(fValidate, data, f) {
-        try {
-            const {error, value} = fValidate(data)
-            if (error) throw error
-
-            await f(value)
-        } catch(err) {
-            if (err instanceof Joi.ValidationError) return obErrors.notify(err.details)
-            console.error(err)
-        }
-    }
-
-    async insertBd() {
-        let data = this.functions.getDataInsert()
-        await this.trycatch(validate.profile.insert, data, async (value) => {
-            console.log('inserting...')
-            this.obResponses.notify({type: 'insert', response: await api.profile.insert(value)})
-        })
-    }
-    async updateBd() {
-        let data = this.functions.getDataUpdate()
-        await this.trycatch(validate.profile.update, data, async (value) => {
-            console.log('updating...')
-            this.obResponses.notify({type: 'update', response: await api.profile.update(value)})
-        })
-    }
-    async deleteBd(id) {
-        let data = id
-        await this.trycatch(validate.profile.id, data, async (value) => {
-            console.log('deleting...')
-            let response = await api.profile.delete({id: value})
-            await f.sleep(500) // hard code que vai sair quando entrar o socket.io
-            this.obResponses.notify({type: 'delete', response: response})
         })
     }
 }
