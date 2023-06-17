@@ -1,0 +1,41 @@
+#filter {
+    display: flex;
+}
+
+#profiles {
+    display: flex;
+}
+#profiles > div {
+    background-color: #ddd;
+    width: 200px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.unvisible { display: none; }
+
+/* btn */
+    /* promotion */
+        div#filter .btn.promotion {
+            padding: 10px;
+            border-radius: 2px;
+            background-color: red;
+        }
+        div#filter .btn.promotion:hover {cursor: pointer;}
+
+        div#filter div#promotion input {display: none;}
+        div#filter div#promotion input:checked ~ label.promotion { background-color: green; }
+
+    /* cdiv#filter ategorie */
+        div#filter div#categories div {
+            padding: 10px;
+        }
+        div#filter div#categories div label {
+            padding: 10px;
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+        div#filter div#categories div label:hover {cursor: pointer;}
+
+        div#filter div#categories input {display: none;}
+        div#filter div#categories input:checked ~ label.categorie { background-color: green; }

@@ -1,7 +1,7 @@
-export default class Api {
+export default new class Api {
     profile = {
-        get: async () => {
-            return (await fetch('/api/profile/get')).json()
+        get: async (id) => {
+            return (await fetch('/api/profile/get?id='+id)).json()
         },
         getList: async () => {
             return (await fetch('/api/profile/getList')).json()

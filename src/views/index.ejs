@@ -14,12 +14,11 @@
 
 
     <script type="module">
-        import Api from '/api.js'
+        import api from '/helper/Api.js'
 
         class Carrosel {
             constructor(base) {
                 this.base = base
-                this.api = new Api()
 
                 this.build()
             }
@@ -31,7 +30,7 @@
             }
             async build() {
                 this.clear()
-                let data = await this.api.homePage.getAll()
+                let data = await api.homePage.getAll()
 
                 data.forEach(e => {
                     this.base.insertAdjacentHTML('beforeend', this.getTemplate(e.profile))
