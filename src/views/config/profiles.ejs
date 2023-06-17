@@ -6,55 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Config Profiles</title>
 
-    <style>
-        #filter {
-            display: flex;
-        }
-
-        #profiles {
-            display: flex;
-        }
-        #profiles > div {
-            background-color: #ddd;
-            width: 200px;
-            padding: 10px;
-            margin: 10px;
-        }
-
-        .unvisible { display: none; }
-
-        /* btn */
-            /* promotion */
-                div#filter .btn.promotion {
-                    padding: 10px;
-                    border-radius: 2px;
-                    background-color: red;
-                }
-                div#filter .btn.promotion:hover {cursor: pointer;}
-
-                div#filter div#promotion input {display: none;}
-                div#filter div#promotion input:checked ~ label.promotion { background-color: green; }
-
-            /* cdiv#filter ategorie */
-                div#filter div#categories div {
-                    padding: 10px;
-                }
-                div#filter div#categories div label {
-                    padding: 10px;
-                    border: 1px solid black;
-                    border-radius: 5px;
-                }
-                div#filter div#categories div label:hover {cursor: pointer;}
-
-                div#filter div#categories input {display: none;}
-                div#filter div#categories input:checked ~ label.categorie { background-color: green; }
-    </style>
+    <link rel="stylesheet" href="/style.css">
     <style>
         #screen {
             display: none;
         }
         #screen #loading {
             display: none;
+        }
+        span.error {
+            background-color: red;
         }
     </style>
 </head>
@@ -63,8 +24,7 @@
     <%- include('../profile/table.ejs') %>
 
     <input type="button" id="insert" value="insert">
-    <div id="messages">
-
+    <div id="notifications">
     </div>
 
     <div id="screen">
@@ -73,149 +33,6 @@
         <%- include('../insertForm.ejs')  %>
     </div>
     
-
-    <script type="module">
-        function sleep(time) {
-            return new Promise(resolve => setTimeout(resolve, time));
-        } 
-        import TableFunctions from '/profiles/TableFunctions.js'
-
-        import Form from '/FormFunctions.js'
-
-        class LoadingFunctions {
-            constructor(base) {
-                this.base = base
-            }
-            show() { this.base.style.display = 'block' }
-            hide() { this.base.style.display = 'none' }
-        }
-        class MessagesFunctions {
-            constructor(base) { this.base = base }
-            insert(msg) {
-                this.base.innerHTML = `
-                    ${msg}
-                `
-            }
-        }
-
-        // Essa clase ta ok
-        class ScreenFunctions { 
-            constructor(base) {
-                this.base = base
-
-                this.form = new Form(this.base.querySelector('#form'))
-                this.loading = new LoadingFunctions(this.base.querySelector('#loading'))
-                this.message = new MessagesFunctions(document.querySelector('#messages'))
-
-                this.form.obResponses.subscribe((obj) => {
-                    switch (obj.type) {
-                        case 'insert': {}
-                            this.message.insert('Inserido com sucesso')
-                            tableFunctions.filterfunction.buildCategories()
-                            break;
-                        case 'update':
-                            this.message.insert('Atualizado com sucesso')
-                            tableFunctions.filterfunction.buildCategories()
-                            break;
-                        case 'delete':
-                            this.message.insert('Deletado com sucesso')
-                            tableFunctions.filterfunction.buildCategories()
-                            break;
-                    }
-
-                    tableFunctions.build()
-                    this.hide()
-                })
-
-                // load buttons 
-                this.base.querySelector(`input.close`).addEventListener('click', evt => {
-                    evt.preventDefault()
-                    this.hide()
-                })
-                document.querySelector('#insert').addEventListener('click', (evt) => {
-                    evt.preventDefault()
-                    this.build()
-                })
-            }
-            async build(id) {
-                this.form.functions.new()
-                this.show()
-
-                if (id) {
-                    this.loading.show()
-                    // await sleep(3000)
-                    let data = await (await fetch('/api/profile/get?id='+id)).json()
-
-                    data = data[0]
-                    data._id = id
-                    this.form.functions.new(data)
-                    this.loading.hide()
-                }
-            }
-            
-            insert() { this.build() }
-            update(id) { this.build(id) }
-            delete(id) { this.form.deleteBd(id) }
-
-            show() { this.base.style.display = 'block' }
-            hide() { this.base.style.display = 'none' }
-        }
-
-
-        // passivel de mudança
-        class TableFunctionsAdmin extends TableFunctions {
-            constructor (base) {
-                super(base)
-                this.base = base
-                this.screenFunctions = new ScreenFunctions( eScreen )
-            }
-            insert(data) {
-                data.forEach(e => {
-                    let card = `<div id="_${e._id}" class="profiles">
-                    <input class="openCard" type="button" value="Abrir"> <br>
-                    <input class="updateCard" type="button" value="Update"> <br>
-                    <input class="deleteCard" type="button" value="Delete"> <br>
-                    
-                    _id: ${e._id}, <br>
-                    name: ${e.name}, <br>
-                    picture: ${e.picture}, <br>
-                    promotion: ${e.promotion}, <br>
-                    uf: ${e.uf}, <br>
-                    category: {<br>
-                        &nbsp;&nbsp; type: ${e.category.type}, <br>
-                        &nbsp;&nbsp; categories: ${e.category.categories} <br>
-                    }
-                    </div>`
-                    this.base.insertAdjacentHTML("beforeend", card)
-                    
-                    // load buttons
-                    this.base.querySelector(`#_${e._id} > input.openCard`).addEventListener('click', evt => {
-                        evt.preventDefault()
-                        
-                        location.href = 'http://localhost:4000/profile?id='+e._id
-                    })
-                    this.base.querySelector(`#_${e._id} > input.updateCard`).addEventListener('click', evt => {
-                        evt.preventDefault()
-                        
-                        this.screenFunctions.update(e._id)
-                    })
-                    this.base.querySelector(`#_${e._id} > input.deleteCard`).addEventListener('click', evt => {
-                        evt.preventDefault()
-                        
-                        this.screenFunctions.delete(e._id)
-                    })
-                });
-            }
-        }
-        
-        // items
-        const eScreen = document.querySelector('div#screen')
-        const eProfiles = document.querySelector('div#profiles')
-        const eFilter = document.querySelector('div#filter')
-
-        // classes
-        const tableFunctions = new TableFunctionsAdmin(eProfiles)
-
-    </script>
+    <script type="module" src="/profiles.js"></script>
 </body>
 </html>

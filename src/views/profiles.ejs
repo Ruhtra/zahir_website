@@ -56,9 +56,9 @@
     <%- include('./profile/table.ejs') %>
 
     <script type="module">
-        import TableFunctions from './TableFunctions.js'
+        import Profiles from '/profiles/profiles/Profiles.js'
 
-        const tableFunctions = new TableFunctions(document.querySelector('#profiles'))
+        const profiles = new Profiles(document.querySelector('#profiles'))
     </script>
 </body>
 </html>

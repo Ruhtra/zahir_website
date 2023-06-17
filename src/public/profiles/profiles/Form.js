@@ -1,28 +1,11 @@
 import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
 import validate from '/validator.js'
-import f from '/functions.js'
-import Api from '/api.js'
+import f from '/helper/functions.js'
+import api from '/helper/api.js'
+import { Filter } from '/helper/Templates.js'
 
-import Observer from '/Observer.js'
 
-/*
-    Desacoplar todo o código 
-
-    Error precisando ser tradados de forma de disparada quando houver um erro
-    clears precisam ser disparados dinamicamente sem chamada "direto" da aplicação
-    Isto é, caso a class seja Error seja deletada, ela apenas não notificará erros pro usuário
-
-    
-    Function retirada de telephone functions dentro da this, o método só será acesado dentro dessa página
-    Vale tambem para category
-
-    Funções relacionadas a telefones e category apenas como módulo de inicialização dentro Form
-    
-
-    Verificar se existe um jeito melhor de notificar alteraçãos via js do que usando o change
-    Pois quando muda valor via .value, O change event não é disparado (gpt deu um help, da uma olahda la depois)
-*/
-
+import Observer from '/helper/Observer.js'
 
 class ErrorsFunctions {
     constructor(form) {
@@ -54,7 +37,92 @@ class ErrorsFunctions {
             : this.form.querySelector(`#${path.join(' #')}`)
 
         this.clear(element)
-        element.insertAdjacentHTML("beforeend", `<span class="error">${msg}</span>`);
+        element.insertAdjacentHTML("beforeend", Filter.error(msg) );
+    }
+}
+
+class TelephoneFunctions  {
+    constructor(baseTelephone) {
+        this.baseTelephone = baseTelephone
+
+        // Build buttons
+        this.baseTelephone.querySelector('#insert [value="whatsapp"]').addEventListener('click', () => this.add.whatsapp())
+        this.baseTelephone.querySelector('#insert [value="telephone"]').addEventListener('click', () => this.add.telephone())
+    }
+    addMain(type, value) {
+        if (!type) throw new Error('The type parameter must be passed')
+        type = type.trim().toLowerCase()
+        if (!['telephone', 'whatsapp'].includes(type)) throw new Error('Type passed must be "telephone" or "whatsapp"')
+
+        this.baseTelephone.insertAdjacentHTML("beforeend", Filter.telephone(type));
+        let element = [ ... this.baseTelephone.querySelectorAll('.'+type)].slice(-1)[0]
+
+        if (value) {
+            let input = element.querySelector('input[type="text"]')
+            input.value = value
+            this.mask(input)
+        }
+        obInputInserted.notify(element) // Rever essa linha de código
+
+        element.addEventListener('keyup', () => this.mask(element.querySelector('input[type="text"]')))
+        element.querySelector('input[name="delete"]').addEventListener('click', () => this.delete(element))
+    }
+    add = {
+        telephone: (value) => this.addMain('telephone', value),
+        whatsapp: (value) => this.addMain('whatsapp', value)
+    }
+    delete(element) { element.remove() }
+    mask (e) {
+        let t = e.value
+        t = t.replace(/\D/g,"")
+        t = t.replace(/(\d{0})(\d)/, "$1($2")
+        t = t.replace(/(\d{2})(\d)/, "$1) $2")
+        t = t.replace(/(\d{2})\)\s(\d{1})(\d)/, "$1) $2 $3")
+        t = t.replace(/(\d{2})\)\s(\d{1})\s(\d{4})(\d)/, "$1) $2 $3-$4")
+        t = t.replace(/(\(\d{2}\)\s\d{1}\s\d{4}\-\d{4})(\d)/, "$1")
+        e.value = t
+    }
+}
+class CategoryFunctions {
+    constructor (base) {
+        this.type = base.querySelector('#type')
+        this.categories = base.querySelector('#categories')
+        this.newCategories = base.querySelector('#newCategories')
+
+        // Build buttons
+        this.type.addEventListener('change', (evt) => {
+            evt.preventDefault()
+            this.changeType()
+        })
+        this.newCategories.querySelector('#new input').addEventListener('change', (evt) => {
+            evt.preventDefault()
+            this.createCategorie()
+        })
+    }
+    createCategorie() {
+        let input = this.newCategories.querySelector('#new input')
+
+        let name = input.value
+        input.value = ''
+
+        this.newCategories.insertAdjacentHTML('beforeend', Filter.categorie(name))
+    }
+    changeType() {
+        if (this.type.value == 'restaurante') this.categories.style.display = 'block'
+        else this.categories.style.display = 'none'
+    }
+}
+class LocalFunctions {
+    constructor(form) {
+        let input = form.querySelector('#cep input[type="text"]')
+        input.addEventListener('keyup', () => this.mask(input))
+    }
+    mask (e) {
+        let t = e.value
+        t = t.replace(/\D/g,"")
+        t = t.replace(/(\d{5})(\d)/, "$1-$2")
+        t = t.replace(/(\d{5}\-\d{3})(\d)/, "$1")
+        e.value = t
     }
 }
 
@@ -92,7 +160,8 @@ class Functions {
             complement: () => this.form.querySelector('#local #complement textarea'),
         },
         movie: () => this.form.querySelector('#movie input'),
-        promotion: () => this.form.querySelector("#promotion select") 
+        promotion: () => this.form.querySelector("#promotion select"),
+        promotionOption: (name) => this.form.querySelector(`#promotion select option[html="${name}"]`)
     }
 
     getDataInsert() {
@@ -176,10 +245,10 @@ class Functions {
 
         // Telephones
         data.telephones.telephone.forEach(e => {
-            this.telephoneFunctions.addTelephone(e.slice(3))
+            this.telephoneFunctions.add.telephone(e.slice(3))
         })
         data.telephones.whatsapp.forEach(e => {
-            this.telephoneFunctions.addWhatsapp(e.slice(3))
+            this.telephoneFunctions.add.whatsapp(e.slice(3))
         })
 
         // Local
@@ -193,19 +262,16 @@ class Functions {
 
         if (data.movie)this.get.movie().value = data.movie
         if (data.promotion) {
-            let idPromotion = this.form.querySelector(`#promotion option[html="${data.promotion}"]`).value
+            let idPromotion = this.get.promotionOption(data.promotion).value
             this.get.promotion().value = idPromotion
         }
     }
-    new(data) {
+    async new(data) {
         errorsFunctions.clear()
         this.clear()
 
-        Promise.all([this.buildCategories(), this.buildPromotions()]).then(() => {
-            if(data) this.set(data)
-        })
-
-        
+        await this.build()
+        if(data) this.set(data)
     }
     clear() {
         this.get.id().value = ''
@@ -243,202 +309,105 @@ class Functions {
         this.get.promotion().value = ''
     }
 
+    build() { return Promise.all([this.buildCategories(), this.buildPromotions()]) }
+    async buildCategories() {
+        let base = this.form.querySelector('#categories')
+        base.innerHTML = '' //clear
+
+        let data = await api.categories.getAll()
+        data.forEach(e => {
+            base.insertAdjacentHTML('beforeend', Filter.build.categories(e))
+        })
+    }
     async buildPromotions() {
         let base = this.form.querySelector('#promotion select')
         base.innerHTML = '<option value="" selected>None</option>' //clear
 
-        const getTemplate = (e) => `<option value="${e._id}" html="${e.percentage}">${e.percentage}</option>`
-
         let data = await api.promotions.getAll()
         data.forEach(e => {
-            base.insertAdjacentHTML('beforeend', getTemplate(e))
-        })
-    }
-    async buildCategories() {
-        let base = this.form.querySelector('#categories')
-
-        console.log(base);
-
-        const getTemplate = (e) => `
-        <div id="${e.name}" class="item">
-            <label for="cb_${e.name}">${e.name}</label>
-            <input id="cb_${e.name}" type="checkbox" name="${e._id}">
-        </div>`
-
-        let data = await api.categories.getAll()
-        base.innerHTML = '' //clear
-        data.forEach(e => {
-            base.insertAdjacentHTML('beforeend', getTemplate(e))
+            base.insertAdjacentHTML('beforeend', Filter.build.promotions(e))
         })
     }
 }
-class TelephoneFunctions  {
-    constructor(form) {
-        form.querySelector('#insert [value="whatsapp"]').addEventListener('click', () => this.addWhatsapp())
-        form.querySelector('#insert [value="telephone"]').addEventListener('click', () => this.addTelephone())
-
-
-        this.form = form
-        this.getTemp = (name) => `<div class="${name}">
-            <label for="${name}">${name.charAt(0).toUpperCase() + name.slice(1)}:</label>
-            <input type="text" maxlength="16">
-            <input type="button" name="delete" value="delete">
-        </div>`
-    }
-    addTelephone(value) {
-        this.form.insertAdjacentHTML("beforeend", this.getTemp('telephone'));
-        let element = [ ... this.form.querySelectorAll('.telephone')].slice(-1)[0]
-
-        if (value) {
-            let input = element.querySelector('input[type="text"]')
-            input.value = value
-            this.mask(input)
-        }
-        obInputInserted.notify(element)
-
-        element.addEventListener('keyup', () => this.mask(element.querySelector('input[type="text"]')))
-        element.querySelector('input[name="delete"]').addEventListener('click', () => this.delete(element))
-    }
-    addWhatsapp(value) {
-        this.form.insertAdjacentHTML("beforeend", this.getTemp('whatsapp'));
-        let element = [ ... this.form.querySelectorAll('.whatsapp')].slice(-1)[0]
-
-        if (value) {
-            let input = element.querySelector('input[type="text"]')
-            input.value = value
-            this.mask(input)
-        }
-        obInputInserted.notify(element)
-
-        element.addEventListener('keyup', () => this.mask(element.querySelector('input[type="text"]')))
-        element.querySelector('input[name="delete"]').addEventListener('click', () => this.delete(element))
-    }
-    delete(element) { element.remove() }
-    mask (e) {
-        let t = e.value
-        t = t.replace(/\D/g,"")
-        t = t.replace(/(\d{0})(\d)/, "$1($2")
-        t = t.replace(/(\d{2})(\d)/, "$1) $2")
-        t = t.replace(/(\d{2})\)\s(\d{1})(\d)/, "$1) $2 $3")
-        t = t.replace(/(\d{2})\)\s(\d{1})\s(\d{4})(\d)/, "$1) $2 $3-$4")
-        t = t.replace(/(\(\d{2}\)\s\d{1}\s\d{4}\-\d{4})(\d)/, "$1")
-        e.value = t
-    }
-}
-class CategoryFunctions {
-    constructor (form) {
-        this.type = form.querySelector('#type')
-        this.categories = form.querySelector('#categories')
-        this.newCategories = form.querySelector('#newCategories')
-
-        // Set button
-        this.type.addEventListener('change', (evt) => {
-            evt.preventDefault()
-            this.changeType()
-        })
-        this.newCategories.querySelector('#new input').addEventListener('change', (evt) => {
-            evt.preventDefault()
-            this.createCategorie()
-        })
-    }
-    createCategorie() {
-        let name = this.newCategories.querySelector('#new input').value
-        this.newCategories.querySelector('#new input').value = ''
-
-        let template = `<div id="${name}" class="item">
-            <label for="cb_${name}">${name}</label>
-            <input id="cb_${name}" type="checkbox" name="${name}" checked>
-        </div>`
-
-        this.newCategories.insertAdjacentHTML('beforeend', template)
-    }
-    changeType() {
-        if (this.type.value == 'restaurante') this.categories.style.display = 'block'
-        else this.categories.style.display = 'none'
-    }
-}
-class LocalFunctions {
-    constructor(form) {
-        let input = form.querySelector('#cep input[type="text"]')
-        input.addEventListener('keyup', () => this.mask(input))
-    }
-    mask (e) {
-        let t = e.value
-        t = t.replace(/\D/g,"")
-        t = t.replace(/(\d{5})(\d)/, "$1-$2")
-        t = t.replace(/(\d{5}\-\d{3})(\d)/, "$1")
-        e.value = t
-    }
-}
-
-
 class Form {
     constructor(form) {
-        this.form = form
         errorsFunctions.start()
+        this.form = form
         this.functions = new Functions( form, this.telephoneFunctions )
 
         this.obResponses = new Observer()
 
-        // this.functions.new()
+        const btn = {
+            insert: this.form.querySelector('input[type=button]#insert'),
+            update: this.form.querySelector('input[type=button]#update')
+        }
 
         // Starter button
-        this.form.querySelector('input[type=button]#insert').addEventListener('click', (evt) => {
+        btn.insert.addEventListener('click', (evt) => {
             evt.preventDefault()
+            btn.insert.disabled = true
             this.insertBd()
+                .finally(() => {
+                    btn.insert.disabled = false
+                })
         })
-        this.form.querySelector('input[type=button]#update').addEventListener('click', (evt) => {
+        btn.update.addEventListener('click', (evt) => {
             evt.preventDefault()
+            btn.update.disabled = true
             this.updateBd()
+                .finally(() => {
+                    btn.update.disabled = false
+                })
         })
     }
-    trycatch(fValidate, data, f) {
+    async trycatch(fValidate, data, f) {
         try {
             const {error, value} = fValidate(data)
             if (error) throw error
 
-            f(value)
+            await f(value)
         } catch(err) {
-            if (err instanceof Joi.ValidationError) return obErrorElement.notify(err.details)
+            if (err instanceof Joi.ValidationError) return obErrors.notify(err.details)
             console.error(err)
         }
     }
 
-    insertBd() {
+    async insertBd() {
         let data = this.functions.getDataInsert()
-        this.trycatch(validate.profile.insert, data, async (value) => {
+        await this.trycatch(validate.profile.insert, data, async (value) => {
             console.log('inserting...')
             this.obResponses.notify({type: 'insert', response: await api.profile.insert(value)})
         })
     }
-    updateBd() {
+    async updateBd() {
         let data = this.functions.getDataUpdate()
-        this.trycatch(validate.profile.update, data, async (value) => {
+        await this.trycatch(validate.profile.update, data, async (value) => {
             console.log('updating...')
             this.obResponses.notify({type: 'update', response: await api.profile.update(value)})
         })
     }
-    deleteBd(id) {
+    async deleteBd(id) {
         let data = id
-        this.trycatch(validate.profile.id, data, async (value) => {
+        await this.trycatch(validate.profile.id, data, async (value) => {
             console.log('deleting...')
-            this.obResponses.notify({type: 'delete', response: await api.profile.delete({id: value})})
+            let response = await api.profile.delete({id: value})
+            await f.sleep(500) // hard code que vai sair quando entrar o socket.io
+            this.obResponses.notify({type: 'delete', response: response})
         })
     }
 }
 
 
 const errorsFunctions =  new ErrorsFunctions(document.querySelector('#form'))
-const api = new Api()
 
 // Observers
 const obInputInserted = new Observer()
-const obErrorElement = new Observer()
+const obErrors = new Observer()
 
 obInputInserted.subscribe((element) => {
     element.addEventListener('change', () => errorsFunctions.clear(element))
 })
-obErrorElement.subscribe((data) => {
+obErrors.subscribe((data) => {
     errorsFunctions.clear()
     data.forEach(e => {
         errorsFunctions.insert(e.path, e.message)

@@ -69,6 +69,7 @@
 </head>
 <body>
     <h2>Home Page</h2>
+    <div id="notifications"></div>
     <div id="homePages">
         <div id="order_0"></div>
         <div id="order_1"></div>
@@ -79,162 +80,9 @@
         <div id="order_6"></div>
     </div>
 
-
     <%- include('../profile/filter.ejs') %>
     <%- include('../profile/table.ejs') %>
 
-    <script type="module">
-        function sleep(time) {
-            return new Promise(resolve => setTimeout(resolve, time));
-        }
-        import Joi from 'https://cdn.jsdelivr.net/npm/joi@17.9.2/+esm'
-        import Api from '/api.js'
-        import validate from "/validator.js";
-
-        import TableFunctions from '/profiles/TableFunctions.js'
-
-        class HomePageFunctions  {
-            constructor(homePage) {
-                this.homePage = homePage
-                this.api = new Api()
-                // this.build()
-                this.data = []
-            }
-            getTemplate(data) {
-                return `
-                    <input class="delete" type="button" value="delete">
-                    ${data.name}
-                `
-            }
-            async build() {
-                let response = await this.api.homePage.getAll()
-                this.data = response
-                this.insert(response)
-            }
-            insert(data) {
-                this.clear()
-                data.forEach(e => {
-                    this.homePage.querySelector('div#order_'+e.order).innerHTML = this.getTemplate(e.profile)
-
-                    // Load buttons
-                    this.homePage.querySelector(`div#order_${e.order} input.delete`).addEventListener('click', (evt) => {
-                        evt.preventDefault()
-
-                        mainFunctions.delete(e.order) // tirar isso daqui
-                    })
-                });
-            }
-            clear() { this.homePage.querySelectorAll('div').forEach(e => { e.innerHTML = '' }) }
-        }
-        class ProfileTable extends TableFunctions {
-            constructor(base) {
-                super(base)
-                this.base
-                this.data = []
-            }
-            insert(data) {
-                this.clear()
-                data.forEach(e => {
-                    let card = `<div id="_${e._id}" class="profiles" >
-                        <input class="openCard" type="button" value="Abrir"> <br>
-
-                        _id: ${e._id}, <br>
-                        name: ${e.name}, <br>
-                        picture: ${e.picture}, <br>
-                        promotion: ${e.promotion}, <br>
-                        uf: ${e.uf}, <br>
-                        category: {<br>
-                            &nbsp;&nbsp; type: ${e.category.type}, <br>
-                            &nbsp;&nbsp; categories: ${e.category.categories} <br>
-                        }
-                    </div>`
-                    this.base.insertAdjacentHTML("beforeend", card)
-
-                    this.base.querySelector(`#_${e._id} > input.openCard`).addEventListener('click', evt => {
-                        evt.preventDefault()
-                        
-                        location.href = 'http://localhost:4000/profile?id='+e._id
-                    })
-                });
-            }
-        
-            async build(permismion) {
-                this.filterfunction.buildCategories()
-                if (!permismion) return // subscreve função build pai pra só ser executada quando receber um parametro verdadeiro
-                let data = await this.api.profile.getList() // atualizar
-
-                this.data = data
-
-                if (data.length == 0) return this.resultNull()
-
-                this.filterfunction.setArray(data)
-                this.insert(data)
-                this.filterfunction.filterMain()
-            }
-        }
-
-        class MainFunctions {
-            constructor() {
-                this.pt = new ProfileTable(eProfiles)
-                this.hpF = new HomePageFunctions(eHomePage)
-                this.api = new Api()
-
-                this.build()
-            }
-
-            async build() {
-                await Promise.all([
-                    this.hpF.build(),
-                    this.pt.build(true)
-                ])
-
-                let hpl = this.hpF.data.map(e => e.profile._id)
-                let template = `
-                    <input class="insertOrd" type="number" placeholder="order" max="6" min="0"><br>  
-                    <input class="insertCard" type="button" value="Inserir"><br>
-                `
-                this.pt.data.forEach(e => {
-                    if (!hpl.includes(e._id) && e.promotion != undefined){
-                        document.querySelector(`#profiles  #_${e._id}`).insertAdjacentHTML('beforeend', template)
-                        document.querySelector(`#profiles #_${e._id} input.insertCard`).addEventListener('click', evt => {
-                            evt.preventDefault()
-                            let order = document.querySelector(`#profiles #_${e._id} input.insertOrd`).value || undefined
-
-                            this.insert(e._id, order)
-                        })
-                    }
-                })
-            }
-            insert(id, order) {
-                const {error, value} = validate.homePage.insert({
-                    id: id,
-                    order: order
-                })
-                if (error) throw error
-
-                this.api.homePage.insert(value)
-                    .then(e => {
-                        this.build()
-                    })
-            }
-            delete(order) {
-                const {error, value} = validate.homePage.order(order)
-                if (error) throw error
-
-                this.api.homePage.delete({order: value})
-                    .then(e => {
-                        this.build()
-                    })
-            }
-        }
-
-        
-        const eHomePage = document.querySelector('#homePages')
-        const eProfiles = document.querySelector('#profiles')
-
-        const mainFunctions = new MainFunctions()
-
-        
-    </script>
+    <script type="module" src="/homePage.js"></script>
 </body>
 </html>
