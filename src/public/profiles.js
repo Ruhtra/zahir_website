@@ -73,7 +73,7 @@ class ScreenFunctions {
     }
     delete(id, btn) {
         btn.disabled = true
-        this.form.db.delete(id)
+        this.form.db.profile.delete(id)
             .finally(() => {
                 btn.disabled = false
             })

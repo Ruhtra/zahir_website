@@ -35,12 +35,12 @@ function configFunctions() {
     switch (change.operationType) {
       case 'delete': {
         verify.homePage.delete(deletedProfileId)
-        verify.categories.notUsed()
+        // verify.categories.notUsed()
         return;
       }
       case 'replace': {
         if (change.fullDocument.promotion == undefined) verify.homePage.delete(deletedProfileId)
-        verify.categories.notUsed()
+        // verify.categories.notUsed()
         return;
       }
     }
