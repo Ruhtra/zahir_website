@@ -37,14 +37,14 @@ export default class DB {
         update: async (data) => {
             await this.trycatch(validate.profile.update, data, async (value) => {
                 console.log('updating...')
-                this.obResponses.notify({type: 'update', response: await api.profile.update(value)})
+                let response = await api.profile.update(value)
+                this.obResponses.notify({type: 'update', response: response})
             })
         },
         delete: async (id) => {
             await this.trycatch(validate.profile.id, id, async (value) => {
                 console.log('deleting...')
                 let response = await api.profile.delete({id: value})
-                await f.sleep(500) // hard code que vai sair quando entrar o socket.io
                 this.obResponses.notify({type: 'delete', response: response})
             })
         }

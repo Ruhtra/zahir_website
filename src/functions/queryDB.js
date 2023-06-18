@@ -126,14 +126,34 @@ const profile = {
                 })            
             }
         }
-
-        return await db.collection('profile').replaceOne(
+        let response =  await db.collection('profile').replaceOne(
             {_id: new ObjectId(data.id)}, structure(data)
         )
+            
+        //remove categories
+        const categoriesCollection = db.collection('categories');
+        const cat = await categoriesCollection.aggregate(query.categoriesNotUsed()).toArray()
+            
+        await categoriesCollection.deleteMany({_id: { $in: cat.map(e => e._id) }})
+        console.log(`Categories deletadas com sucesso`)
+
+        return response
+
     },
     delete: async (id) => {
         const db = await connect();
-        return await db.collection('profile').deleteOne({_id: new ObjectId(id)})
+
+
+        let response =  await db.collection('profile').deleteOne({_id: new ObjectId(id)})
+        
+        //remove categories
+        const categoriesCollection = db.collection('categories');
+        const cat = await categoriesCollection.aggregate(query.categoriesNotUsed()).toArray()
+            
+        await categoriesCollection.deleteMany({_id: { $in: cat.map(e => e._id) }})
+        console.log(`Categories deletadas com sucesso`)
+
+        return response
     }
 }
 

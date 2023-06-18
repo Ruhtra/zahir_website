@@ -108,8 +108,14 @@ class CategoryFunctions {
         this.newCategories.insertAdjacentHTML('beforeend', Filter.categorie(name))
     }
     changeType() {
-        if (this.type.value == 'restaurante') this.categories.style.display = 'block'
-        else this.categories.style.display = 'none'
+        if (this.type.value == 'restaurante') {
+            this.categories.style.display = 'block'
+            this.newCategories.style.display = 'block'
+        }
+        else {
+            this.categories.style.display = 'none'
+            this.newCategories.style.display = 'none'
+        }
     }
 }
 class LocalFunctions {
