@@ -6,7 +6,10 @@ export const Profile = {
             _id: ${data._id}, <br>
             name: ${data.name}, <br>
             picture: ${data.picture}, <br>
-            promotion: ${data.promotion}, <br>
+            promotion: { <br>
+                &nbsp;&nbsp; title: ${data.promotion.title}, <br>
+                &nbsp;&nbsp; description: ${data.promotion.description} <br>
+            }, <br>
             uf: ${data.uf}, <br>
             category: {<br>
                 &nbsp;&nbsp; type: ${data.category.type}, <br>
@@ -22,7 +25,10 @@ export const Profile = {
             _id: ${data._id}, <br>
             name: ${data.name}, <br>
             picture: ${data.picture}, <br>
-            promotion: ${data.promotion}, <br>
+            promotion: { <br>
+                &nbsp;&nbsp; title: ${data.promotion.title}, <br>
+                &nbsp;&nbsp; description: ${data.promotion.description} <br>
+            }, <br>
             uf: ${data.uf}, <br>
             category: {<br>
                 &nbsp;&nbsp; type: ${data.category.type}, <br>
@@ -36,7 +42,10 @@ export const Profile = {
         _id: ${data._id}, <br>
         name: ${data.name}, <br>
         picture: ${data.picture}, <br>
-        promotion: ${data.promotion}, <br>
+        promotion: { <br>
+            &nbsp;&nbsp; title: ${data.promotion.title}, <br>
+            &nbsp;&nbsp; description: ${data.promotion.description} <br>
+        }, <br>
         uf: ${data.uf}, <br>
         category: {<br>
             &nbsp;&nbsp; type: ${data.category.type}, <br>

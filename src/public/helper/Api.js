@@ -15,7 +15,7 @@ async function structure(link, data) {
 export default new class Api {
     profile = {
         get: async (id) => structure('/api/profile/get?id='+id),
-        getList: async () => await structure('/api/profile/getList'),
+        getList: async () => structure('/api/profile/getList'),
         insert: async (data) => structure('/api/profile/insert', {
                 method: 'POST',
                 headers: {

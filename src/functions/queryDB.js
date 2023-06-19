@@ -29,11 +29,14 @@ const structure = (obj) => {
           complement: obj.local.complement
         },
         movie: obj.movie,
+        promotion: {
+            title: obj.promotion.title,
+            description: obj.promotion.description
+        }
     }
     data = f.removeEmptyValues(data)
 
     data['created'] = new Date()
-    if (obj.promotion != undefined) data['promotion'] = new ObjectId(obj.promotion)
     if (obj.category.categories != undefined) data['category']['categories'] = obj.category.categories.map((e) => new ObjectId(e))
 
     return data
@@ -61,26 +64,20 @@ const profile = {
     },
     getList: async () => {
         const db = await connect();
-        return await db.collection('profile').aggregate(query.listProfile()).toArray()
+        let res = await db.collection('profile').aggregate(query.listProfile()).toArray()
+        console.log(res);
+        return res
     },
     insert: async (data) => {
         const db = await connect();
         
         // validate ids
-        let promises = []
         if (data.category.categories != undefined) {
             promises = data.category.categories.map(async (id) => {
                 let find = await db.collection('categories').findOne({_id: new ObjectId(id)})
                 if (!find) throw new Error(queryDB.profile.insert.categorieNotFound)
             })
         }
-        if (data.promotion != undefined) {
-            promises.push((async () => {
-                let find = await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)})
-                if (!find) throw new Error(queryDB.profile.insert.promotionNotFound)
-            })() )
-        }
-        await Promise.all(promises)
 
         // insert new categories
         if (data.category.newCategories != undefined) {
@@ -90,7 +87,7 @@ const profile = {
     
                 Object.values(response.insertedIds).forEach(e => {
                     data.category.categories.push(e.toString())
-                })            
+                })
             }
         }
 
@@ -100,20 +97,12 @@ const profile = {
         const db = await connect();
         
         // validate ids
-        let promises = []
         if (data.category.categories != undefined) {
             promises = data.category.categories.map(async (id) => {
                 let find = await db.collection('categories').findOne({_id: new ObjectId(id)})
                 if (!find) throw new Error(queryDB.profile.insert.categorieNotFound)
             })
         }
-        if (data.promotion != undefined) {
-            promises.push((async () => {
-                let find = await db.collection('promotions').findOne({_id: new ObjectId(data.promotion)})
-                if (!find) throw new Error(queryDB.profile.insert.promotionNotFound)
-            })() )
-        }
-        await Promise.all(promises)
 
         // insert new categories
         if (data.category.newCategories != undefined) {
@@ -126,6 +115,7 @@ const profile = {
                 })            
             }
         }
+
         let response =  await db.collection('profile').replaceOne(
             {_id: new ObjectId(data.id)}, structure(data)
         )
@@ -178,7 +168,7 @@ const homePage = {
         promises.push((async () => {
             let profile = await db.collection('profile').findOne( {_id: new ObjectId(id)}, {projection: {_id: 1, promotion: 1}} )  
             if (profile == null) throw new Error(queryDB.homePageProfile.insert.profileNotFound)
-            if (!profile.promotion) throw new Error(queryDB.homePageProfile.insert.promotionIsRequired)
+            if (Object.keys(profile.promotion).length == 0) throw new Error(queryDB.homePageProfile.insert.promotionIsRequired)
         })() )
 
         await Promise.all(promises)

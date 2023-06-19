@@ -36,7 +36,10 @@
             getTemplate(data) {
                 return `<div class="element">
                     name: ${data.name} <br>
-                    promotion: ${data.promotion}
+                    promotion: { <br>
+                        &nbsp;&nbsp; title: ${data.promotion.title}, <br>
+                        &nbsp;&nbsp; description: ${data.promotion.description} <br>
+                    } <br>
                 </div>`
             }
             async build() {

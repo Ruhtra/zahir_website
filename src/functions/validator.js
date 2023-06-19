@@ -38,7 +38,10 @@ const profileScheme = Joi.object().keys({
         complement: Joi.string().max(250)
     }).required(),
     movie: Joi.string().uri(),
-    promotion: idScheme
+    promotion: Joi.object().keys({
+        title: Joi.string().max(20).required(),
+        description: Joi.string().max(250)
+    }).required()
 })
 const updateScheme = profileScheme.keys({
     id: idScheme.required()

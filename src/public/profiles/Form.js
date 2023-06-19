@@ -166,8 +166,10 @@ class Functions {
             complement: () => this.form.querySelector('#local #complement textarea'),
         },
         movie: () => this.form.querySelector('#movie input'),
-        promotion: () => this.form.querySelector("#promotion select"),
-        promotionOption: (name) => this.form.querySelector(`#promotion select option[html="${name}"]`)
+        promotion: {
+            title: () => this.form.querySelector("#promotion #title input"),
+            description: () => this.form.querySelector("#promotion #description textarea")
+        },
     }
 
     getDataInsert() {
@@ -193,7 +195,10 @@ class Functions {
                 complement: this.get.local.complement().value,
             },
             movie: this.get.movie().value,
-            promotion: this.get.promotion().value
+            promotion: {
+                title: this.get.promotion.title().value,
+                description: this.get.promotion.description().value
+            }
         }
         if (data.category.type == 'restaurante') data.category['categories'] = [ ... this.form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
         if (data.category.type == 'restaurante') data.category['newCategories'] = [ ... this.form.querySelectorAll('#category #newCategories input:checked') ].map(e => e.getAttribute('name'))
@@ -224,7 +229,10 @@ class Functions {
                 complement: this.get.local.complement().value,
             },
             movie: this.get.movie().value,
-            promotion: this.get.promotion().value
+            promotion: {
+                title: this.get.promotion.title().value,
+                description: this.get.promotion.description().value
+            }
         }
         if (data.category.type == 'restaurante') data.category['categories'] = [ ... this.form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
         if (data.category.type == 'restaurante') data.category['newCategories'] = [ ... this.form.querySelectorAll('#category #newCategories input:checked') ].map(e => e.getAttribute('name'))
@@ -267,10 +275,9 @@ class Functions {
         if (data.local.complement)this.get.local.complement().value = data.local.complement
 
         if (data.movie)this.get.movie().value = data.movie
-        if (data.promotion) {
-            let idPromotion = this.get.promotionOption(data.promotion).value
-            this.get.promotion().value = idPromotion
-        }
+        // Promotion
+        if (data.promotion.title) this.get.promotion.title().value = data.promotion.title
+        if (data.promotion.description) this.get.promotion.description().value = data.promotion.description
     }
     async new(data) {
         errorsFunctions.clear()
@@ -312,11 +319,12 @@ class Functions {
 
         
         this.get.movie().value = ''
-        this.get.promotion().value = ''
+        this.get.promotion.title().value = ''
+        this.get.promotion.description().value = ''
     }
 
-    build() { return Promise.all([this.buildCategories(), this.buildPromotions()]) }
-    async buildCategories() {
+    async build() { 
+        // Build in categories
         let base = this.form.querySelector('#categories')
         base.innerHTML = '' //clear
 
@@ -324,16 +332,7 @@ class Functions {
         data.forEach(e => {
             base.insertAdjacentHTML('beforeend', Filter.build.categories(e))
         })
-    }
-    async buildPromotions() {
-        let base = this.form.querySelector('#promotion select')
-        base.innerHTML = '<option value="" selected>None</option>' //clear
-
-        let data = await api.promotions.getAll()
-        data.forEach(e => {
-            base.insertAdjacentHTML('beforeend', Filter.build.promotions(e))
-        })
-    }
+     }
 }
 class Form {
     constructor(form) {
@@ -349,7 +348,7 @@ class Form {
             update: this.form.querySelector('input[type=button]#update')
         }
 
-        // Starter button
+        // Starter buttons
         btn.insert.addEventListener('click', (evt) => {
             evt.preventDefault()
             btn.insert.disabled = true
