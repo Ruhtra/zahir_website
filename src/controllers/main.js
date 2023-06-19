@@ -5,11 +5,15 @@ module.exports = {
     profile: (req, res) => {
         return res.render('profile.ejs')
     },
-    // config
     profiles: (req, res) => {
-        return res.render('config/profiles.ejs')
+        return res.render('profiles.ejs')
     },
-    homePage: (req, res) => {
-        return res.render('config/homePage.ejs')
+    config: {
+        profiles: (req, res) => {
+            return res.render('config/profiles.ejs')
+        },
+        homePage: (req, res) => {
+            return res.render('config/homePage.ejs')
+        }
     }
 }

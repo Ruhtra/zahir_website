@@ -7,9 +7,10 @@ const use = fn => (req, res, next) => {
 
 router.get('/', use(controllerMain.index))
 router.get('/profile', use(controllerMain.profile))
+router.get('/profiles', use(controllerMain.profiles))
 
 // config
-router.get('/config/profiles', use(controllerMain.profiles))
-router.get('/config/homePage', use(controllerMain.homePage))
+router.get('/config/profiles', use(controllerMain.config.profiles))
+router.get('/config/homePage', use(controllerMain.config.homePage))
 
 module.exports = router

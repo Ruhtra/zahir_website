@@ -20,7 +20,7 @@ export default class DB {
             await f(value)
         } catch(err) {
             if (err instanceof Joi.ValidationError) {
-                if (this.obErrors) return obErrors.notify(err.details)
+                if (this.obErrors) return this.obErrors.notify(err.details)
             }
             if (err instanceof InternalServerError) this.notifications.insert('Não foi possível executar ação. Erro interno do servidor')
             console.error(err)
