@@ -4,58 +4,141 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="stylesheet/flickity.css" media="screen">
+    
+    <link rel="stylesheet" href="stylesheet/assets/navbar.css">
+    <link rel="stylesheet" href="stylesheet/assets/carousel.css">
+
     <title>Home page</title>
 
     <style>
-        #carrosel {
-            display: flex;
-            gap: 5px;
+        * {
+            margin: 0;
+            padding: 0;
         }
-        #carrosel .element {
-            padding: 10px;
-            background-color: #ddd;
+        /* Gambiarra que sai com atualização da imagem opaca */
+        body, html {
+            height: 100%;
+        }
+        main {
+            height: 100%;
+            background-color: rgba(255, 255, 255, .5);
+        }
+
+    
+        /* remove */
+        body {
+            /* background-image: url('/images/MainPage.png'); */
+            background-image: url('/images/back.png');
         }
     </style>
 </head>
 <body>
-    <h1>Home page</h1>
+    <main> 
+        <%- include('assets/navbar.ejs') %>
+        <section id="carousel">
+            <div id="top">
+                <h1> <span>Promoções</span> da semana </h1>
+            </div>
+            <div id="data"></div>
+            <%- include('assets/carousel.ejs') %>
+        </section>
+    </main>
 
-    <h2>Carrosel de promotions</h2>
-    <div id="carrosel"></div>
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<script>
+    function mainFlickity(flkty) {
+        let elements = flkty.cells.map(e => e.element)
 
+        elements.forEach((e) => {
+            e.classList.remove('left')
+            e.classList.remove('rigth')
+        })
+        elements.forEach((e, i) => {
+            // Center
+            e.style.transform = e.style.transform.split(' ')[0] + ' translateY(-50%)'
+            e.style.top = '50%'
 
-    <script type="module">
-        import api from '/helper/Api.js'
+            // set Left and Rigth
+            if (e.classList.contains('is-selected') && elements.length > 1) {
+                var prev = i-1
+                var next = i+1
 
-        class Carrosel {
-            constructor(base) {
-                this.base = base
+                if (prev < 0) { prev = prev + elements.length }
+                if (next > elements.length-1) next = next-elements.length
 
-                this.build()
+                elements[prev].classList.add('left')
+                elements[next].classList.add('rigth')
             }
-            getTemplate(data) {
-                return `<div class="element">
-                    name: ${data.name} <br>
-                    promotion: { <br>
-                        &nbsp;&nbsp; title: ${data.promotion.title}, <br>
-                        &nbsp;&nbsp; description: ${data.promotion.description} <br>
-                    } <br>
-                </div>`
-            }
-            async build() {
-                this.clear()
-                let data = await api.homePage.getAll()
+        })
+    }
 
-                data.forEach(e => {
-                    this.base.insertAdjacentHTML('beforeend', this.getTemplate(e.profile))
-                });
-            }
-            clear() { this.base.innerHTML = `` }
+    var flkty = new Flickity('.js-flickity', {
+      wrapAround: true,
+      setGallerySize: false,
+        on: {
+        ready: function () {  mainFlickity(this) }
+      }
+    });
+    
+  
+    flkty.on( 'scroll', function() {mainFlickity(flkty)});
+</script>
+<script type="module">
+    import api from '/helper/Api.js'
+
+    class Carrosel {
+        constructor(base) {
+            this.base = base
+
+            this.build()
+        }
+        getTemplate(data) {
+            return `
+            <div class="card">
+                <img src="/images/carousel/2.jpg" alt="">
+                <div class="elements">
+                    <div class="left">
+                    <span class="name">${data.name}</span>
+                    <span class="local">RJ-Rio de Janeiro</span>
+                    </div>
+                    <div class="right">
+                    <button class="button">Ver Review</button>
+                    </div>
+                </div>
+            </div>
+            `
+        }
+        async build() {
+            let data = await api.homePage.getAll()
+            this.clear()
+            let elements = []
+
+            data.forEach(e => {
+                let cell = this.newElement(this.getTemplate(e.profile))
+                elements.push(cell)
+            });
+            if (elements.length == 0) this.base.style.display = 'none'
+            if (elements.length == 2) elements.push(this.newElement(this.getTemplate(data[elements.length-1].profile)))
+
+            flkty.append(elements)
+            flkty.select( 0, false, true );
+        }
+        clear() { 
+            flkty.remove(flkty.cells.map(e => e.element))
         }
 
-        const eCarrosel = document.querySelector('#carrosel')
-        new Carrosel(eCarrosel)
+        newElement(content) {
+            let cell = document.createElement('div')
+            cell.classList.add('gallery-cell', 'js-gallery-cell')
+            cell.innerHTML = content
+            return cell
+        }
+    }
 
-    </script>
+    const eCarrosel = document.querySelector('.carousel')
+    new Carrosel(eCarrosel)
+
+</script>
 </body>
 </html>
