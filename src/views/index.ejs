@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="stylesheet/flickity.css" media="screen">
+    <!-- <meta http-equiv="refresh" content="2" /> -->
     
     <link rel="stylesheet" href="stylesheet/assets/navbar.css">
     <link rel="stylesheet" href="stylesheet/assets/carousel.css">
@@ -37,10 +38,9 @@
     <main> 
         <%- include('assets/navbar.ejs') %>
         <section id="carousel">
-            <div id="top">
-                <h1> <span>Promoções</span> da semana </h1>
+            <div class="top">
+                <h1> <span>Promoções</span> da <br> semana </h1>
             </div>
-            <div id="data"></div>
             <%- include('assets/carousel.ejs') %>
         </section>
     </main>

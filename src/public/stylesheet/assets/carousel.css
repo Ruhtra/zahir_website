@@ -13,24 +13,24 @@
     display: flex;
     flex-direction: column;
 }
-#carousel #top {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-#carousel #top h1 {
-    width: 30vw;
-    min-width: 400px;
+/* top */
+    #carousel .top {
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-    text-align: center;
-    font-size: 4vw;
+        z-index: 1;
+    }
+    #carousel .top h1 {
+        text-align: center;
+        font-size: 4vw;
 
-    line-height: 90%;
-}
-#carousel #top h1 span {
-    color: var(--var2);
-    letter-spacing: .1em;
-}
+        line-height: 90%;
+    }
+    #carousel .top h1 span {
+        color: var(--var2);
+        letter-spacing: .1em;
+    }
 
 
 .carousel {
@@ -41,11 +41,9 @@
     width: 100%;
 
     overflow: hidden;
-    margin-top: -30px;
 }
 .carousel .gallery {
     width: 90%;
-    max-width: 1500px;
     aspect-ratio: 11/4;
 }
 .carousel .gallery-cell {
@@ -207,21 +205,23 @@
 
 /* responsive */
 @media screen and ( max-width: 1000px ) {
-    #carousel #top h1 {
-        font-size: 50px;
-    }
-
-
+    #carousel .top h1 {  font-size: max(7vw, 20px); }
+    .carousel { margin-top: -3.5vw; }
     .carousel .gallery {
         max-width: none;
         aspect-ratio: 15/10;
     }
-    .carousel .gallery .flickity-viewport {
-        transform:  scale(1.75);
-    }
-    .carousel .gallery .flickity-page-dots .dot {
-        width: 1.75%;
-    }
+    .carousel .gallery .flickity-viewport { transform:  scale(1.75); }
+    .carousel .gallery .flickity-page-dots .dot { width: 1.75%; }
     .carousel .flickity-button { display: none; }
 
+}
+
+@media screen and ( width > 1700px ) {
+    #carousel .top h1 { font-size: 400%; } 
+
+    #carousel .carousel .gallery { width: 1500px; }
+    #carousel .carousel .elements .left .name { font-size: 200%; }
+    #carousel .carousel .elements .left .local { font-size: 120%; }
+    #carousel .carousel .elements .right button { font-size: 130%; }
 }
