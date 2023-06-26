@@ -30,7 +30,7 @@
         color: white;
         font-size: 1.2vw;
         border-radius: 0 10px 10px 0;
-        background-color: green;
+        background-color: var(--var2);
         z-index: 1;
     }
     #infos .left .back {
