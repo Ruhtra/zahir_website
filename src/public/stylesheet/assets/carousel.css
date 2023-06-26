@@ -80,8 +80,9 @@
 
             border-radius: 1.5vw;
         }
-        /* sides */
+        /* shadows */
             .carousel .gallery-cell.left .card::after,
+            .carousel .gallery-cell.is-selected .card::after,
             .carousel .gallery-cell.rigth .card::after {
                 content: '';
 
@@ -97,6 +98,9 @@
             }
             .carousel .gallery-cell.rigth .card::after {
                 background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            }
+            .carousel .gallery-cell.is-selected .card::after {
+                background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
             }
 
         .carousel .card img {
@@ -117,14 +121,15 @@
     /* elements */
         .carousel .gallery-cell:not(.is-selected) .elements { display: none; }
         .carousel .elements {
-        position: absolute;
+            position: absolute;
 
-        bottom: 0;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        
-        width: 100%;
-        height: 32%;
+            bottom: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            
+            width: 100%;
+            height: 32%;
+            z-index: 2;
         }
         /* left */
             .carousel .elements .left {
@@ -143,7 +148,7 @@
             .carousel .elements .left .name {
                 font-size: 2vw;
                 font-weight: 900;
-                line-height: 80%;
+                line-height: 100%;
             }
             .carousel .elements .left .local {
                 font-size: 1.2vw;
@@ -161,7 +166,7 @@
                 width: 70%;
                 height: fit-content;
 
-                padding: 5px 0;
+                padding: min(.5vw, 5px) 0;
 
                 color: white;
                 font-size: 1.3vw;
@@ -204,6 +209,11 @@
 
 
 /* responsive */
+@media screen and ( max-width: 1300px ) {
+    #carousel {
+        margin-top: min(calc(1em + 13vw), 100px);
+    }
+}
 @media screen and ( max-width: 1000px ) {
     #carousel .top h1 {  font-size: max(7vw, 20px); }
     .carousel { margin-top: -3.5vw; }
