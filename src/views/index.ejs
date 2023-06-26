@@ -9,6 +9,7 @@
     
     <link rel="stylesheet" href="stylesheet/assets/navbar.css">
     <link rel="stylesheet" href="stylesheet/assets/carousel.css">
+    <link rel="stylesheet" href="stylesheet/index/infos.css">
 
     <title>Home page</title>
 
@@ -17,15 +18,16 @@
             margin: 0;
             padding: 0;
         }
-        /* Gambiarra que sai com atualização da imagem opaca */
-        body, html {
-            height: 100%;
-        }
-        main {
-            height: 100%;
-            background-color: rgba(255, 255, 255, .5);
-        }
 
+        /* scroll bar */
+        body::-webkit-scrollbar {  width: 12px; }
+        body::-webkit-scrollbar-track { background: var(--var4); }
+
+        body::-webkit-scrollbar-thumb {
+            background-color: var(--var1);
+            border-radius: 200px;
+            border: 2px solid var(--var4);
+        }
     
         /* remove */
         body {
@@ -35,15 +37,23 @@
     </style>
 </head>
 <body>
-    <main> 
-        <%- include('assets/navbar.ejs') %>
-        <section id="carousel">
-            <div class="top">
-                <h1> <span>Promoções</span> da <br> semana </h1>
-            </div>
-            <%- include('assets/carousel.ejs') %>
-        </section>
-    </main>
+    <%- include('assets/navbar.ejs') %>
+    <section id="carousel">
+        <div class="top">
+            <h1> <span>Promoções</span> da <br> semana </h1>
+        </div>
+        <%- include('assets/carousel.ejs') %>
+    </section>
+    <section id="infos">
+        <div class="left">
+            <img src="/images/index/zahir.png" alt="Imagem do zahir comendo um hámburguer e um fundo em amarelo">
+            <p class="text">Oi, meu nome é Ramon Sanmir, tenho 34 anos e moro em Fortaleza, desde que eu era muito novo já gostava do meio artistico e internet no geral, com 12 anos fiz um canal no YouTube com amigos e depois comecei a gravar vídeos para as redes sociais, no tempo sem muito apoio e por ser novo acabei sem dar continuidade. Já vendi dindim alcoólico na praia para conseguir comprar meu computador e iniciar a vida na internet, tive alguns planos atrasados pela pandemia e comecei a fazer transmissões na twitch, após esse período tendo como única fonte de renda os jogos e streams, comecei a fazer conteúdo de experiências e estou me reiventando a cada dia.</p>
+            <div class="back"></div>
+        </div>
+        <div class="rigth">
+            <img src="/images/index/panela.png" alt="Imagem de uma panela com frango assado">
+        </div>
+    </section>
 
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 <script>
@@ -96,7 +106,7 @@
         getTemplate(data) {
             return `
             <div class="card">
-                <img src="/images/carousel/2.jpg" alt="">
+                <img src="/images/carousel/1.png" alt="">
                 <div class="elements">
                     <div class="left">
                     <span class="name">${data.name}</span>
