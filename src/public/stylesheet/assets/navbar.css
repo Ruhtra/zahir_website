@@ -10,7 +10,8 @@
 #nav * { box-sizing: border-box; }
 #nav {
     background-color: var(--var1);
-    background-image: url('/images/back.png');
+    background-image: url('/images/back_50.png');
+    background-size: 50%;
     z-index: 2;
 }
 
@@ -139,6 +140,10 @@ ul.nav {
 
         cursor: pointer;
     }
+
+@media ( max-width: 1000px ) {
+    #nav { background-size: 100%; }
+}
 
 @media (max-width: 1300px) {
     #nav {
