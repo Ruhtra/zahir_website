@@ -209,12 +209,8 @@
 
 
 /* responsive */
-@media screen and ( max-width: 1300px ) {
-    #carousel {
-        margin-top: min(calc(1em + 13vw), 100px);
-    }
-}
 @media screen and ( max-width: 1000px ) {
+    #carousel {  margin-top: min(calc(1em + 13vw), 100px); }
     #carousel .top h1 {  font-size: max(7vw, 20px); }
     .carousel { margin-top: -3.5vw; }
     .carousel .gallery {
