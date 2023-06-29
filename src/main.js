@@ -3,6 +3,7 @@ const express = require("express");
 const http = require('http');
 const Joi = require('joi');
 const cors = require('cors')
+const ngrok = require('ngrok');
 
 const configEngine = require("./config/viewEngine.js");
 const Database = require("./functions/queryDB.js");
@@ -13,6 +14,8 @@ async function startingModules() {
     await Database.testConnect()
         .then(console.log)
         .catch(console.log)
+
+    console.log(`  ~ Connect ngrok: ${await ngrok.connect(process.env.PORT || 4000)}`)
 }
 
 
