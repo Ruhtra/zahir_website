@@ -1,8 +1,6 @@
 #infos {
     display: grid;
     grid-template-columns: 1fr auto;
-    
-    margin-top: 50px;
 }
 /* left */
     #infos .left {

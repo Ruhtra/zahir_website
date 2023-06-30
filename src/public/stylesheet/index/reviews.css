@@ -1,0 +1,85 @@
+#reviews {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: min(10vw, 50px);
+}
+    /* Top */
+        #reviews .top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #reviews .top a {
+            position: relative;
+            
+            padding: 1.5vw;
+            
+            color: white;
+            font-size: min(2.8vw, 280%);
+            font-weight: 500;
+            text-decoration: none;
+            
+            border: 0;
+            border-radius: 20px;
+            background-color: var(--var2);
+            box-shadow: .5vw .5vw 0 var(--var4);
+        }
+        #reviews .top a:hover { box-shadow: -0.5vw -0.5vw 0 var(--var4); }
+        /* Stars */
+            #reviews .top .stars {
+                position: absolute;
+                display: flex;
+                left: 50%;
+                top: 0;
+                transform: translate(-50%, -50%);
+                
+                width: 50%;
+                height: 100%;
+            }
+            #reviews .top .stars svg.star:nth-child(3) { width: 100%; }
+
+    /* Bottom */
+        #reviews .bottom {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            gap: 3vw;
+
+            padding: 2vw;
+        }
+        #reviews .bottom .movie {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: fit-content;
+            height: fit-content;
+
+            width: 325px;
+            min-height: 325px;
+            
+            overflow: hidden;
+            
+            border-radius: 1vw;
+        }
+        #reviews .bottom .movie img {
+            object-fit: cover;
+            width: 100%;
+        }
+@media screen and (max-width: 1000px) {
+    #reviews .top a {
+        font-size: min(180%);
+        padding: 15px 20px;
+
+        box-shadow: 5px 5px 0 var(--var4);
+    }
+    #reviews .bottom {
+        flex-direction: column;
+        justify-content: start;
+        align-items: center;
+    }
+    #reviews .bottom .movie {
+        width: 70vw;
+    }
+}

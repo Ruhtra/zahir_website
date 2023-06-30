@@ -1,0 +1,40 @@
+:root {
+    --var1: rgba(113, 82, 160, 1);
+    --var2: rgba(203, 87, 87, 1);
+    --var3: rgba(40, 171, 201, 1);
+    --var4: rgba(237, 171, 74, 1);
+
+    --active: rgba(40, 171, 201, .9);
+}
+
+footer {
+    margin-top: 50px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+
+    padding: 50px 0;
+
+    background-color: var(--var2);
+}
+/* social */
+    footer .social {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1em 2em;
+    }
+    footer .social svg {
+        width: 50px;
+        aspect-ratio: 1;
+
+        fill: var(--var4);
+    }
+/* texts */
+    footer .texts {
+        margin: 0 auto;
+        color: white;
+        text-align: center;
+    }
+    footer .texts h3 span { font-weight: 900; }
