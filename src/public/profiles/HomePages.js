@@ -1,4 +1,4 @@
-import api from '/helper/api.js'
+import api from '/helper/Api.js'
 import { HomePage } from '/helper/Templates.js'
 import Observer from '/helper/Observer.js'
 
