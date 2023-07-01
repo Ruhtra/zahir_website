@@ -1,4 +1,4 @@
-import api from '/helper/api.js'
+import api from '/helper/Api.js'
 
 class FilterSstructure {
     constructor(data) {
