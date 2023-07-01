@@ -12,8 +12,8 @@
                 <li class="item"><a class="name" href="#">Anuncie</a></li>
                 <li class="line"><div></div></li>
                 <li class="item config">
-                    <input type="checkbox" id="cb_config" style="display: none;">
-                    <label for="cb_config"><a class="name">Config</a></label>
+                    <input type="checkbox" id="cb_desktop_config" style="display: none;">
+                    <label for="cb_desktop_config"><a class="name">Config</a></label>
                     <ul class="content">
                         <li><a href="/config/profiles">Reviews</a></li>
                         <li><a href="/config/homepage">Home page</a></li>
@@ -45,11 +45,11 @@
                     </label>
                 </div>
                 <div class="items">
-                    <a href="#" class="home active">
+                    <a href="/" class="home active">
                         <%- include('./icons/home.ejs') %>
                         • Home
                     </a>
-                    <a href="#" class="reviews">
+                    <a href="/profiles" class="reviews">
                         <%- include('./icons/reviews.ejs') %>
                         • Reviews
                     </a>
@@ -57,10 +57,28 @@
                         <%- include('./icons/anuncie.ejs') %>
                         • Anuncie
                     </a>
-                    <a href="#" class="config">
-                        <%- include('./icons/config.ejs') %>
-                        • Config
-                    </a>
+                    <input type="checkbox" id="cb_mobile_config" style="display: none;">
+                    <label for="cb_mobile_config">
+                        <a class="config dropdown">
+                            <%- include('./icons/config.ejs') %>
+                            • Config
+                            <%- include('./icons/arrow.ejs') %>
+                        </a>
+                    </label>
+                    <ul class="content">
+                        <li>
+                            <a href="/config/profiles" class="reviews">
+                                <%- include('./icons/movieConfig.ejs') %>
+                                • Reviews
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/config/homepage" class="homepage">
+                                <%- include('./icons/tripleStar.ejs') %>
+                                • Destaques
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </li>

@@ -104,8 +104,8 @@ ul.nav {
         }
         /* Config */
             /* input */
-                ul.nav ul.center li.config input#cb_config:checked ~ ul {  display: flex; }
-                ul.nav ul.center li.config input#cb_config:checked ~ label a {
+                ul.nav ul.center li.config input#cb_desktop_config:checked ~ ul.content {  display: flex; }
+                ul.nav ul.center li.config input#cb_desktop_config:checked ~ label a {
                     font-size: 1.3em;
                     background-color: rgba(0, 0, 0, .2);
                 }
@@ -249,9 +249,30 @@ ul.nav {
                 transition: all 500ms;
                 cursor: pointer;
             }
+            #nav .menu .items a.dropdown { grid-template-columns: auto 1fr auto; }
             #nav .menu .items a.active { background-color: rgb(0, 0, 86); }
-            #nav .menu .items a:hover { background-color: rgb(0, 0, 86); }
             #nav .menu .items a svg { height: 100%; }
+            #nav .menu .items a { height: 100%; }
+            #nav .menu .items label { display: block; }
+
+            /* input */
+                #nav .menu .items input#cb_mobile_config:checked ~ ul.content { display: flex; }
+                #nav .menu .items input#cb_mobile_config:checked ~ label a { background-color: rgb(0, 0, 86); }
+                #nav .menu .items label .arrow { transition: transform 500ms; }
+                #nav .menu .items input#cb_mobile_config:checked ~ label a .arrow { transform: rotate(-180deg); }
+
+            #nav .menu .items ul.content {
+                display: none;
+                flex-direction: column;
+                align-items: start;
+                gap: 2vw;
+                background-color: rgba(0, 0, 0, .2);
+                border-radius: .5em;
+            }
+            #nav .menu .items ul.content li{
+                display: block;
+                width: 100%;
+            }
 
 @media ( max-width: 1000px ) {
     #nav {
