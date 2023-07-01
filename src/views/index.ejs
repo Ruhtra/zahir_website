@@ -156,7 +156,8 @@
 
     class Carrosel {
         constructor(base) {
-            this.base = base
+            this.carousel = base
+            this.base = base.querySelector('.carousel')
 
             this.build()
         }
@@ -185,9 +186,7 @@
                 let cell = this.newElement(this.getTemplate(e.profile, i))
                 elements.push(cell)
             });
-            if (elements.length == 0) this.base.style.display = 'none'
-            if (elements.length == 2) elements.push(this.newElement(this.getTemplate(data[elements.length-1].profile, elements.length-1)))
-
+            if (elements.length == 0) this.carousel.style.display = 'none'
             flkty.append(elements)
             flkty.select( 0, false, true );
         }
@@ -203,7 +202,7 @@
         }
     }
 
-    const eCarrosel = document.querySelector('.carousel')
+    const eCarrosel = document.querySelector('#carousel')
     new Carrosel(eCarrosel)
 
 </script>
