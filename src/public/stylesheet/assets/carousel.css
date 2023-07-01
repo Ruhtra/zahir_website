@@ -30,8 +30,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-
-        z-index: 1;
     }
     #carousel .top h1 {
         text-align: center;
@@ -103,7 +101,7 @@
                 right: 0;
 
                 z-index: 1;
-                
+
                 background: rgb(0,0,0);
             }
             .carousel .gallery-cell.left .card::after {
@@ -124,7 +122,7 @@
         }
         .carousel .card::before {
             content: '';
-            
+
             bottom: 0;
             left: 0;
 
@@ -139,7 +137,7 @@
             bottom: 0;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            
+
             width: 100%;
             height: 32%;
             z-index: 2;
@@ -175,22 +173,25 @@
                 width: 100%;
                 height: 100%;
             }
-            .carousel .elements .right button {
+            .carousel .elements .right a {
+                display: block;
+
                 width: 70%;
                 height: fit-content;
 
                 padding: min(.5vw, 5px) 0;
 
                 color: white;
-                font-size: 1.3vw;
+                text-decoration: none;
                 text-align: center;
+                font-size: 1.3vw;
 
                 border: none;
                 border-radius: 5em;
                 box-shadow: -.1em -.1em 0 rgba(0, 0, 0, .2) inset;
                 background-color: var(--var4);
             }
-            .carousel .elements .right button:hover {
+            .carousel .elements .right a:hover {
                 cursor: pointer;
                 box-shadow: .1em .1em 0 rgba(0, 0, 0, .2) inset;
             }
@@ -207,11 +208,11 @@
         aspect-ratio: 1;
 
         margin: 0 1%;
-        
+
         border-radius: 50%;
         border: 1px solid var(--var2);
         background-color: rgba(0, 0, 0, 0);
-        
+
         opacity: 1;
         transition: transform .5ms;
     }
@@ -219,7 +220,6 @@
         transform: scale(1.3);
         background-color: var(--var2);
     }
-
 
 /* responsive */
 @media screen and ( max-width: 1000px ) {
@@ -233,7 +233,6 @@
     .carousel .gallery .flickity-viewport { transform:  scale(1.75); }
     .carousel .gallery .flickity-page-dots .dot { width: 1.75%; }
     .carousel .flickity-button { display: none; }
-
 }
 
 @media screen and ( width > 1700px ) {
@@ -242,5 +241,5 @@
     #carousel .carousel .gallery { width: 1500px; }
     #carousel .carousel .elements .left .name { font-size: 200%; }
     #carousel .carousel .elements .left .local { font-size: 120%; }
-    #carousel .carousel .elements .right button { font-size: 130%; }
+    #carousel .carousel .elements .right .button { font-size: 130%; }
 }
