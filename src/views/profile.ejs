@@ -52,7 +52,7 @@
         const profileFunctions = new ProfileFunctions(document.querySelector('#main'))
 
         // query
-        fetch('http://localhost:4000/api/profile/get?id='+searchParams.get('id'))
+        fetch('/api/profile/get?id='+searchParams.get('id'))
             .then((res) => { return res.json() })
             .then((data) => {
                 console.log(data)
