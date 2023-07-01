@@ -5,13 +5,20 @@
         </li>
         <li>
             <ul class="center">
-                <li class="item active"><a href="/">Home</a></li>
+                <li class="item active"><a class="name" href="/">Home</a></li>
                 <li class="line"><div></div></li>
-                <li class="item"><a href="#">Reviews</a></li>
+                <li class="item"><a class="name" href="/profiles">Reviews</a></li>
                 <li class="line"><div></div></li>
-                <li class="item"><a href="#">Anuncie</a></li>
+                <li class="item"><a class="name" href="#">Anuncie</a></li>
                 <li class="line"><div></div></li>
-                <li class="item"><a href="#">Config</a></li>
+                <li class="item config">
+                    <input type="checkbox" id="cb_config" style="display: none;">
+                    <label for="cb_config"><a class="name">Config</a></label>
+                    <ul class="content">
+                        <li><a href="/config/profiles">Reviews</a></li>
+                        <li><a href="/config/homepage">Home page</a></li>
+                    </ul>
+                </li>
             </ul>
         </li>
         <li>
@@ -23,7 +30,7 @@
     </ul>
     <ul class="nav mobile">
         <li class="logo">
-            <a href="/"> <img src="/images/icon.png" alt="Logo do website escrito zahir"> </a>
+            <a href="/"><img src="/images/icon.png" alt="Logo do website escrito zahir"> </a>
         </li>
         <li class="menu">
             <input type="checkbox" id="cb_sidebar" style="display: none;">
