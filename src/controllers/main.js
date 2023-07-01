@@ -2,6 +2,9 @@ module.exports = {
     index: (req, res) => {
         return res.render('index.ejs')
     },
+    test: (req, res) => {
+        return res.render('test.ejs')
+    },
     profile: (req, res) => {
         return res.render('profile.ejs')
     },
