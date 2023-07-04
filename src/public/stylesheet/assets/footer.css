@@ -1,21 +1,13 @@
-:root {
-    --var1: rgba(113, 82, 160, 1);
-    --var2: rgba(203, 87, 87, 1);
-    --var3: rgba(40, 171, 201, 1);
-    --var4: rgba(237, 171, 74, 1);
-
-    --active: rgba(40, 171, 201, .9);
-}
-
 footer {
-    margin-top: 50px;
+    margin-top: 5rem;
     display: grid;
     grid-template-rows: 1fr auto;
-    gap: 10px;
+    gap: 1em;
 
-    padding: 50px 0;
+    padding: 3.5em 0;
 
     background-color: var(--var2);
+    font-size: min(1rem, 3vw);
 }
 /* social */
     footer .social {
@@ -26,7 +18,7 @@ footer {
         gap: 1em 2em;
     }
     footer .social svg {
-        width: 50px;
+        width: 3em;
         aspect-ratio: 1;
 
         fill: var(--var4);

@@ -1,7 +1,9 @@
 #reviews {
     display: grid;
     grid-template-rows: auto 1fr;
-    gap: min(10vw, 50px);
+    gap: min(10vw, 50px); /* recode */
+
+    font-size: clamp(1rem, 2.8vw, 2rem);
 }
     /* Top */
         #reviews .top {
@@ -13,19 +15,19 @@
         #reviews .top a {
             position: relative;
             
-            padding: 1.5vw;
+            padding: 1em;
             
             color: white;
-            font-size: min(2.8vw, 280%);
+            font-size: 1em;
             font-weight: 500;
             text-decoration: none;
             
             border: 0;
-            border-radius: 20px;
+            border-radius: .5em;
             background-color: var(--var2);
-            box-shadow: .5vw .5vw 0 var(--var4);
+            box-shadow: .4em .4em 0 var(--var4);
         }
-        #reviews .top a:hover { box-shadow: -0.5vw -0.5vw 0 var(--var4); }
+        #reviews .top a:hover { box-shadow: -.4em -.4em 0 var(--var4); }
         /* Stars */
             #reviews .top .stars {
                 position: absolute;
@@ -44,9 +46,9 @@
             display: flex;
             justify-content: space-evenly;
             flex-wrap: wrap;
-            gap: 3vw;
+            gap: 3vw;  /* recode */
 
-            padding: 2vw;
+            padding: 2vw;  /* recode */
         }
         #reviews .bottom .movie {
             display: flex;
@@ -56,36 +58,29 @@
             width: fit-content;
             height: fit-content;
 
-            width: 325px;
-            min-height: 325px;
+            width: 325px;  /* recode */
+            min-height: 325px;  /* recode */
             
             overflow: hidden;
             
-            border-radius: 1vw;
+            border-radius: .5em;  /* recode */
         }
         #reviews .bottom .movie img {
             object-fit: cover;
             width: 100%;
         }
 @media screen and (max-width: 1000px) {
-    #reviews .top a {
-        font-size: min(180%);
-        padding: 15px 20px;
-
-        box-shadow: 5px 5px 0 var(--var4);
-    }
     #reviews .bottom {
         flex-direction: column;
         justify-content: start;
         align-items: center;
+        padding: 0;
     }
-    #reviews .bottom .movie {
-        width: 70vw;
-    }
+    #reviews .bottom .movie { width: 70vw;  /* recode */ }
 }
 @media screen and (max-width: 500px) {
     #reviews .bottom .movie {
         width: auto;
-        min-width: 100vw;
+        min-width: 100vw;  /* recode */
     }
 }
