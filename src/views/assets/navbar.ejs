@@ -3,10 +3,29 @@
         <div class="logo"><a href="/"><img src="/images/icon.png" alt=""></a></div>
     
         <ul class="links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/profiles">Reviews</a></li>
-            <li><a href="/">Anuncia</a></li>
-            <li><a href="/">Config</a></li>
+            <li><a class="item active" href="/">Home</a></li>
+            <li class="line"></li>
+            
+            <li><a class="item" href="/profiles">Reviews</a></li>
+            <li class="line"></li>
+            
+            <li><a class="item" href="/">Anuncia</a></li>
+            <li class="line"></li>
+            
+            <li>
+                <input type="checkbox" id="cb_desktop_config" style="display: none;">
+                <label for="cb_desktop_config">
+                    <a class="item dropdown">
+                        Config
+                        <%- include('./icons/arrow.ejs') %>
+                    </a>
+                </label>
+                
+                <ul class="content">
+                    <li><a href=""> • Reviews</a></li>
+                    <li><a href=""> • Home Page</a></li>
+                </ul>
+            </li>
         </ul>
 
         <div class="btns">
@@ -40,8 +59,8 @@
                     • Anuncie
                 </a></li>
                 <li>
-                    <input type="checkbox" id="cb_config" style="display: none;">
-                    <label for="cb_config">
+                    <input type="checkbox" id="cb_sidebar_config" style="display: none;">
+                    <label for="cb_sidebar_config">
                         <a class="config dropdown">
                             <%- include('./icons/config.ejs') %>
                             • Config
