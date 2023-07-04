@@ -1,9 +1,15 @@
+#reviews * {
+    box-sizing: border-box;
+}
+
 #reviews {
     display: grid;
     grid-template-rows: auto 1fr;
     gap: min(10vw, 50px); /* recode */
 
     font-size: clamp(1rem, 2.8vw, 2rem);
+
+    padding: 1rem;
 }
     /* Top */
         #reviews .top {
@@ -15,7 +21,7 @@
         #reviews .top a {
             position: relative;
             
-            padding: 1em;
+            padding: .5em 1em;
             
             color: white;
             font-size: 1em;
@@ -25,9 +31,9 @@
             border: 0;
             border-radius: .5em;
             background-color: var(--var2);
-            box-shadow: .4em .4em 0 var(--var4);
+            box-shadow: .3em .3em 0 var(--var4);
         }
-        #reviews .top a:hover { box-shadow: -.4em -.4em 0 var(--var4); }
+        #reviews .top a:hover { box-shadow: -.3em -.3em 0 var(--var4); }
         /* Stars */
             #reviews .top .stars {
                 position: absolute;
@@ -43,12 +49,20 @@
 
     /* Bottom */
         #reviews .bottom {
+            box-sizing: content-box;
+
             display: flex;
             justify-content: space-evenly;
             flex-wrap: wrap;
-            gap: 3vw;  /* recode */
+            gap: 1rem;
 
-            padding: 2vw;  /* recode */
+            width: 100%;
+            max-width: 2000px;
+            height: 610px;
+
+            margin: 0 auto;
+            
+            overflow: hidden;
         }
         #reviews .bottom .movie {
             display: flex;
@@ -57,30 +71,12 @@
 
             width: fit-content;
             height: fit-content;
-
-            width: 325px;  /* recode */
-            min-height: 325px;  /* recode */
             
             overflow: hidden;
             
-            border-radius: .5em;  /* recode */
+            border-radius: .5em;
         }
         #reviews .bottom .movie img {
             object-fit: cover;
             width: 100%;
         }
-@media screen and (max-width: 1000px) {
-    #reviews .bottom {
-        flex-direction: column;
-        justify-content: start;
-        align-items: center;
-        padding: 0;
-    }
-    #reviews .bottom .movie { width: 70vw;  /* recode */ }
-}
-@media screen and (max-width: 500px) {
-    #reviews .bottom .movie {
-        width: auto;
-        min-width: 100vw;  /* recode */
-    }
-}
