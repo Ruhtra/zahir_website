@@ -1,86 +1,65 @@
-<div id="nav">
-    <ul class="nav desktop">
-        <li class="logo">
-            <a href="/"> <img src="/images/icon.png" alt="Logo do website escrito zahir"> </a>
-        </li>
-        <li>
-            <ul class="center">
-                <li class="item active"><a class="name" href="/">Home</a></li>
-                <li class="line"><div></div></li>
-                <li class="item"><a class="name" href="/profiles">Reviews</a></li>
-                <li class="line"><div></div></li>
-                <li class="item"><a class="name" href="#">Anuncie</a></li>
-                <li class="line"><div></div></li>
-                <li class="item config">
-                    <input type="checkbox" id="cb_desktop_config" style="display: none;">
-                    <label for="cb_desktop_config"><a class="name">Config</a></label>
-                    <ul class="content">
-                        <li><a href="/config/profiles">Reviews</a></li>
-                        <li><a href="/config/homepage">Home page</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <ul class="login">
-                <li class="login"><a href="#">Log in</a></li>
-                <li class="register"><a href="#">Registre-se</a></li>
-            </ul>
-        </li>
-    </ul>
-    <ul class="nav mobile">
-        <li class="logo">
-            <a href="/"><img src="/images/icon.png" alt="Logo do website escrito zahir"> </a>
-        </li>
-        <li class="menu">
-            <input type="checkbox" id="cb_sidebar" style="display: none;">
-            <label for="cb_sidebar">
-                <%- include('./icons/menu.ejs') %>
-            </label>
-            <div class="sidebar">
-                <div class="top">
+<nav>
+    <div class="nav desktop">
+        <div class="logo"><a href="/"><img src="/images/icon.png" alt=""></a></div>
+    
+        <ul class="links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/profiles">Reviews</a></li>
+            <li><a href="/">Anuncia</a></li>
+            <li><a href="/">Config</a></li>
+        </ul>
+
+        <div class="btns">
+            <a href="#" class="login">Log in</a>
+            <a href="#" class="register">Regristre-se</a>
+        </div>
+    </div>
+    <div class="nav mobile">
+        <div class="logo"><a href="/"><img src="/images/icon.png" alt=""></a></div>
+
+        <label for="cb_sidebar" class="btn"><%- include('./icons/menu.ejs') %></label>
+        <input id="cb_sidebar" type="checkbox" style="display: none;">
+        <div class="sidebar">
+            <div class="top">
+                <div class="inside">
                     <h3> Menu bar </h3>
-                    <label for="cb_sidebar">
-                        <%- include('./icons/close.ejs') %>
-                    </label>
+                    <label for="cb_sidebar" class="btn"><%- include('./icons/close.ejs') %></label>
                 </div>
-                <div class="items">
-                    <a href="/" class="home active">
-                        <%- include('./icons/home.ejs') %>
-                        • Home
-                    </a>
-                    <a href="/profiles" class="reviews">
-                        <%- include('./icons/reviews.ejs') %>
-                        • Reviews
-                    </a>
-                    <a href="#" class="anuncie">
-                        <%- include('./icons/anuncie.ejs') %>
-                        • Anuncie
-                    </a>
-                    <input type="checkbox" id="cb_mobile_config" style="display: none;">
-                    <label for="cb_mobile_config">
+            </div>
+            <ul class="links">
+                <li><a href="/" class="home active">
+                    <%- include('./icons/home.ejs') %>
+                    • Home
+                </a></li>
+                <li><a href="/profiles" class="reviews">
+                    <%- include('./icons/reviews.ejs') %>
+                    • Reviews
+                </a></li>
+                <li><a href="/" class="anuncie">
+                    <%- include('./icons/anuncie.ejs') %>
+                    • Anuncie
+                </a></li>
+                <li>
+                    <input type="checkbox" id="cb_config" style="display: none;">
+                    <label for="cb_config">
                         <a class="config dropdown">
                             <%- include('./icons/config.ejs') %>
                             • Config
                             <%- include('./icons/arrow.ejs') %>
                         </a>
                     </label>
-                    <ul class="content">
-                        <li>
-                            <a href="/config/profiles" class="reviews">
+                    <ul class="content links">
+                        <li><a href="/config/profiles" class="reviews">
                                 <%- include('./icons/movieConfig.ejs') %>
                                 • Reviews
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/config/homepage" class="homepage">
-                                <%- include('./icons/tripleStar.ejs') %>
-                                • Destaques
-                            </a>
-                        </li>
+                        </a></li>
+                        <li><a href="/config/homepage" class="homepage">
+                            <%- include('./icons/tripleStar.ejs') %>
+                            • Destaques
+                        </a></li>
                     </ul>
-                </div>
-            </div>
-        </li>
-    </ul>
-</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
