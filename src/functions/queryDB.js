@@ -36,7 +36,7 @@ const structure = (obj) => {
     }
     data = f.removeEmptyValues(data)
 
-    data['created'] = new Date()
+    data['createdAt'] = new Date()
     if (obj.category.categories != undefined) data['category']['categories'] = obj.category.categories.map((e) => new ObjectId(e))
 
     return data
@@ -144,7 +144,18 @@ const profile = {
         console.log(`Categories deletadas com sucesso`)
 
         return response
-    }
+    },
+    recents: async () => {
+        // internal
+        const db = await connect();
+
+        return await db.collection('profile')
+            .find({movie: { $exists: 1, $ne: null }})
+            .project({ movie: 1  })
+            .sort({ createdAt: -1 })
+            .limit(4)
+        .toArray()
+    } 
 }
 
 const homePage = {

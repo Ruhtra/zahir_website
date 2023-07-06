@@ -1,6 +1,15 @@
+const Database = require("../functions/queryDB.js");
+
 module.exports = {
-    index: (req, res) => {
-        return res.render('index.ejs')
+    index: async (req, res) => {
+
+        let data = await Database.profile.recents()
+
+        console.log(data);
+
+        return res.render('index.ejs', {
+            recents: data
+        })
     },
     test: (req, res) => {
         return res.render('test.ejs')
