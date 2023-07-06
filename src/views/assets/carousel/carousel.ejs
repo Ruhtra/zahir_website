@@ -1,11 +1,10 @@
 <div class="carousel">
     <div class="gallery js-flickity" >
-        <% for( let i = 0; i < 3; i++ ) { %>
+        <% homePage.forEach(data => { %>
             <div class="gallery-cell js-gallery-cell">
-                <div class="card">
-                    <span class="loading"></span>
-                </div>
-          </div>
-        <% } %>
+                <% data.profile['picture'] = `/images/carousel/${data.order+1}.png` %>
+                <%- include('./card.ejs', { profile: data.profile }) %>
+            </div>
+        <% }) %>
     </div>
 </div>

@@ -29,54 +29,8 @@
 <body>
     <%- include('./assets/navbar.ejs', {active: null})%>
     <div id="main">
-        <div class="card">
-            <span class="loading"></span>
-        </div>
+        <% profile['picture'] = `/images/carousel/1.png` %>
+        <%- include('./assets/carousel/card.ejs'), { profile } %>
     </div>
-
-    <script type="module">
-    import api from '/helper/Api.js'
-    
-        class InsertCard {
-            constructor (base, id) {
-                this.base = base
-                api.profile.get(id)
-                    .then(data => {
-                        console.log(data);
-                        data[0]._id = id
-
-                        this.main(data[0])
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            }
-            getTemplate(data, i) {
-                // updated this for get a template ejs
-                return `
-                <div class="card">
-                    <img src="/images/carousel/${i+1}.png" alt="">
-                    ${ (data.promotion.title) ? `<div class="promotion"> ${data.promotion.title} </div>` : '' }
-                    <div class="elements">
-                        <div class="left">
-                            <span class="name">${data.name}</span>
-                            <span class="local">${data.local.uf} - ${data.local.city}</span>
-                        </div>
-                    </div>
-                </div>
-                `
-            }
-            main(data) {
-                this.clear()
-
-                this.base.insertAdjacentHTML('beforeend', this.getTemplate(data, 1)) //hard code image
-            }
-            clear() { this.base.innerHTML = '' }
-        }
-
-
-        const searchParams = new URLSearchParams(document.location.search); 
-        const insertCard = new InsertCard(document.querySelector('#main'), searchParams.get('id'))
-    </script>
 </body>
 </html>

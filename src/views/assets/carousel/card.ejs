@@ -1,0 +1,16 @@
+
+<div class="card">
+    <img src="<%= profile.picture %>" alt=""> <!-- implemented image here -->
+    <% if (profile.promotion.title) { %>
+        <div class="promotion">  <%= profile.promotion.title %> </div>
+    <% } %>
+    <div class="elements">
+        <div class="left">
+        <span class="name"> <%= profile.name %> </span>
+        <span class="local"> <%= profile.local.uf %> - <%= profile.local.city %> </span>
+        </div>
+        <div class="right">
+            <a href="/profile?id=<%= profile._id %>">Ver Review</a>
+        </div>
+    </div>
+</div>
