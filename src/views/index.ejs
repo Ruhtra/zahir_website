@@ -94,18 +94,14 @@
             </a>
         </div>
         <div class="bottom">
-            <div class="movie loading">
-                <iframe src="https://www.instagram.com/reel/Ct4LQCytzZw/embed" width="320px" height="610px" frameborder="0" scrolling="no"></iframe>
-            </div>
-            <div class="movie loading">
-                <iframe src="https://www.instagram.com/reel/Ct4LQCytzZw/embed" width="320px" height="610px" frameborder="0" scrolling="no"></iframe>
-            </div>
-            <div class="movie loading">
-                <iframe src="https://www.instagram.com/reel/Ct4LQCytzZw/embed" width="320px" height="610px" frameborder="0" scrolling="no"></iframe>
-            </div>
-            <div class="movie loading">
-                <iframe src="https://www.instagram.com/reel/Ct4LQCytzZw/embed" width="320px" height="610px" frameborder="0" scrolling="no"></iframe>
-            </div>
+            <% recents.forEach(e => { %>
+                <% if (e.movie) { %>
+                    <div class="movie loading">
+                        <iframe src="<%= e.movie %>" width="320px" height="610px" frameborder="0" scrolling="no"></iframe>
+                    </div>
+                <% } %>
+            <% }) %>
+
         </div>
     </section>
     <%- include('assets/footer.ejs') %>
