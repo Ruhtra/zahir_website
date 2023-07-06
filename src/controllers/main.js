@@ -1,21 +1,23 @@
 const Database = require("../functions/queryDB.js");
+const validate = require("../functions/validator.js");
 
 module.exports = {
-    index: async (req, res) => {
-
-        let data = await Database.profile.recents()
-
-        console.log(data);
-
+    index: async (req, res) => { 
         return res.render('index.ejs', {
-            recents: data
+            homePage: await Database.homePage.get(),
+            recents: await Database.profile.recents()
         })
     },
     test: (req, res) => {
         return res.render('test.ejs')
     },
-    profile: (req, res) => {
-        return res.render('profile.ejs')
+    profile: async (req, res) => {
+        const {error, value} = validate.profile.id(req.query.id)
+        if (error) throw error
+
+        return res.render('profile.ejs', {
+            profile: (await Database.profile.get(value))[0]
+        })
     },
     profiles: (req, res) => {
         return res.render('profiles.ejs')

@@ -9,7 +9,10 @@ module.exports.listProfile = () => { return [
   }, {
     $project: {
       _id: 1,
-      uf: "$local.uf",
+      local: {
+        uf: "$local.uf",
+        city: "$local.city"
+      },
       name: 1,
       picture: 1,
       category: {
@@ -38,7 +41,7 @@ module.exports.profile = (id) => { return  [
   },
 }, {
   $project: {
-    _id: 0,
+    _id: 1,
     created: 1,
     name: 1,
     informations: 1,

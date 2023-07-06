@@ -1,19 +1,7 @@
+@import '/stylesheet/assets/card.css';
+
 :root {
-    --font-size-card: clamp(.1rem, 1.75vw, 1.75rem);
     --font-size-carousel: clamp(.1rem, 2vw, 1rem) 
-}
-
-#carousel .loading {  
-    background-image: linear-gradient(90deg,hsla(0,0%,98.8%,0),var(--var1) 50%,hsla(0,0%,98.8%,0)),linear-gradient(var(--var4) 100%,transparent 0);
-    background-size: 300px 100%,100% 100%;
-    background-position: -160% 0,0 0;
-    background-repeat: no-repeat;
-    animation: loading 1.5s infinite;
-
-    top: 0;
-    right: 0;
-
-    z-index: 1;
 }
 
 #carousel {
@@ -64,31 +52,9 @@
 }
 .carousel .gallery-cell.is-selected { z-index: 1; }
 
-/* card */
-    .carousel .gallery-cell .card {
-        position: relative;
-
-        width: 100%;
-        height: 100%;
-
-        transition: transform .5s;
-
-        font-size: var(--font-size-card);
-    }
+/* card - modifys */
     .carousel .gallery-cell.is-selected .card { transform: scale(1.2); }
 
-    /* back */
-        .carousel .card img,
-        .carousel .card::before,
-        .carousel .card::after,
-        .carousel .card .loading {
-            position: absolute;
-
-            width: 98%;
-            height: 98%;
-
-            border-radius: 1em;
-        }
         /* shadows */
             .carousel .gallery-cell.left .card::after,
             .carousel .gallery-cell.is-selected .card::after,
@@ -106,101 +72,12 @@
             .carousel .gallery-cell.rigth .card::after {  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
             .carousel .gallery-cell.is-selected .card::after { background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%); }
 
-        .carousel .card img {
-            top: 0;
-            right: 0;
-
-            object-fit: cover;
-        }
-        .carousel .card::before {
-            content: '';
-
-            bottom: 0;
-            left: 0;
-
-            background-color: var(--var2);
-        }
     /* promotion */
-        .card .promotion {
-            position: absolute;
-            top: 0;
-            right: 1em;
-
-            padding: .25em .25em .5em .25em;
-            
-            color: red;
-            font-size: .75em;
-            font-weight: 900;
-            
-            border: .05em solid black;
-            border-radius: 0  0 1em 1em;
-            background-color: white;
-        }
         .gallery-cell.left .card .promotion { display: none; }
         .gallery-cell.rigth .card .promotion { display: none; }
 
     /* elements */
         .carousel .gallery-cell:not(.is-selected) .elements { display: none; }
-        .carousel .elements {
-            position: absolute;
-
-            bottom: 0;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-
-            width: 100%;
-            height: 32%;
-            z-index: 2;
-        }
-        /* left */
-            .carousel .elements .left {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: start;
-
-                width: 100%;
-                height: 100%;
-
-                padding-left: 15%;
-
-                color: white;
-            }
-            .carousel .elements .left .name {
-                font-size: 1em;
-                font-weight: 900;
-                line-height: 100%;
-            }
-            .carousel .elements .left .local { font-size: .5em; }
-        /* rigth */
-            .carousel .elements .right {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                width: 100%;
-                height: 100%;
-            }
-            .carousel .elements .right a {
-                display: block;
-
-                height: fit-content;
-
-                padding: .5em 2em;
-
-                color: white;
-                text-decoration: none;
-                text-align: center;
-                font-size: .75em;
-
-                border: none;
-                border-radius: 5em;
-                background-color: var(--var4);
-                box-shadow: -.15em -.15em 0 rgba(0, 0, 0, .2) inset;
-                cursor: pointer;
-            }
-            .carousel .elements .right a:hover {  box-shadow: .15em .15em 0 rgba(0, 0, 0, .2) inset; }
-
 
 /* dot bar */
     .carousel .gallery .flickity-page-dots {
