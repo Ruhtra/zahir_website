@@ -4,61 +4,79 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="/stylesheet/assets/variables.css">
+    <link rel="stylesheet" href="/stylesheet/assets/navbar.css">
+
+    <link rel="stylesheet" href="/stylesheet/assets/card.css">
+
+
     <title>Profile</title>
+
+    <style>
+        .card {
+            width: 510px;
+            height: 380px;
+        }
+    </style>
 </head>
 <body>
-
-    <div id="main"></div>
+    <%- include('./assets/navbar.ejs', {active: null})%>
+    <div id="main">
+        <div class="card">
+            <span class="loading"></span>
+        </div>
+    </div>
 
     <script type="module">
-        class ProfileFunctions {
-            constructor(base) {
+    import api from '/helper/Api.js'
+    
+        class InsertCard {
+            constructor (base, id) {
                 this.base = base
-                this.template = (data) => `<div id="${data._id}">
-                    _id: ${data._id}, <br>
-                    created: ${data.created}, <br>
-                    name: ${data.name}, <br>
-                    resume: ${data.resume}, <br>
-                    picture: ${data.picture}, <br>
-                    promotion: ${data.promotion}, <br>
-                    local: {<br>
-                        &nbsp;&nbsp; cep: ${data.local.cep}, <br>
-                        &nbsp;&nbsp; uf: ${data.local.uf}, <br>
-                        &nbsp;&nbsp; city: ${data.local.city}, <br>
-                        &nbsp;&nbsp; neighborhood: ${data.local.neighborhood}, <br>
-                        &nbsp;&nbsp; street: ${data.local.street}, <br>
-                        &nbsp;&nbsp; number: ${data.local.number}, <br>
-                        &nbsp;&nbsp; complement: ${data.local.complement}, <br>
-                    },<br>
-                    informations: ${data.informations}, <br>
-                    category: {<br>
-                        &nbsp;&nbsp; type: ${data.category.type}, <br>
-                        &nbsp;&nbsp; categories: ${data.category.categories} <br>
-                    },<br>
-                    telephones: { <br>
-                        &nbsp;&nbsp; telephone: ${data.telephones.telephone}, <br>
-                        &nbsp;&nbsp; whatsapp: ${data.telephones.whatsapp} <br>
-                    }, <br>
-                    movie: ${data.movie}, <br>
-                </div>`
+                api.profile.get(id)
+                    .then(data => {
+                        console.log(data);
+                        data[0]._id = id
+
+                        this.main(data[0])
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             }
-            insert(data) {
-                data['_id'] = searchParams.get('id')
-                this.base.insertAdjacentHTML("beforeend", this.template(data))
+            getTemplate(data, i) {
+                // updated this for get a template ejs
+                return `
+                <div class="card">
+                    <img src="/images/carousel/${i+1}.png" alt="">
+                    ${ (data.promotion.title) ? `<div class="promotion"> ${data.promotion.title} </div>` : '' }
+                    <div class="elements">
+                        <div class="left">
+                            <span class="name">${data.name}</span>
+                            <span class="local">${data.local.uf} - ${data.local.city}</span>
+                        </div>
+                    </div>
+                </div>
+                `
             }
+            main(data) {
+                this.clear()
+
+                this.base.insertAdjacentHTML('beforeend', this.getTemplate(data, 1)) //hard code image
+            }
+            clear() { this.base.innerHTML = '' }
         }
 
-        const searchParams = new URLSearchParams(document.location.search); 
-        const profileFunctions = new ProfileFunctions(document.querySelector('#main'))
 
-        // query
-        fetch('/api/profile/get?id='+searchParams.get('id'))
-            .then((res) => { return res.json() })
-            .then((data) => {
-                console.log(data)
-                profileFunctions.insert(data[0])
-            })
-            .catch((err) => { console.log(err) })
+        const searchParams = new URLSearchParams(document.location.search); 
+        const insertCard = new InsertCard(document.querySelector('#main'), searchParams.get('id'))
     </script>
 </body>
 </html>
