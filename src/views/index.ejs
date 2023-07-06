@@ -8,16 +8,12 @@
     <!-- <meta http-equiv="refresh" content="2" /> -->
 
     <style>
-        /* Variables Colors */
-        :root {
-            --var1: rgba(113, 82, 160, 1);
-            --var2: rgba(203, 87, 87, 1);
-            --var3: rgba(40, 171, 201, 1);
-            --var4: rgba(237, 171, 74, 1);
-
-            --active: rgba(40, 171, 201, .9);
+        * {
+            padding: 0;
+            margin: 0;
         }
     </style>
+    <link rel="stylesheet" href="/stylesheet/assets/variables.css">
     <link rel="stylesheet" href="/stylesheet/assets/navbar.css">
     <link rel="stylesheet" href="stylesheet/assets/carousel.css">
     <link rel="stylesheet" href="stylesheet/assets/footer.css">
@@ -63,12 +59,14 @@
     </style>
 </head>
 <body>
-    <%- include('assets/navbar.ejs') %>
+    <%- include('./assets/navbar.ejs', {
+        active: 'home'
+    })%>
     <section id="carousel">
         <div class="top">
             <h1> <span>Promoções</span> da <br> semana </h1>
         </div>
-        <%- include('assets/carousel.ejs') %>
+        <%- include('assets/carousel/carousel.ejs') %>
     </section>
     <section id="infos">
         <div class="left">
@@ -156,9 +154,11 @@
             this.build()
         }
         getTemplate(data, i) {
+            // updated this for get a template ejs
             return `
             <div class="card">
                 <img src="/images/carousel/${i+1}.png" alt="">
+                ${ (data.promotion.title) ? `<div class="promotion"> ${data.promotion.title} </div>` : '' }
                 <div class="elements">
                     <div class="left">
                     <span class="name">${data.name}</span>

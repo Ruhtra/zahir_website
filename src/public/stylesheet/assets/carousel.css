@@ -120,6 +120,24 @@
 
             background-color: var(--var2);
         }
+    /* promotion */
+        .card .promotion {
+            position: absolute;
+            top: 0;
+            right: 1em;
+
+            padding: .25em .25em .5em .25em;
+            
+            color: red;
+            font-size: .75em;
+            font-weight: 900;
+            
+            border: .05em solid black;
+            border-radius: 0  0 1em 1em;
+            background-color: white;
+        }
+        .gallery-cell.left .card .promotion { display: none; }
+        .gallery-cell.rigth .card .promotion { display: none; }
 
     /* elements */
         .carousel .gallery-cell:not(.is-selected) .elements { display: none; }

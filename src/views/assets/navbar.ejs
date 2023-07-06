@@ -3,13 +3,29 @@
         <div class="logo"><a href="/"><img src="/images/icon.png" alt=""></a></div>
     
         <ul class="links">
-            <li><a class="item active" href="/">Home</a></li>
+            <li>
+                <a 
+                    class="item <% if (active == 'home') { %>active<% } %>"
+                    href="/">
+                    Home
+                </a>
+            </li>
             <li class="line"></li>
-            
-            <li><a class="item" href="/profiles">Reviews</a></li>
+            <li>
+                <a
+                    class="item <% if (active == 'profiles') { %>active<% } %>"
+                    href="/profiles">
+                    Reviews
+                </a>
+            </li>
             <li class="line"></li>
-            
-            <li><a class="item" href="#">Anuncie</a></li>
+            <li>
+                <a
+                    class="item <% if (active == 'anuncie') { %>active<% } %>"
+                    href="#">
+                    Anuncie
+                </a>
+            </li>
             <li class="line"></li>
             
             <li>
