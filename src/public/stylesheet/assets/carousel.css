@@ -1,15 +1,11 @@
 @import '/stylesheet/assets/card.css';
 
-:root {
-    --font-size-carousel: clamp(.1rem, 2vw, 1rem) 
-}
-
 #carousel {
     margin-top: 1em;  /* recode */
     display: flex;
     flex-direction: column;
 
-    font-size: var(--font-size-carousel);
+    font-size: var(--carousel-font-size);
 }
 /* top */
     #carousel .top {
@@ -24,7 +20,7 @@
         line-height: 90%;
     }
     #carousel .top h1 span {
-        color: var(--var2);
+        color: var(--color-2);
         letter-spacing: .1em;
     }
 
@@ -53,7 +49,11 @@
 .carousel .gallery-cell.is-selected { z-index: 1; }
 
 /* card - modifys */
-    .carousel .gallery-cell.is-selected .card { transform: scale(1.2); }
+    .carousel .card {
+        font-size: var(--carousel-card-font-size);
+        transition: scale .5s;
+    }
+    .carousel .gallery-cell.is-selected .card { scale: 1.2; }
 
         /* shadows */
             .carousel .gallery-cell.left .card::after,
@@ -92,7 +92,7 @@
         margin: 0 .5em;
 
         border-radius: 50%;
-        border: .1em solid var(--var2);  /* recode */
+        border: .1em solid var(--color-2);  /* recode */
         background-color: rgba(0, 0, 0, 0);
 
         opacity: 1;
@@ -100,7 +100,7 @@
     }
     .carousel .gallery .flickity-page-dots .dot.is-selected {
         transform: scale(1.3);
-        background-color: var(--var2);
+        background-color: var(--color-2);
     }
 
 /* responsive */

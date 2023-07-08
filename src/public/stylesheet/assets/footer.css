@@ -6,7 +6,7 @@ footer {
 
     padding: 3.5em 0;
 
-    background-color: var(--var2);
+    background-color: var(--color-2);
     font-size: min(1rem, 3vw);
 }
 /* social */
@@ -21,7 +21,7 @@ footer {
         width: 3em;
         aspect-ratio: 1;
 
-        fill: var(--var4);
+        fill: var(--color-4);
     }
 /* texts */
     footer .texts {

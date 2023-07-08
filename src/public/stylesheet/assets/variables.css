@@ -1,8 +1,45 @@
 :root {
-    --var1: rgba(113, 82, 160, 1);
-    --var2: rgba(203, 87, 87, 1);
-    --var3: rgba(40, 171, 201, 1);
-    --var4: rgba(237, 171, 74, 1);
+    /* global */
+        --color-1: rgba(113, 82, 160, 1);
+        --color-2: rgba(203, 87, 87, 1);
+        --color-3: rgba(40, 171, 201, 1);
+        --color-4: rgba(237, 171, 74, 1);
 
-    --active: rgba(40, 171, 201, .9);
+    /* index */
+        /* infos */
+            --infos-font-size: clamp(.1rem, 2.2vw, 1.4rem);
+            --infos--img-width:  min(30vw, 400px);
+
+
+    /* carousel */
+        --carousel-font-size: clamp(.1rem, 2vw, 1rem);
+        --carousel-card-font-size: clamp(.1rem, 1.75vw, 1.75rem);
+
+    /* card */
+        /* none */
+
+    /* profile */
+        --profile-back: url('/images/back_10.png');
+        --profile-font-size: clamp(.1em, 2.5vw, 3em);
+
+    /* nav */
+        --nav-padding-y: .5rem;
+        --nav-padding: var(--nav-padding-y) 2rem;
+        --nav-heigth: min(40px, 10vw);
+        --nav-heigth-total: calc(var(--nav-heigth) + var(--nav-padding-y) * 2);
+
+        --nav-font-size: min(1rem, 4vw);
+    
+        --nav-active: rgba(40, 171, 201, .9);
 }
+
+/* scroll bar */
+body::-webkit-scrollbar {  width: 12px; }
+body::-webkit-scrollbar-track { background: var(--color-4); }
+
+body::-webkit-scrollbar-thumb {
+    background-color: var(--color-1);
+    border-radius: 200px;
+    border: 2px solid var(--color-4);
+}
+section:not(:nth-child(1)) { margin-top: 50px; }

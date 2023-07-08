@@ -30,10 +30,10 @@
             
             border: 0;
             border-radius: .5em;
-            background-color: var(--var2);
-            box-shadow: .3em .3em 0 var(--var4);
+            background-color: var(--color-2);
+            box-shadow: .3em .3em 0 var(--color-4);
         }
-        #reviews .top a:hover { box-shadow: -.3em -.3em 0 var(--var4); }
+        #reviews .top a:hover { box-shadow: -.3em -.3em 0 var(--color-4); }
         /* Stars */
             #reviews .top .stars {
                 position: absolute;
