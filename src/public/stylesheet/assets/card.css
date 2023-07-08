@@ -1,17 +1,11 @@
-:root {
-    --font-size-card: clamp(.1rem, 1.75vw, 1.75rem);
-}
-
 /* card */
 .card {
     position: relative;
 
     width: 100%;
     height: 100%;
-    
-    transition: transform .5s;
 
-    font-size: var(--font-size-card);
+    font-size: 1em;
 }
     /* back */
         .card img,
@@ -49,7 +43,7 @@
             bottom: 0;
             left: 0;
 
-            background-color: var(--var2);
+            background-color: var(--color-2);
         }
 
     /* promotion */
@@ -124,7 +118,7 @@
 
                 border: none;
                 border-radius: 5em;
-                background-color: var(--var4);
+                background-color: var(--color-4);
                 box-shadow: -.15em -.15em 0 rgba(0, 0, 0, .2) inset;
                 cursor: pointer;
             }

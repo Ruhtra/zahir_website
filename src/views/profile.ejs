@@ -9,31 +9,48 @@
         * {
             padding: 0;
             margin: 0;
+            box-sizing: border-box;
+        }
+        html { height: 5000px } /* remove */
+        
+        body {
+            /* background-image: url('/images/ProfilePage.png'); remove  */
+            background-image: url('/images/back_10.png');
+            background-size: 50%;
         }
     </style>
     <link rel="stylesheet" href="/stylesheet/assets/variables.css">
     <link rel="stylesheet" href="/stylesheet/assets/navbar.css">
 
-    <link rel="stylesheet" href="/stylesheet/assets/card.css">
-
+    <link rel="stylesheet" href="/stylesheet/profile/profile.css">
 
     <title>Profile</title>
-
-    <style>
-        .card {
-            width: 510px;
-            height: 380px;
-        }
-        .card .elements .right {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <%- include('./assets/navbar.ejs', {active: null})%>
-    <div id="main">
-        <% profile['picture'] = `/images/carousel/1.png` %>
-        <%- include('./assets/carousel/card.ejs'), { profile } %>
-    </div>
+    <header>
+        <div class="top">
+            <div class="left">
+                <% profile['picture'] = `/images/carousel/1.png` %>
+                <%- include('./assets/carousel/card.ejs'), { profile } %>
+                <div class="back"></div>
+            </div>
+            <div class="rigth">
+                <div class="description">
+                    <h3>Descrição do produto</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
+                </div>
+                <div class="informations">
+                    <h3>Informações</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
+                </div>
+                <div class="numbers">
+                    <span class="whatsapp">+55 84 9 9922-8732</span>
+                    <span class="telephone">+55 84 9 9922-4321</span>
+                </div>
+                <p class="local">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla.</p>
+            </div>
+        </div>
+    </header>
 </body>
 </html>

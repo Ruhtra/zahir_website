@@ -1,13 +1,8 @@
-:root {
-    --font-size-text: clamp(.1rem, 2.2vw, 1.4rem);
-    --width-img:  min(30vw, 400px);
-}
-
 #infos {
     display: grid;
     grid-template-columns: 1fr auto;
 
-    font-size: var(--font-size-text);
+    font-size: var(--infos-font-size);
 }
 /* left */
     #infos .left {
@@ -19,7 +14,7 @@
         padding: min(2vw, 1em);
     }
     #infos .left img {
-        width: var(--width-img);
+        width: var(--infos--img-width);
         z-index: 1;
     }
     #infos .left p {
@@ -35,16 +30,16 @@
         color: white;
         font-size: 1em;
         border-radius: 0 1em 1em 0;
-        background-color: var(--var2);
+        background-color: var(--color-2);
         z-index: 1;
     }
     #infos .left .back {
         position: absolute;
         top: 50%;
-        left: calc(var(--width-img) / 4 );
+        left: calc(var(--infos--img-width) / 4 );
         transform: rotate(17deg) translateY(-50%);
 
-        width: calc(var(--width-img) * 1.5);
+        width: calc(var(--infos--img-width) * 1.5);
         aspect-ratio: 30/27;
         
         border: .3em solid red;

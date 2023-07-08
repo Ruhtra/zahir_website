@@ -1,0 +1,82 @@
+@import '/stylesheet/assets/card.css';
+
+/* top */
+    header .top {
+        width: 90%;
+        max-width: 35em;
+        height: auto;
+        min-height: 15em;
+
+        margin: 5rem auto;
+        
+        font-size: var(--profile-font-size);
+    }
+    header .top {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    header .top > * {
+        width: 100%;
+        height: 100%;
+    }
+    /* left */
+        header .top > .left { position: relative; }
+        /* card */
+            header .top > .left .card {
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+
+                width: 16em;
+                height: auto;
+                aspect-ratio: 51/38;
+
+                z-index: 1;
+            }
+            .card .elements .right { display: none; }
+        /* back */
+            header .top > .left .back {
+                position: absolute;
+                right: 0;   
+
+                width: 50%;
+                height: 100%;
+                
+                border: .1em solid black;
+                border-radius: 1em;
+                background-color: #0a0615;
+                background-image: var(--profile-back);
+                background-size: 300%;
+                background-repeat: no-repeat;
+            }
+    /* rigth */
+        header .top > .rigth {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: .5em;
+
+            width: 100%;
+            
+            padding: 1em;
+            
+            font-size: .5em;
+
+            border: .1em solid black;
+            border-left: none;
+            border-radius:  0 1em 1em 0;
+            background-color: white;
+        }
+        header .top > .rigth h3 {
+            font-size: 1.2em;
+            font-weight: 900;
+        }
+        header .top > .rigth p { color: red; }
+        header .top > .rigth .numbers {
+            display: flex;
+            flex-direction: column;
+
+            font-size: 1.1em;
+        }
+        header .top > .rigth .local { width: 50%; }
