@@ -244,7 +244,7 @@ nav {
             
 
 
-    @media (width < 800px) {
+    @media screen and (max-width: 800px) {
         :root { --nav-padding: .5rem .5rem; }
     
         .nav.desktop { display: none; }

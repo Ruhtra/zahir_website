@@ -20,7 +20,7 @@
 
     /* profile */
         --profile-back: url('/images/back_10.png');
-        --profile-font-size: clamp(.1em, 2.5vw, 3em);
+        --profile-font-size: clamp(.1em, 2.5vw, 2.5em);
 
     /* nav */
         --nav-padding-y: .5rem;
