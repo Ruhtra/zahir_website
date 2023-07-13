@@ -11,7 +11,7 @@
             margin: 0;
             box-sizing: border-box;
         }
-        html { height: 5000px } /* remove */
+        html, body { min-width: calc(300px + 2rem); }
         
         body {
             /* background-image: url('/images/ProfilePage.png'); remove  */
@@ -21,6 +21,7 @@
     </style>
     <link rel="stylesheet" href="/stylesheet/assets/variables.css">
     <link rel="stylesheet" href="/stylesheet/assets/navbar.css">
+    <link rel="stylesheet" href="/stylesheet/assets/footer.css">
 
     <link rel="stylesheet" href="/stylesheet/profile/profile.css">
 
@@ -38,19 +39,62 @@
             <div class="rigth">
                 <div class="description">
                     <h3>Descrição do produto</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
+                    <p class="text-color">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
                 </div>
                 <div class="informations">
                     <h3>Informações</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
+                    <p class="text-color">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
                 </div>
                 <div class="numbers">
-                    <span class="whatsapp">+55 84 9 9922-8732</span>
-                    <span class="telephone">+55 84 9 9922-4321</span>
+                    <p class="whatsapp">
+                        <%- include('./assets/icons/whatsapp.ejs') %>
+                        <span>+55 84 9 9922-8732</span>
+                    </p>
+                    <p class="telephone">
+                        <%- include('./assets/icons/telephone.ejs') %>
+                        <span>+55 84 9 9922-4321</span>
+                    </p>
                 </div>
-                <p class="local">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla.</p>
+                <p class="address text-color">
+                    <%- include('./assets/icons/local.ejs') %>
+                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla.</span>
+                </p>
+            </div>
+        </div>
+        <div class="division"></div>
+        <div class="bottom">
+            <div class="movie">
+                <div class="embed">
+                    <iframe src="<%= profile.movie %>" frameborder="0" scrolling="no" loading="lazy" allowfullscreen></iframe>
+                </div>
+                <div class="note">
+                    <div class="stars">
+                        <%- include('./assets/icons/star.ejs') %>
+                        <%- include('./assets/icons/star.ejs') %>
+                        <%- include('./assets/icons/star.ejs') %>
+                        <%- include('./assets/icons/star.ejs') %>
+                        <%- include('./assets/icons/star.ejs') %>
+                    </div>
+                    <p>Nota do Zahir: <span>8.5</span></p>
+                </div>
+            </div>
+            <div class="reviewdeo">
+                <div class="block">
+                    <h2>Reviewdeo</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
+                </div>
+            </div>
+            <div class="map">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1984.9497464183057!2d-35.25231975!3d-5.7276148!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b3a9841fd354b7%3A0x924003331f7e8980!2sR.%20Bariri%20-%20Lagoa%20Azul%2C%20Natal%20-%20RN%2C%2059135-620!5e0!3m2!1spt-BR!2sbr!4v1689094090991!5m2!1spt-BR!2sbr"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
             </div>
         </div>
     </header>
+    <%- include('./assets/footer.ejs') %>
 </body>
 </html>

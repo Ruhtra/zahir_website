@@ -114,6 +114,6 @@
     .carousel .flickity-button { display: none; }
 }
 
-@media screen and ( width > 1700px ) {
+@media screen and ( min-width: 1700px ) {
     #carousel .carousel .gallery { width: 1500px; }
 }
