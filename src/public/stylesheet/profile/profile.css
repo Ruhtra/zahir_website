@@ -222,6 +222,8 @@ header { font-size: var(--profile-font-size); }
         }
         header .bottom .reviewdeo .block {
             position: relative;
+            
+            min-width: 100%;
 
             padding: 1em;
 

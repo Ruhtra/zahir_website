@@ -34,30 +34,39 @@
             <div class="left">
                 <% profile['picture'] = `/images/carousel/1.png` %>
                 <%- include('./assets/carousel/card.ejs'), { profile } %>
+                <% console.log(profile) %>
                 <div class="back"></div>
             </div>
             <div class="rigth">
-                <div class="description">
-                    <h3>Descrição do produto</h3>
-                    <p class="text-color">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
-                </div>
-                <div class="informations">
-                    <h3>Informações</h3>
-                    <p class="text-color">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
-                </div>
+                <% if (profile.resume) { %>
+                    <div class="description">
+                        <h3>Descrição do produto</h3>
+                        <p class="text-color"><%= profile.resume %></p>
+                    </div>
+                <% } %>
+                <% if (profile.informations) { %>
+                    <div class="informations">
+                        <h3>Informações</h3>
+                        <p class="text-color"><%= profile.informations %></p>
+                    </div>
+                <% } %>
                 <div class="numbers">
-                    <p class="whatsapp">
-                        <%- include('./assets/icons/whatsapp.ejs') %>
-                        <span>+55 84 9 9922-8732</span>
-                    </p>
-                    <p class="telephone">
-                        <%- include('./assets/icons/telephone.ejs') %>
-                        <span>+55 84 9 9922-4321</span>
-                    </p>
+                    <% profile.telephones.whatsapp.forEach(number => { %>
+                        <p class="whatsapp">
+                            <%- include('./assets/icons/whatsapp.ejs') %>
+                            <span><%= number %></span>
+                        </p>
+                    <% }) %>
+                    <% profile.telephones.telephone.forEach(number => { %>
+                        <p class="telephone">
+                            <%- include('./assets/icons/telephone.ejs') %>
+                            <span><%= number %></span>
+                        </p>
+                    <% }) %>
                 </div>
                 <p class="address text-color">
                     <%- include('./assets/icons/local.ejs') %>
-                    <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla.</span>
+                    <span>Endereo grande com descrição bem bonitinho e completamente enorme vai entrar aqui</span>
                 </p>
             </div>
         </div>
@@ -79,11 +88,13 @@
                 </div>
             </div>
             <div class="reviewdeo">
-                <div class="block">
-                    <h2>Reviewdeo</h2>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel mi in nisl feugiat fringilla. Nam orci purus, porta ut ligula in, egestas commodo est. Proin non maximus turpis, a vestibulum metus. Morbi nisl arcu, laoreet vehicula orci non, dapibus porta erat. Aliquam volutpat libero cursus tortor cursus vulputate. Morbi venenatis dictum nibh. Pellentesque metus lectus, feugiat nec lacus eu, iaculis finibus turpis. Aenean hendrerit leo sapien, in pellentesque magna lacinia in. Pellentesque lacus mauris, euismod aliquam posuere quis, sagittis id velit. Morbi viverra varius pharetra. Donec ullamcorper odio id vulputate efficitur. Integer vel ante eros. Nullam fringilla sodales iaculis.</p>
+                    <% if (profile.resume) { %>
+                    <div class="block">
+                        <h2>Reviewdeo</h2>
+                        <p><%= profile.resume %></p>
+                    </div>
+                    <% } %>
                 </div>
-            </div>
             <div class="map">
                 <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1984.9497464183057!2d-35.25231975!3d-5.7276148!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7b3a9841fd354b7%3A0x924003331f7e8980!2sR.%20Bariri%20-%20Lagoa%20Azul%2C%20Natal%20-%20RN%2C%2059135-620!5e0!3m2!1spt-BR!2sbr!4v1689094090991!5m2!1spt-BR!2sbr"
