@@ -9,6 +9,21 @@ export default class HomePages  {
         this.homePage = homePage
         this.obResponses = new Observer()
         this.DB = new DB(this.obResponses)
+
+
+        // Load buttons
+            this.homePage.querySelectorAll(`div.block`).forEach(e => {
+                let btn = e.querySelector('button.delete')
+                btn.addEventListener('click', (evt) => {
+                    evt.preventDefault()
+
+                    btn.disabled = true
+                    this.DB.homePage.delete(e.id.split('_')[1])
+                        .finally(() => {
+                            btn.disabled = false
+                        })
+                })
+            })
     }
 
     async build() {
@@ -19,20 +34,15 @@ export default class HomePages  {
     insert(data) {
         this.clear()
         data.forEach(e => {
-            this.homePage.querySelector('div#order_'+e.order).innerHTML = HomePage.profile(e.profile)
-
-            // Load buttons
-            let btn = this.homePage.querySelector(`div#order_${e.order} input.delete`)
-            btn.addEventListener('click', (evt) => {
-                evt.preventDefault()
-
-                btn.disabled = true
-                this.DB.homePage.delete(e.order)
-                    .finally(() => {
-                        btn.disabled = false
-                    })
-            })
+            let block =  this.homePage.querySelector(`div#order_${e.order}`)
+            block.querySelector('.item').innerHTML = HomePage.profile(e.profile)
+            block.querySelector('.none').style.display = 'none'
+            block.querySelector('.options').style.display = 'flex'
         });
     }
-    clear() { this.homePage.querySelectorAll('div').forEach(e => { e.innerHTML = '' }) }
+    clear() {
+        this.homePage.querySelectorAll('.item').forEach(e => { e.innerHTML = '' })
+        this.homePage.querySelectorAll('.none').forEach(e => {e.style.display = 'flex'})
+        this.homePage.querySelectorAll('.options').forEach(e => {e.style.display = 'none'})
+    }
 }

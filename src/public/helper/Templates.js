@@ -82,9 +82,7 @@ export const Filter = {
 }
 
 export const HomePage = {
-    profile: (data) => `
-        <input class="delete" type="button" value="delete">
-        ${data.name}`,
+    profile: (data) => `<img src="/images/carousel/${data.picture != undefined ? data.picture : 'none' }">`,
     btns: () => `
         <input class="insertOrd" type="number" placeholder="order" max="6" min="0"><br>  
         <input class="insertCard" type="button" value="Inserir"><br>`

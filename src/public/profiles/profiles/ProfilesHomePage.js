@@ -10,7 +10,7 @@ export default class ProfilesHomePage extends Profiles {
         super(base, true)
         this.base = base
         this.obResponses = new Observer()
-        this.db = new DB(this.obResponses)
+        this.DB = new DB(this.obResponses)
     }
     insertBtn(data) {
         const profile = this.base.querySelector(`#_${data._id}`)
@@ -22,7 +22,7 @@ export default class ProfilesHomePage extends Profiles {
             evt.preventDefault()
 
             btn.disabled = true
-            this.db.homePage.insert({
+            this.DB.homePage.insert({
                 id: data._id,
                 order: profile.querySelector(`#_${data._id} input.insertOrd`).value || undefined
             }).finally(() => {
