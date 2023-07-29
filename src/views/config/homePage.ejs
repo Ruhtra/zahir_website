@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="/stylesheet/assets/variables.css">
+    <link rel="stylesheet" href="/stylesheet/assets/navbar.css">
+
+    <link rel="stylesheet" href="/stylesheet/config/homePage/homePage.css">
+    
     <title>Home Page</title>
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         #homePages {
             display: flex;
             gap: 5px;
@@ -17,68 +29,185 @@
             justify-content: center;
             align-items: center;
 
-            padding: 10px;
             width: 100px;
             height: 100px;
             background-color: #ddd;
         }
     </style>
+
+    <!-- header -->
     <style>
-        #filter {
+    /* header */
+        header.top {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            
+            width: 500px;
+            height: 3em;
+            
+            margin: 1em;
+            padding: .5em 1em .5em .5em;
+            
+            font-size: 1rem;
+            letter-spacing: .1em;
+            border-radius: 1em 1em 10em 1em;
+            background: var(--color-4);
         }
+        header.top h2 { font-size: 2em; }
+        header.top h3 { align-self: start; }
+    </style>
 
-        #profiles {
-            display: flex;
-        }
-        #profiles > div {
-            background-color: #ddd;
-            width: 200px;
-            padding: 10px;
-            margin: 10px;
-        }
-
-        .unvisible { display: none; }
-
-        /* btn */
-            /* promotion */
-                .btn.promotion {
-                    padding: 10px;
-                    border-radius: 2px;
-                    background-color: red;
+    <style>
+        /* main */
+            /* section homepage */
+                /* global */
+                    section.homePage svg {
+                        width: 50%;
+                        aspect-ratio: 1;
+                    }
+                section.homePage #homePages {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    
+                    width: max-content;
+                    
+                    margin: 0 auto;
+                    padding: .5em 3em;
+                    
+                    font-size: 1rem;
+                    border-radius: 1em;
+                    background: red;
                 }
-                .btn.promotion:hover {cursor: pointer;}
-
-                div#promotion input {display: none;}
-                div#promotion input:checked ~ label.promotion { background-color: green; }
-
-            /* categorie */
-                div#categories div {
-                    padding: 10px;
+                section.homePage #homePages:before {
+                    content: '';
+                    position: absolute;
+                    width: 105%;
+                    height: 100%;
+                    
+                    border-radius: 10em;
+                    background: green;
+                    z-index: -1;
                 }
-                div#categories div label {
-                    padding: 10px;
-                    border: 1px solid black;
-                    border-radius: 5px;
-                }
-                div#categories div label:hover {cursor: pointer;}
+                /* homePages */
+                    section.homePage #homePages > .block {
+                        position: relative;
+                        border-radius: .5em;
+                        overflow: hidden;
+                    }
+                    section.homePage #homePages .options {
+                        display: none;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
 
-                div#categories input {display: none;}
-        div#categories input:checked ~ label.categorie { background-color: green; }
-</style>
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, .5);
+                        opacity: 0;
+                        transition: 250ms;
+                    }
+                    /* item */
+                        section.homePage #homePages .item img {
+                            height: 100%;
+                            width: 100%;
+
+                            object-fit: cover;
+                        }
+                    /* none */
+                        section.homePage #homePages .none {
+                            position: absolute;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            
+                            width: 100%;
+                            height: 100%;
+
+                        }
+                    /* options */
+                        section.homePage #homePages .options button {
+                            all: unset;
+                            position: absolute;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            width: 100%;
+                            height: 100%;
+                            cursor: pointer;
+                        }
+                        section.homePage #homePages .options:hover { opacity: 1; }
+            /* section filter */
+
+
+    </style>
 </head>
 <body>
-    <h2>Home Page</h2>
+    <%- include('../assets/navbar.ejs', { active: 'config/homePage' }) %>
+    <header class="top">
+        <h2>Tela Inicial</h2>
+        <h3>Promoções</h3>
+    </header>
     <div id="notifications"></div>
-    <div id="homePages">
-        <div id="order_0"></div>
-        <div id="order_1"></div>
-        <div id="order_2"></div>
-        <div id="order_3"></div>
-        <div id="order_4"></div>
-        <div id="order_5"></div>
-        <div id="order_6"></div>
-    </div>
+    <main>
+        <section class="homePage">
+            <div id="homePages">
+                <div id="order_0" class="block">
+                    <div class="item"></div>
+                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
+                    <div class="options">
+                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
+                    </div>
+                </div>
+                <div id="order_1" class="block">
+                    <div class="item"></div>
+                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
+                    <div class="options">
+                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
+                    </div>
+                </div>
+                <div id="order_2" class="block">
+                    <div class="item"></div>
+                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
+                    <div class="options">
+                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
+                    </div>
+                </div>
+                <div id="order_3" class="block">
+                    <div class="item"></div>
+                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
+                    <div class="options">
+                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
+                    </div>
+                </div>
+                <div id="order_4" class="block">
+                    <div class="item"></div>
+                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
+                    <div class="options">
+                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
+                    </div>
+                </div>
+                <div id="order_5" class="block">
+                    <div class="item"></div>
+                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
+                    <div class="options">
+                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
+                    </div>
+                </div>
+                <div id="order_6" class="block">
+                    <div class="item"></div>
+                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
+                    <div class="options">
+                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <%- include('../profile/filter.ejs') %>
     <%- include('../profile/table.ejs') %>

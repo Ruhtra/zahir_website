@@ -31,15 +31,15 @@
             <li>
                 <input type="checkbox" id="cb_desktop_config" style="display: none;">
                 <label for="cb_desktop_config">
-                    <a class="item dropdown">
+                    <a class="item dropdown <% if (active == 'config/homePage' || active == 'config/profiles') { %>active<% } %>">
                         Config
                         <%- include('./icons/arrow.ejs') %>
                     </a>
                 </label>
                 
                 <ul class="content">
-                    <li><a href="/config/profiles"> • Reviews</a></li>
-                    <li><a href="/config/homepage"> • Home Page</a></li>
+                    <li><a href="/config/profiles" class="<% if (active == 'config/profiles') { %>active<% } %>"> • Reviews</a></li>
+                    <li><a href="/config/homepage" class="<% if (active == 'config/homePage') { %>active<% } %>"> • Home Page</a></li>
                 </ul>
             </li>
         </ul>
