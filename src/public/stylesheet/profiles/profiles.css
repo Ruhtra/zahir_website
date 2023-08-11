@@ -1,0 +1,80 @@
+/* profiles */
+    #profiles {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1em;
+
+        max-width: 1200px;
+        
+        margin: 0 auto;
+        
+        /* background-color: red; */
+    }
+    /* card */
+        #profiles .profiles {
+            position: relative;
+
+            width: 240px;
+            aspect-ratio: 1;
+            
+            padding: .5em;
+
+            font-size: 1rem;
+            border-radius: .5em;
+            background-color: #d9d9d9;
+            box-shadow: 0.05em 0.05em 0.5em black;
+        }
+        /* img */
+            #profiles .profiles img {
+                width: 100%;
+                aspect-ratio: 1;
+
+                border-radius: .5em;
+
+                object-fit: cover;
+            }
+        /* elements */
+            #profiles .profiles .elements {
+                display: grid;
+                grid-template-rows: 1fr 1fr;
+            }
+            #profiles .profiles .elements span {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                text-align: center;
+                letter-spacing: .1em;
+                font-size: 1.5em;
+            }
+            #profiles .profiles .elements span.name { font-weight: 900; }
+            #profiles .profiles .elements span.local {
+                font-size: 1em;
+                line-height: 1.5em;
+            }
+        /* promotion */
+            #profiles .profiles .promotion {
+                position: absolute;
+                top: 0;
+                right: 0;
+
+                width: max-content;
+                max-width: 75%;
+                
+                font-size: 1.5em;
+                padding: 0 .5em;
+                
+                border-radius: inherit;
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+                border-bottom-right-radius: 0;
+
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: 1.5em;
+                color: white;
+
+                background: rgb(238,0,0);
+                background: linear-gradient(0deg, rgba(238,0,0,1) 0%, rgba(200,0,0,1) 100%);
+            }

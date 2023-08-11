@@ -23,7 +23,7 @@ class FilterSstructure {
     filterUf(uf) {
         this.arrFilter = this.data.map((e, i) => {
             if (this.arrFilter[i])
-            if (e['uf'] == uf.toUpperCase()) return 1
+            if (e['local']['uf'] == uf.toUpperCase()) return 1
             return 0
         })
     }
