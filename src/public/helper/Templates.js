@@ -1,19 +1,33 @@
 export const Profile = {
-    card: (data)  => `
-        <div id="_${data._id}" class="profiles" >
-            <input class="openCard" type="button" value="Abrir"> <br>
+    // card: (data)  => `
+    //     <div id="_${data._id}" class="profiles" >
+    //         <input class="openCard" type="button" value="Abrir"> <br>
 
-            _id: ${data._id}, <br>
-            name: ${data.name}, <br>
-            picture: ${data.picture}, <br>
-            promotion: { <br>
-                &nbsp;&nbsp; title: ${data.promotion.title}, <br>
-                &nbsp;&nbsp; description: ${data.promotion.description} <br>
-            }, <br>
-            uf: ${data.uf}, <br>
-            category: {<br>
-                &nbsp;&nbsp; type: ${data.category.type}, <br>
-                &nbsp;&nbsp; categories: ${data.category.categories} <br>
+    //         _id: ${data._id}, <br>
+    //         name: ${data.name}, <br>
+    //         picture: ${data.picture}, <br>
+    //         promotion: { <br>
+    //             &nbsp;&nbsp; title: ${data.promotion.title}, <br>
+    //             &nbsp;&nbsp; description: ${data.promotion.description} <br>
+    //         }, <br>
+    //         uf: ${data.uf}, <br>
+    //         category: {<br>
+    //             &nbsp;&nbsp; type: ${data.category.type}, <br>
+    //             &nbsp;&nbsp; categories: ${data.category.categories} <br>
+    //         }
+    //     </div>`,
+    card: (data) => `
+        <div id="_${data._id}" class="profiles" >
+            <input class="openCard" type="button" value="Abrir" style="display: none;">
+            <img src="${'/images/carousel/1.png'}" alt=""> <!-- implemented image here -->
+            <div class="elements">
+                <span class="name">${data.name}</span>
+                <span class="local">${data.local.uf} - ${data.local.city}</span>
+            </div>
+            ${ data.promotion.title != undefined ?
+                `<div class="promotion">
+                    <span class="title">${data.promotion.title}</span>
+                </div>` : ''
             }
         </div>`,
     cardAdmin: (data) => `

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/stylesheet/assets/variables.css">
     <link rel="stylesheet" href="/stylesheet/assets/navbar.css">
 
+    <link rel="stylesheet" href="/stylesheet/profiles/filter.css">
+    <link rel="stylesheet" href="/stylesheet/profiles/profiles.css">
     <link rel="stylesheet" href="/stylesheet/config/homePage/homePage.css">
     
     <title>Home Page</title>
@@ -17,6 +19,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+        body {
+            /* background-image: url('/images/MainPage.png'); */ /* remove */ 
+            background-image: url('/images/back_10.png');
+            background-size: 50%;
         }
 
         #homePages {
@@ -33,117 +40,6 @@
             height: 100px;
             background-color: #ddd;
         }
-    </style>
-
-    <!-- header -->
-    <style>
-    /* header */
-        header.top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            
-            width: 500px;
-            height: 3em;
-            
-            margin: 1em;
-            padding: .5em 1em .5em .5em;
-            
-            font-size: 1rem;
-            letter-spacing: .1em;
-            border-radius: 1em 1em 10em 1em;
-            background: var(--color-4);
-        }
-        header.top h2 { font-size: 2em; }
-        header.top h3 { align-self: start; }
-    </style>
-
-    <style>
-        /* main */
-            /* section homepage */
-                /* global */
-                    section.homePage svg {
-                        width: 50%;
-                        aspect-ratio: 1;
-                    }
-                section.homePage #homePages {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    position: relative;
-                    
-                    width: max-content;
-                    
-                    margin: 0 auto;
-                    padding: .5em 3em;
-                    
-                    font-size: 1rem;
-                    border-radius: 1em;
-                    background: red;
-                }
-                section.homePage #homePages:before {
-                    content: '';
-                    position: absolute;
-                    width: 105%;
-                    height: 100%;
-                    
-                    border-radius: 10em;
-                    background: green;
-                    z-index: -1;
-                }
-                /* homePages */
-                    section.homePage #homePages > .block {
-                        position: relative;
-                        border-radius: .5em;
-                        overflow: hidden;
-                    }
-                    section.homePage #homePages .options {
-                        display: none;
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-
-                        width: 100%;
-                        height: 100%;
-                        background-color: rgba(0, 0, 0, .5);
-                        opacity: 0;
-                        transition: 250ms;
-                    }
-                    /* item */
-                        section.homePage #homePages .item img {
-                            height: 100%;
-                            width: 100%;
-
-                            object-fit: cover;
-                        }
-                    /* none */
-                        section.homePage #homePages .none {
-                            position: absolute;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            
-                            width: 100%;
-                            height: 100%;
-
-                        }
-                    /* options */
-                        section.homePage #homePages .options button {
-                            all: unset;
-                            position: absolute;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-
-                            width: 100%;
-                            height: 100%;
-                            cursor: pointer;
-                        }
-                        section.homePage #homePages .options:hover { opacity: 1; }
-            /* section filter */
-
-
     </style>
 </head>
 <body>

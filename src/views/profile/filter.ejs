@@ -1,4 +1,4 @@
-<div id="filter">
+<!-- <div id="filter">
     <div id="promotion">
         <input id="cb_promotion" type="checkbox">
         <label class="btn promotion" for="cb_promotion">Promotion</label>
@@ -44,4 +44,58 @@
     <div id="categories">
     </div>
     <div id="clear"><input type="button" value="clear"></div>
+</div> -->
+<div id="filter">
+    <div id="filtragem">
+        Filtragem
+    </div>
+    <div id="promotion">
+        <input id="cb_promotion" type="checkbox" style="display: none;">
+        <label class="btn promotion" for="cb_promotion">Promotion</label>
+    </div>
+    <div id="type">
+        <select id="sl_type">
+            <option value="restaurante">Restaurante</option>
+            <option value="hotel">Hotel</option>
+        </select>
+        <%- include('../assets/icons/arrow.ejs') %>
+    </div>
+    <div id="uf">
+        <select id="sl_uf">
+            <option value="" selected>Região</option>
+            <option value="AC">AC</option>
+            <option value="AL">AL</option>
+            <option value="AM">AM</option>
+            <option value="AP">AP</option>
+            <option value="BA">BA</option>
+            <option value="CE">CE</option>
+            <option value="DF">DF</option>
+            <option value="ES">ES</option>
+            <option value="GO">GO</option>
+            <option value="MA">MA</option>
+            <option value="MG">MG</option>
+            <option value="MS">MS</option>
+            <option value="MT">MT</option>
+            <option value="PA">PA</option>
+            <option value="PB">PB</option>
+            <option value="PE">PE</option>
+            <option value="PI">PI</option>
+            <option value="PR">PR</option>
+            <option value="RJ">RJ</option>
+            <option value="RN">RN</option>
+            <option value="RO">RO</option>
+            <option value="RR">RR</option>
+            <option value="RS">RS</option>
+            <option value="SC">SC</option>
+            <option value="SE">SE</option>
+            <option value="SP">SP</option>
+            <option value="TO">TO</option>
+        </select>
+        <%- include('../assets/icons/arrow.ejs') %>
+    </div>
+    <div id="categories" style="display: none;"></div>
+    <div id="clear">
+        Clear
+        <%- include('../assets/icons/close.ejs') %>
+    </div>
 </div>

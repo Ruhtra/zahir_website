@@ -1,0 +1,136 @@
+/* global */
+    .unvisible { display: none; }
+
+/* filter */
+    #filter {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1em;
+
+        width: fit-content;
+
+        margin: 2em auto;
+        padding: .5em 2em;
+        
+        font-size: 1rem;
+        border-radius: 5em;
+        background-color: rgba(170, 170, 170, .5);
+    }
+    #filter::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        
+        width: 100%;
+        height: 100%;
+
+        padding: 0 2em;
+
+        border-radius: inherit;
+        background-color: rgba(170, 170, 170, .5);
+        z-index: -1;
+    }
+    /* Filtagem */
+        #filter #filtragem {
+            display: block;
+            cursor: pointer;
+
+            padding: .25em;
+            border-radius: .25em;
+            
+            font-size: 1.5em;
+            color: white;
+            background-color: #1D54B9;
+            box-shadow: -.1em -.1em 0 rgba(0, 0, 0, .5) inset;
+        }
+        #filter #filtragem:hover {
+            box-shadow: .1em .1em 0 rgba(0, 0, 0, .5) inset;
+        }
+    /* promotion */
+        #filter #promotion .btn.promotion {
+            display: block;
+            cursor: pointer;
+
+            padding: .25em;
+            border-radius: .25em;
+            
+            font-size: 1.5em;
+            color: white;
+            background-color: #1D54B9;
+            box-shadow: -.1em -.1em 0 rgba(0, 0, 0, .5) inset;
+        }
+        #filter #promotion .btn.promotion:hover {
+            box-shadow: .1em .1em 0 rgba(0, 0, 0, .5) inset;
+        }
+    /* type */
+        /* globals */
+            #filter svg {
+                height: 100%;
+                padding: .1em;
+                aspect-ratio: 1;
+            }
+        #filter #type {
+            display: grid;
+            gap: .25em;
+            grid-template-columns: 1fr auto;
+            
+            padding: .25em;
+            
+            color: white;
+            font-size: 1.5em;
+            border-radius: 0.25em;
+            background-color: #1D54B9;
+        }
+        #filter #type select {
+            all: unset;
+        }
+    /* uf */
+        /* globals */
+            #filter svg {
+                height: 100%;
+                padding: .1em;
+                aspect-ratio: 1;
+            }
+        #filter #uf {
+            display: grid;
+            gap: .25em;
+            grid-template-columns: 1fr auto;
+            
+            padding: .25em;
+            
+            color: white;
+            font-size: 1.5em;
+            border-radius: 0.25em;
+            background-color: #1D54B9;
+        }
+        #filter #uf select {
+            all: unset;
+        }
+    /* clear */
+        /* globals */
+            #filter svg {
+                height: 100%;
+                padding: .1em;
+                aspect-ratio: 1;
+            }
+        #filter #clear {
+            cursor: pointer;
+            display: grid;
+            gap: .25em;
+            grid-template-columns: 1fr auto;
+
+            padding: .25em;
+            
+            color: white;
+            font-size: 1.5em;
+            border-radius: 0.25em;
+            background-color: #1D54B9;
+            box-shadow: -.1em -.1em 0 rgba(0, 0, 0, .5) inset;
+        }
+        #filter #clear:hover {
+            box-shadow: .1em .1em 0 rgba(0, 0, 0, .5) inset;
+        }
