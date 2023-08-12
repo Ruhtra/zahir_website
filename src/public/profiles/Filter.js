@@ -32,10 +32,12 @@ class FilterSstructure {
 
         this.arrFilter = this.data.map((e, i) => {
             if (this.arrFilter[i]) {
-                let result = categories.map(name => {
-                    return e['category']['categories'].includes(name)
-                })
-                if (result.filter(e => e == false).length == 0) return 1
+                if (e['category']['categories'] != undefined) {
+                    let result = categories.map(name => {
+                        return e['category']['categories'].includes(name)
+                    })
+                    if (result.filter(e => e == false).length == 0) return 1
+                }
             }
             return 0
         })
