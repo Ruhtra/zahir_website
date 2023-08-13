@@ -47,7 +47,7 @@ class FilterSstructure {
     }
 }
 
-class Screen {
+class ScreenProfiles {
     constructor (baseTable) {
         this.baseTable = baseTable
         this.cardRemove = 'unvisible'
@@ -69,20 +69,47 @@ class Screen {
     cardsEmpty() { this.elements['empty']().classList.remove(this.cardRemove) }
     cardsClean() { this.elements['allProfiles']().forEach(e => { e.classList.remove(this.cardRemove) }) }
 }
+class ScreenFilter {
+    constructor (baseFilter) {
+        this.baseFilter = baseFilter
+
+        this.elements = {
+            filterScreen: () => this.baseFilter.querySelector('#screenFilter')
+        }
+        this.btn = {
+            close: this.elements.filterScreen().querySelector('.close')
+        }
+
+        // Starting buttons
+        this.btn.close.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            this.closeFilter()
+        })
+    }
+    openFilter() {
+        this.elements.filterScreen().style.display = 'flex'
+    }
+    closeFilter() {
+        this.elements.filterScreen().style.display = 'none'
+    }
+}
 
 export default class Filter extends FilterSstructure  {
     constructor(baseFilter, baseTable, array) {
         super(array)
 
         this.baseFilter = baseFilter
-        this.screen = new Screen(baseTable)
+        this.screenProfiles = new ScreenProfiles(baseTable)
+        this.screenFilter = new ScreenFilter(baseFilter)
 
         this.btn = {
             promotion: this.baseFilter.querySelector('#promotion'),
             type: this.baseFilter.querySelector('#type'),
             uf: this.baseFilter.querySelector('#uf'),
             categories: this.baseFilter.querySelector('#categories'),
-            clear: this.baseFilter.querySelector('#clear')
+            clear: this.baseFilter.querySelectorAll('.clear'),
+            openFilter: this.baseFilter.querySelector('#openFilter')
         }
 
         this.btn.promotion.addEventListener('click', (e) => {
@@ -98,7 +125,7 @@ export default class Filter extends FilterSstructure  {
             e.preventDefault()
 
             // change visible categories
-            if (this.btn.type.querySelector('select').value == 'restaurante') this.btn.categories.style.display = 'block'
+            if (this.btn.type.querySelector('select').value == 'restaurante') this.btn.categories.style.display = 'flex'
             else this.btn.categories.style.display = 'none'
 
             this.filterMain()
@@ -109,18 +136,27 @@ export default class Filter extends FilterSstructure  {
             this.filterMain()
         })
         this.buildCategories()
-        this.btn.clear.addEventListener('click', (e) => {
-            e.preventDefault()
-            
-            this.btn.promotion.querySelector('input').checked = false
-            this.btn.type.querySelector('select').value = 'restaurante'
-            this.btn.uf.querySelector('select').value = ''
-            this.btn.categories.style.display = 'block'
-            this.btn.categories.querySelectorAll('input').forEach(e => {
-                e.checked = false
-            })
+        this.btn.clear.forEach(element => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault()
+                
+                this.btn.promotion.querySelector('input').checked = false
+                this.btn.type.querySelector('select').value = 'restaurante'
+                this.btn.uf.querySelector('select').value = ''
+                this.btn.categories.style.display = 'flex'
+                this.btn.categories.querySelectorAll('input').forEach(e => {
+                    e.checked = false
+                })
 
-            this.filterMain()
+                this.filterMain()
+            })
+        })
+
+        // openFilter
+        this.btn.openFilter.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            this.screenFilter.openFilter()
         })
     }
     promotion() {
@@ -146,14 +182,14 @@ export default class Filter extends FilterSstructure  {
 
     filterMain() {
         this.filterClean()
-        this.screen.cardsClean()
+        this.screenProfiles.cardsClean()
 
         this.type()
         this.promotion()
         this.uf()
         this.categories()
         
-        this.screen.cardsShow(this.arrFilter, this.data)
+        this.screenProfiles.cardsShow(this.arrFilter, this.data)
     }
 
     setArray(array) {this.data = array}
