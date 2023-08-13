@@ -5,9 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Config Profiles</title>
+    
+    
+    <link rel="stylesheet" href="/stylesheet/assets/variables.css">
+    <link rel="stylesheet" href="/stylesheet/assets/navbar.css">
 
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/stylesheet/profiles/filter.css">
+    <link rel="stylesheet" href="/stylesheet/profiles/profiles.css">
+    <link rel="stylesheet" href="/stylesheet/config/profiles/profiles.css">
+
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         #screen {
             display: none;
         }
@@ -20,6 +33,8 @@
     </style>
 </head>
 <body>
+    <%- include('../assets/navbar.ejs', {active: 'config/profiles'}) %>
+
     <%- include('../profile/filter.ejs') %>
     <%- include('../profile/table.ejs') %>
 
