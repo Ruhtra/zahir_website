@@ -38,7 +38,57 @@
 
             width: 100px;
             height: 100px;
-            background-color: #ddd;
+        }
+
+        button.insertCard {
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            background: rgba(0, 0, 0, .6);
+            opacity: 0;
+            transition: opacity .3s;
+        }
+        button.insertCard:hover {
+            opacity: 1;
+        }
+        button.insertCard.hover {
+            opacity: 1;
+        }
+        button.insertCard div {
+            width: 50%;
+            height: 50%;
+            margin: auto;
+        }
+
+
+        .markHomePage {
+            position: absolute;
+            
+            top: 0;
+            left: 0;
+            border-radius: inherit;
+            border-top-right-radius: 0;
+            border-bottom-left-radius: 0;
+            /* border-bottom-right-radius: 0; */
+
+            background-color: aqua;
+            padding: 1em .5em;
+        }
+        .markHomePage span {
+            display: block;
+            padding: .15em;
+            background: red;
+            font-size: 2em;
+            box-sizing: content-box;
+            height: 1em;
+            width: 1em;
+            text-align: center;
+            line-height: 1em;
+            border-radius: 10em;
         }
     </style>
 </head>
@@ -52,55 +102,16 @@
     <main>
         <section class="homePage">
             <div id="homePages">
-                <div id="order_0" class="block">
-                    <div class="item"></div>
-                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
-                    <div class="options">
-                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
+                <% for( let index = 0; index < 7; index++ ) { %>
+                    <div id="order_<%= index %>" class="block">
+                        <div class="item"></div>
+                        <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
+                        <div class="options">
+                            <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
+                            <button class="add"> ADICIONAR </button>
+                        </div>
                     </div>
-                </div>
-                <div id="order_1" class="block">
-                    <div class="item"></div>
-                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
-                    <div class="options">
-                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
-                    </div>
-                </div>
-                <div id="order_2" class="block">
-                    <div class="item"></div>
-                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
-                    <div class="options">
-                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
-                    </div>
-                </div>
-                <div id="order_3" class="block">
-                    <div class="item"></div>
-                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
-                    <div class="options">
-                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
-                    </div>
-                </div>
-                <div id="order_4" class="block">
-                    <div class="item"></div>
-                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
-                    <div class="options">
-                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
-                    </div>
-                </div>
-                <div id="order_5" class="block">
-                    <div class="item"></div>
-                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
-                    <div class="options">
-                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
-                    </div>
-                </div>
-                <div id="order_6" class="block">
-                    <div class="item"></div>
-                    <div class="none"> <%- include('../assets/icons/empty.ejs') %> </div>
-                    <div class="options">
-                        <button class="delete"> <%- include('../assets/icons/trash.ejs') %> </button>
-                    </div>
-                </div>
+                <% } %>
             </div>
         </section>
     </main>
