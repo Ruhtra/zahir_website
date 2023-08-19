@@ -11,23 +11,60 @@ export default class ProfilesHomePage extends Profiles {
         this.base = base
         this.obResponses = new Observer()
         this.DB = new DB(this.obResponses)
+
+        this.btn = {
+            insertCard: (profile) =>  profile.querySelector('.insertCard'),
+            iconAdd: (profile) => profile.querySelector('.insertCard .icon-add'),
+            iconCancel: (profile) => profile.querySelector('.insertCard .icon-cancel')
+        }
+
+        this.status_toogleWaitPositions = false
+        this.id_toogle = undefined
     }
+    setFalse(profile) {
+        this.btn.insertCard(profile).classList.remove('hover')
+        this.btn.iconAdd(profile).style.display = 'block'
+        this.btn.iconCancel(profile).style.display = 'none'
+        this.status_toogleWaitPositions = false
+    }
+    setTrue(profile){
+        this.btn.insertCard(profile).classList.add('hover')
+        this.btn.iconAdd(profile).style.display = 'none'
+        this.btn.iconCancel(profile).style.display = 'block'
+        this.status_toogleWaitPositions = true
+    }
+
+    toggleWaitPosition(profile, id){
+        if (this.status_toogleWaitPositions) {
+            this.setFalse(profile)
+            this.id_toogle = undefined
+            return this.obResponses.notify({type: 'cancelWaitPosition', response: {}})
+        }
+
+        this.setTrue(profile)
+        this.id_toogle = id
+        this.obResponses.notify({type: 'startingWaitPosition', response: {id}})
+    }
+
+    endWaitPosition(){
+        this.status_toogleWaitPositions = false
+        this.id_toogle = undefined
+    }
+
     insertBtn(data) {
         const profile = this.base.querySelector(`#_${data._id}`)
         profile.insertAdjacentHTML('beforeend', HomePage.btns())
-
         // Load buttons
-        let btn = profile.querySelector(` input.insertCard`)
-        btn.addEventListener('click', evt => {
+        this.btn.insertCard(profile).addEventListener('click', evt => {
             evt.preventDefault()
 
-            btn.disabled = true
-            this.DB.homePage.insert({
-                id: data._id,
-                order: profile.querySelector(`#_${data._id} input.insertOrd`).value || undefined
-            }).finally(() => {
-                btn.disabled = false
-            })
+            if (this.id_toogle != data._id && this.id_toogle != undefined) return console.log("Não permitido selecionar dois");
+    
+            this.toggleWaitPosition(profile, data._id);            
         })
+    }
+    insertPosition(data) {
+        const profile = this.base.querySelector(`#_${data.profile._id}`)
+        profile.insertAdjacentHTML('beforeend', HomePage.position(data.order))
     }
 }
