@@ -99,6 +99,21 @@
                 height: 100%;
                 aspect-ratio: 1;
             }
+            #filter #screenFilter select {
+                appearance: none;
+                cursor: pointer;
+
+                padding: .5em;
+
+                font-size: 1em;
+                border-radius: .3em;
+                background-color: rgba(50, 50, 50, 1);
+                background-image: url("/images/arrow_temp.png");
+                background-size: 1em 1em; /* Ajuste o tamanho da imagem */
+                background-position: 92% center;
+                background-repeat: no-repeat;
+                padding-right: 2em; /* Espaço para a imagem */
+            }
 
         #filter #screenFilter {
             position: fixed;
@@ -148,75 +163,107 @@
         /* middle */
             #filter #screenFilter .mainFilter {
                 display: grid;
-                grid-template-columns: repeat(3, min-content);
+                grid-template-columns: repeat(2, min-content) auto;
                 grid-template-rows: min-content;
                 gap: 1em;
 
                 padding: 1em;
             }
             /* promotion */
-                #filter #screenFilter #promotion .btn.promotion {
-                    display: block;
-                    cursor: pointer;
-                    width: fit-content;
-
-                    padding: .25em;
-                    border-radius: .25em;
-                    
-                    font-size: 1.5em;
-                    color: white;
-                    background-color: #1D54B9;
-                }
-                /* checked */
-                    #filter #screenFilter #promotion input:checked ~ .btn {
-                        background-color: green;
-                        box-shadow: .1em .1em 0 rgba(0, 0, 0, .5) inset; /* hover fixed */
-                    }
-            /* type */
-                #filter #screenFilter #type {
+            #filter #screenFilter .mainFilter #promotion {
                     cursor: pointer;
                     display: grid;
-                    gap: .25em;
                     grid-template-columns: 1fr auto;
+                    align-items: center;
+                    gap: 1em;
+                    align-self: center;
+                    justify-self: end;
 
-                    width: max-content;
-                    
-                    padding: .25em;
-                    
+                    width: min-content;
+                    padding: .5em;
+
                     color: white;
-                    font-size: 1.5em;
-                    border-radius: 0.25em;
-                    background-color: #1D54B9;
+                    font-size: 1em;
+                    line-height: 1em;
+                    border-radius: .3em;
+                    background-color: rgba(50, 50, 50, 1);;
                 }
-                #filter #screenFilter #type select { all: unset }
-                #filter #screenFilter #type select option {
-                    background-color: #1D54B9;
+                /* outside */
+                    #filter #screenFilter .mainFilter #promotion .toogle .outside {
+                        cursor: pointer;
+                        position: relative;
+                        display: block;
+                        
+                        height: 2em;
+                        width: 5em;
+                        
+                        font-size: .75em;
+                        border-radius: 1em;
+                        border: .15em solid rgba(230, 230, 230, 1);
+                        background-color: rgb(143, 143, 143);
+                        box-shadow: 0 0 .5em rgba(0, 0, 0, .5) inset;
+                        transition: background .5s;
+                    }
+                    #filter #screenFilter .mainFilter #promotion .toogle .outside:hover {
+                        box-shadow: 0 0 .5em rgba(0, 0, 0, .5) inset, 0 0 .2em rgb(0, 186, 224);
+                    }
+                    /* circle */
+                        #filter #screenFilter .mainFilter #promotion .toogle .outside .circle {
+                            position: absolute;
+                            display: block;
+                            right: 3em;
+
+                            height: 100%;
+                            aspect-ratio: 1;
+
+                            border-radius: inherit;
+
+                            background-color: white;
+                            transition: right .5s;
+                        }
+                        #filter #screenFilter .mainFilter #promotion .toogle .outside .circle::after {
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+
+                            height: 85%;
+                            aspect-ratio: 1;
+
+                            border-radius: inherit;
+
+                            box-shadow: 0 .1em .2em rgba(0, 0, 0, .5) inset;
+                            background-color: white;
+                        }
+                /* input promotion */
+                    #filter #screenFilter .mainFilter #promotion .toogle input[type="checkbox"]:checked ~ .outside { background-color: green; }
+                    #filter #screenFilter .mainFilter #promotion .toogle input[type="checkbox"]:checked ~ .outside .circle { right: 0; }
+            /* type */
+                #filter #screenFilter #type {
+                    align-self: center;
+                    justify-self: start;
                 }
+                #filter #screenFilter #type select {
+                    color: white;
+                }
+                #filter #screenFilter #type select option { background-color: inherit; }
                 /* checked */
                     /* desenvolver giro da seta */
             /* uf */
                 #filter #screenFilter #uf {
-                    cursor: pointer;
-                    display: grid;
-                    gap: .25em;
-                    grid-template-columns: 1fr auto;
-                    
-                    width: max-content;
-                    
-                    padding: .25em;
-                    
-                    color: white;
-                    font-size: 1.5em;
-                    border-radius: 0.25em;
-                    background-color: #1D54B9;
+                    align-self: center;
+                    justify-self: start;
                 }
-                #filter #screenFilter #uf select { all: unset; }
+                #filter #screenFilter #uf select {
+                    color: white;
+                }
                 #filter #screenFilter #uf select option { background-color: inherit; }
                 /* checked */
                     /* desenvolver giro da seta */
             /* Categories */
                 #filter #screenFilter .categories {
-                    grid-area: 2 / 1 / 3 / span 4;
+                    grid-area: 2 / 1 / -1 / -1;
                     width: 100%;
                 }
                 /* title */
@@ -228,22 +275,22 @@
                     #filter #screenFilter .categories div#categories {
                         display: flex;
                         gap: 1em;
-                        padding: 1em 1em;
+                        padding: 1em;
                     }
                     #filter #screenFilter .categories div#categories .item input[type="checkbox"] { display: none; }
                     #filter #screenFilter .categories div#categories .item label {
                         cursor: pointer;
-                        padding: .4em .8em;
+                        padding: .4em 1.2em;
 
                         border-radius: 1em;
                         background-color: rgba(0, 0, 0, .3);
                         transition: .2s background ease-in-out;
                     }
                     #filter #screenFilter .categories div#categories .item label:hover {
-                        background-color: rgba(194, 11, 47, 1);
+                        background-color: rgb(238, 175, 0);
                     }
                     #filter #screenFilter .categories div#categories .item input:checked ~ label {
-                    background-color: rgba(194, 11, 47, 1);
+                        background-color: rgb(238, 175, 0);
                 }
         /* options */
             #filter #screenFilter .options {
