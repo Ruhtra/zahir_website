@@ -21,10 +21,6 @@
             </div>
 
             <div class="mainFilter">
-                <div id="promotion">
-                    <input id="cb_promotion" type="checkbox" style="display: none;">
-                    <label class="btn promotion btn-shadow" for="cb_promotion">Promotion</label>
-                </div>
                 <div id="type">
                     <select id="sl_type">
                         <option value="restaurante">Restaurante</option>
@@ -64,6 +60,15 @@
                         <option value="TO">TO</option>
                     </select>
                     <!-- <%- include('../assets/icons/arrow.ejs') %> -->
+                </div>
+                <div id="promotion">
+                    <h3>Promoção: </h3>
+                    <div class="toogle">
+                        <input type="checkbox" name="cb_promotion" id="cb_promotion" style="display: none;">
+                        <label class="outside" for="cb_promotion">
+                                <div class="circle"></div>
+                        </label>
+                    </div>
                 </div>
                 <div class="categories">
                     <h2>Categorias</h2>

@@ -125,8 +125,8 @@ export default class Filter extends FilterSstructure  {
             e.preventDefault()
 
             // change visible categories
-            if (this.btn.type.querySelector('select').value == 'restaurante') this.btn.categories.style.display = 'flex'
-            else this.btn.categories.style.display = 'none'
+            if (this.btn.type.querySelector('select').value == 'restaurante') this.btn.categories.parentNode.style.display = 'block'
+            else this.btn.categories.parentNode.style.display = 'none'
 
             this.filterMain()
         })
