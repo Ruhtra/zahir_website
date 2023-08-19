@@ -96,7 +96,11 @@ export const Filter = {
 }
 
 export const HomePage = {
-    profile: (data) => `<img src="/images/carousel/${data.picture != undefined ? data.picture : 'none' }">`,
+    profile: (data) => {
+        if (data.picture != undefined) return `<img src="/images/carousel/${data.picture}">`
+        return `<img style="width: 50%;height: 50%;" src="/images/notImage.png">`
+    },
+
     btns: () => `
         <input class="insertOrd" type="number" placeholder="order" max="6" min="0"><br>  
         <input class="insertCard" type="button" value="Inserir"><br>`
