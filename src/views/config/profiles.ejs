@@ -37,15 +37,24 @@
 
     <%- include('../profile/filter.ejs') %>
     <%- include('../profile/table.ejs') %>
-
-    <input type="button" id="insert" value="insert">
+    
     <div id="notifications">
     </div>
 
     <div id="screen">
-        <div id="loading">!!! CARREGANDO</div>
-        <input type="button" value="close" class="close">
-        <%- include('../form.ejs')  %>
+        <div class="back">
+            <div class="top">
+                <input type="button" value="close" class="close">
+            </div>
+            <div class="middle">
+                <div id="loading">
+                    <div class="circle"></div>
+                </div>
+                <%- include('../form.ejs')  %>
+            </div>
+            <div class="bottom">
+            </div>
+        </div>
     </div>
     
     <script type="module" src="/profiles.js"></script>
