@@ -8,7 +8,7 @@ class LoadingFunctions {
     constructor(base) {
         this.base = base
     }
-    show() { this.base.style.display = 'block' }
+    show() { this.base.style.display = 'flex' }
     hide() { this.base.style.display = 'none' }
 }
 
@@ -51,6 +51,7 @@ class ScreenFunctions {
     async build(id) {
         this.show()
         this.loading.show()
+        this.form.hide()
         await this.form.functions.new()
 
         if (id) {
@@ -60,7 +61,10 @@ class ScreenFunctions {
             data._id = id
             this.form.functions.new(data)
         }
+            
+        await new Promise(r => setTimeout(r, 2000)); // teste
         this.loading.hide()
+        this.form.show()
     }
     
     insert() { this.build() }
@@ -79,7 +83,7 @@ class ScreenFunctions {
             })
     }
 
-    show() { this.base.style.display = 'block' }
+    show() { this.base.style.display = 'flex' }
     hide() { this.base.style.display = 'none' }
 }
 

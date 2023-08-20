@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheet/profiles/form.css">
+</head>
+<body>
+    
+
+    <div class="middle">
+        <div id="loading">
+            <div class="circle"></div>
+        </div>
+            <form action="POST" id="form">
+                <div id="id" style="display: none;">
+                    <input type="hidden" name="id">
+                </div>
+                <div id="name">
+                    <input id="in_name" type="text" name="name" placeholder="Insira o nome">
+                </div>
+                <div id="promotion">
+                    <div id="title">
+                        <input id="in_title" type="text" name="title" placeholder="Titulo da promoção">
+                    </div>
+                    <div id="description">
+                        <textarea id="in_description" name="description" placeholder="Descrição da promoção"></textarea>
+                    </div>
+                </div>
+                <div id="picture">
+                    <label for="in_picture">
+                        <img src="" alt="">
+                        <span class="select">select img</span>
+                        <span class="new">insira nova mensage</span>
+                        <div class="options">
+                            <button type="button" class="clear">clear</button>
+                        </div>
+                    </label>
+                    <input id="in_picture" type="file" name="picture" style="display: none;">
+                </div>
+                <div id="resume">
+                    <textarea id="in_resume" name="resume" placeholder="Pequeno resumo"></textarea>
+                </div>
+                <div id="category">
+                    <select name="type" id="type">
+                        <option value="restaurante" selected>restaurante</option>
+                        <option value="hotel">hotel</option>
+                    </select>
+                    <div id="categories">
+                    </div>
+                    <div id="newCategories">
+                        <div id="new" class="item">
+                            <input type="text" id="in_new" placeholder="Adicionar" >
+                        </div>
+                    </div>
+                </div>
+                <div id="movie">
+                    <input id="in_movie" type="url" name="movie" placeholder="Url do video">
+                </div>  
+                <div id="informations">
+                    <textarea id="in_informations" name="informations" cols="30" rows="10" placeholder="Informações"></textarea>
+                </div>
+                <div id="telephones">
+                    <div id="insert">
+                        <input type="button" value="telephone">
+                        <input type="button" value="whatsapp">
+                    </div>
+                </div> 
+                <div id="local">
+                    <div id="cep">
+                        <input id="in_cep" type="text" name="cep" placeholder="cep">
+                    </div>
+                    <div id="uf">
+                        <select name="uf">
+                            <option value="" selected>None</option>
+                            <option value="AC">AC</option>
+                            <option value="AL">AL</option>
+                            <option value="AM">AM</option>
+                            <option value="AP">AP</option>
+                            <option value="BA">BA</option>
+                            <option value="CE">CE</option>
+                            <option value="DF">DF</option>
+                            <option value="ES">ES</option>
+                            <option value="GO">GO</option>
+                            <option value="MA">MA</option>
+                            <option value="MG">MG</option>
+                            <option value="MS">MS</option>
+                            <option value="MT">MT</option>
+                            <option value="PA">PA</option>
+                            <option value="PB">PB</option>
+                            <option value="PE">PE</option>
+                            <option value="PI">PI</option>
+                            <option value="PR">PR</option>
+                            <option value="RJ">RJ</option>
+                            <option value="RN">RN</option>
+                            <option value="RO">RO</option>
+                            <option value="RR">RR</option>
+                            <option value="RS">RS</option>
+                            <option value="SC">SC</option>
+                            <option value="SE">SE</option>
+                            <option value="SP">SP</option>
+                            <option value="TO">TO</option>
+                        </select>
+                    </div>
+                    <div id="city">
+                        <input id="in_city" type="text" name="city" placeholder="city">
+                    </div>
+                    <div id="neighborhood">
+                        <input id="in_neighborhood" type="text" name="neighborhood" placeholder="neighborhood">
+                    </div>
+                    <div id="number" maxlength="10">
+                        <input id="in_number" type="text" name="number" placeholder="number">
+                    </div>
+                    <div id="street">
+                        <input id="in_street" type="text" name="street" placeholder="street">
+                    </div>
+                    <div id="complement">
+                        <textarea id="in_complement" name="complement" placeholder="complement"></textarea>
+                    </div>
+                </div>
+            
+                <input id="insert" type="button" value="insert">
+                <input id="update" type="button" value="update">
+            </form>
+        <!-- <%- include('../form.ejs')  %> -->
+    </div>
+
+    <script type="module">
+        import Form from '/profiles/Form.js'
+        const form = new Form(document.querySelector('#form'))
+        form.functions.new()
+
+        class ManagerImage {
+            constructor(base) {
+                this.base = base
+
+                this.elements = {
+                    img: this.base.querySelector('img'),
+                    input: this.base.querySelector('input#in_picture'),
+                    span: {
+                        select: this.base.querySelector('.select'),
+                        insert: this.base.querySelector('.new')
+                    },
+                    options: this.base.querySelector('.options')
+                }
+                this.btns = {
+                    clear: this.base.querySelector('.options .clear')
+                }
+
+                //Starting button
+                this.elements.input.addEventListener('change', evt => {
+                    const [file] = evt.target.files
+                    if (file) return this.insertImg(file)
+                    if (this.elements.input.value == '') return
+                    this.clearImg()
+                })
+                this.btns.clear.addEventListener('click', (evt) => {
+                    evt.preventDefault()
+                    this.clearImg()
+                })
+            }
+            insertImg(file) {
+                this.elements.img.src = URL.createObjectURL(file)
+                this.elements.img.onload = () => {
+                    URL.revokeObjectURL(this.elements.img.src) // free memory
+                }
+
+                this.elements.options.style.display = 'block'
+                this.elements.span.select.style.display = 'none'
+                this.elements.span.insert.style.display = 'block'
+            }
+            clearImg() {
+                this.elements.img.src = "#"
+                this.elements.options.style.display = 'none'
+                this.elements.span.select.style.display = 'block'
+                this.elements.span.insert.style.display = 'none'
+            }
+        }
+
+        new ManagerImage(document.querySelector('#picture'))
+    </script>
+</body>
+</html>

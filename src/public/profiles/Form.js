@@ -15,29 +15,28 @@ class ErrorsFunctions {
         // Clear error when changes
         this.form.querySelectorAll('input, select, textarea').forEach(e => {
             e.addEventListener('change', () => {
-                this.clear(e.parentElement)
+                    this.clear(e)
+                })
             })
-        })
-    }
-    clear(element) {
-        if (element) {
-            let err = element.querySelector('span.error')
-            if (err) err.remove()
-            return
         }
+        clear(element) {
+            if (element) {
+                element.classList.remove('error')
+                return
+            }
+            this.form.querySelectorAll('.error').forEach(e => {
+                e.classList.remove('error')
+            })
+            
+        }
+        insert(path, msg) {
+            var element = path[0] == 'telephones'
+                ? this.form.querySelectorAll(`#telephones .${path[1]}`)[path[2]]
+                : this.form.querySelector(`#${path.join(' #')}`)
 
-        this.form.querySelectorAll('span.error').forEach(e => {
-            e.remove()
-        })
-        
-    }
-    insert(path, msg) {
-        var element = path[0] == 'telephones'
-            ? this.form.querySelectorAll(`#telephones .${path[1]}`)[path[2]]
-            : this.form.querySelector(`#${path.join(' #')}`)
-
-        this.clear(element)
-        element.insertAdjacentHTML("beforeend", Filter.error(msg) );
+            console.log(path, msg)
+            let input = element.querySelector('input, select, textarea')
+        input.classList.add('error')
     }
 }
 
@@ -109,8 +108,8 @@ class CategoryFunctions {
     }
     changeType() {
         if (this.type.value == 'restaurante') {
-            this.categories.style.display = 'block'
-            this.newCategories.style.display = 'block'
+            this.categories.style.display = 'flex'
+            this.newCategories.style.display = 'flex'
         }
         else {
             this.categories.style.display = 'none'
@@ -332,7 +331,7 @@ class Functions {
         data.forEach(e => {
             base.insertAdjacentHTML('beforeend', Filter.build.categories(e))
         })
-     }
+    }
 }
 class Form {
     constructor(form) {
@@ -354,6 +353,7 @@ class Form {
             btn.insert.disabled = true
 
             let data = this.functions.getDataInsert()
+            console.log(data);
             this.db.profile.insert(data)
                 .finally(() => {
                     btn.insert.disabled = false
@@ -370,8 +370,10 @@ class Form {
                 })
         })
     }
-}
 
+    hide() { this.form.style.display = 'none' }
+    show() { this.form.style.display = 'block' }
+}
 
 const errorsFunctions =  new ErrorsFunctions(document.querySelector('#form'))
 

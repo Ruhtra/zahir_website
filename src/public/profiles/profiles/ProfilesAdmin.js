@@ -6,21 +6,24 @@ export default class ProfilesAdmin extends Profiles {
         super(base)
         this.base = base
         this.screenFunctions = screenFunctions
+
     }
     insert(data) {
+        this.base.insertAdjacentHTML("beforeend", Profile.addCard())
+
         data.forEach(e => {
             this.base.insertAdjacentHTML("beforeend", Profile.cardAdmin(e))
 
             const btn = {
-                open: this.base.querySelector(`#_${e._id} > input.openCard`),
-                update: this.base.querySelector(`#_${e._id} > input.updateCard`),
-                delete: this.base.querySelector(`#_${e._id} > input.deleteCard`)
+                open: this.base.querySelector(`#_${e._id} input.openCard`),
+                update: this.base.querySelector(`#_${e._id} input.updateCard`),
+                delete: this.base.querySelector(`#_${e._id} input.deleteCard`)
             }
             
             // load buttons
             btn.open.addEventListener('click', evt => {
                 evt.preventDefault()
-                location.href = 'http://localhost:4000/profile?id='+e._id
+                location.href = '/profile?id='+e._id
             })
             btn.update.addEventListener('click', evt => {
                 evt.preventDefault()
@@ -30,6 +33,12 @@ export default class ProfilesAdmin extends Profiles {
                 evt.preventDefault()
                 this.screenFunctions.delete(e._id, btn.delete)
             })
+            
         });
+
+        this.base.querySelector('#insert').addEventListener('click', (evt) => {
+            evt.preventDefault()
+            this.screenFunctions.build()
+        })
     }
 }
