@@ -129,7 +129,52 @@
     <script type="module">
         import Form from '/profiles/Form.js'
         const form = new Form(document.querySelector('#form'))
+
         form.functions.new()
+
+        class ApiUploadController {
+            constructor(URL, files){
+                this.URL = URL
+                // this.files = files
+                this.xhr = new XMLHttpRequest()
+                this.xhr.open('POST', this.URL, true)
+                
+
+                console.log('startup in ');
+                console.log(files[0]);
+
+                if (files.length > 0) {
+                    var file = files[0];
+                    this.formData = new FormData();
+                    this.formData.append('file', file);
+                } else console.log('Nenhum arquivo selecionado');
+                            
+                this.xhr.upload.onprogress = ({loaded, total}) => {
+                    console.log(this.calcSize(loaded, total));
+                }
+
+                this.xhr.onload = e => {
+                    const {err}  =  JSON.parse(this.xhr.response);
+                    if(err) return console.error(err);
+
+                    if (e.loaded == e.total) console.log('finalizado');
+                }
+
+                this.xhr.send(this.formData)
+            }
+
+            calcSize(loaded, total) {
+                var loadedKb = Math.floor(loaded/1000)
+                var totalKb = Math.floor(total/1000)
+                return {
+                    loadedKb: loadedKb,
+                    totalKb: totalKb,
+                    percentage: Math.floor(loadedKb/totalKb * 100),
+                    size: totalKb < 1024 ? `${loadedKb} KB` : `${(loadedKb/1024).toFixed(2)} MB`
+                }
+            }
+        }
+        
 
         class ManagerImage {
             constructor(base) {
@@ -150,9 +195,12 @@
 
                 //Starting button
                 this.elements.input.addEventListener('change', evt => {
+                    this.apiUploadController = new ApiUploadController('/api/uploads/upload', evt.target.files)
+
                     const [file] = evt.target.files
                     if (file) return this.insertImg(file)
                     if (this.elements.input.value == '') return
+
                     this.clearImg()
                 })
                 this.btns.clear.addEventListener('click', (evt) => {
@@ -179,6 +227,10 @@
         }
 
         new ManagerImage(document.querySelector('#picture'))
+
+
+        
+
     </script>
 </body>
 </html>

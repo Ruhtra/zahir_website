@@ -19,4 +19,6 @@ router.post('/homePage/delete', use(controllerApi.homePage.delete))
 router.get('/categories/getAll', use(controllerApi.categories.getAll))
 router.get('/promotions/getAll', use(controllerApi.promotions.getAll))
 
+router.post('/uploads/upload', use(controllerApi.uploads.upload))
+
 module.exports = router
