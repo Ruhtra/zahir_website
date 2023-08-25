@@ -1,5 +1,7 @@
+const multer = require("multer");
 const Database = require("../functions/queryDB.js");
 const validate = require("../functions/validator.js");
+const upload = require("../middleware/upload.js");
 const fs = require('fs')
 
 module.exports = {
@@ -57,6 +59,22 @@ module.exports = {
     promotions: {
         getAll: async (req, res) => {
             return res.send(await Database.promotions.getAll())
+        }
+    },
+    uploads: {
+        upload: async (req, res) => {
+            console.log(upload.getConfig)
+            multer(upload.getConfig).single('file')(req, res, function (err) {
+                if (err) {
+                    // A Multer error occurred when uploading.
+                    console.log('erro multer');
+                    return res.status(500).json({msg: 'erro interno'})
+                }
+
+                if (!req.file) return res.status(409).json({msg: 'fuck'})
+                const filename = req.file.filename;
+                res.status(200).json({"msg": "file uploaded.......", "filename": filename});
+            })
         }
     }
 }
