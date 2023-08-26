@@ -68,10 +68,10 @@ module.exports = {
                 if (err) {
                     // A Multer error occurred when uploading.
                     console.log('erro multer');
-                    return res.status(500).json({msg: 'erro interno'})
+                    return res.status(500).json({err: 'Erro interno'})
                 }
 
-                if (!req.file) return res.status(409).json({msg: 'fuck'})
+                if (!req.file) return res.status(409).json({err: 'Permitido apenas .png ou .jpg '})
                 const filename = req.file.filename;
                 res.status(200).json({"msg": "file uploaded.......", "filename": filename});
             })

@@ -26,7 +26,7 @@ class Upload {
     fileFilter() {
         return (req, file, cb) => {
             const type = mime.extension(file.mimetype);
-            const conditions = ["png", "jpg", "jpeg", "txt"];
+            const conditions = ["png", "jpg", "jpeg"];
             
             if (conditions.includes(`${type}`)) return cb(null, true);
             return cb(null, false)
