@@ -15,23 +15,25 @@ export default class ProfilesAdmin extends Profiles {
             this.base.insertAdjacentHTML("beforeend", Profile.cardAdmin(e))
 
             const btn = {
-                open: this.base.querySelector(`#_${e._id} input.openCard`),
+                // open: this.base.querySelector(`#_${e._id} input.openCard`),
                 update: this.base.querySelector(`#_${e._id} input.updateCard`),
                 delete: this.base.querySelector(`#_${e._id} input.deleteCard`)
             }
             
             // load buttons
-            btn.open.addEventListener('click', evt => {
+            this.base.querySelector(`#_${e._id}`).addEventListener('click', evt => {
                 evt.preventDefault()
                 location.href = '/profile?id='+e._id
             })
             btn.update.addEventListener('click', evt => {
                 evt.preventDefault()
                 this.screenFunctions.update(e._id, btn.update)
+                evt.stopPropagation()
             })
             btn.delete.addEventListener('click', evt => {
                 evt.preventDefault()
                 this.screenFunctions.delete(e._id, btn.delete)
+                evt.stopPropagation()
             })
             
         });

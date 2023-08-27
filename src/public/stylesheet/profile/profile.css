@@ -259,6 +259,32 @@ header { font-size: var(--profile-font-size); }
             }
 
     /* map */
+        header .bottom .map {
+            position: relative;
+        }
+        header .bottom .map::after {
+            content: 'Em desenvolvimento';
+            padding: .25em .5em;
+            color: white;
+            font-size: 3em;
+            font-weight: 900;
+            letter-spacing: .1em;
+            background: rgba(0, 0, 0, .5);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+        header .bottom .map::before {
+            content: '';
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .6);
+            top: 0;
+            left: 0;
+            position: absolute;
+        }
         header .bottom .map iframe {
             width: 100%;
             height: 100%;
