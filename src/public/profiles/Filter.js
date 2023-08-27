@@ -88,9 +88,13 @@ class ScreenFilter {
         })
     }
     openFilter() {
+        //Disabled scroll
+        document.body.style.overflow = "hidden";
         this.elements.filterScreen().style.display = 'flex'
     }
     closeFilter() {
+        //Enable scroll
+        document.body.style.overflow = "auto";
         this.elements.filterScreen().style.display = 'none'
     }
 }
