@@ -6,6 +6,119 @@ import Observer from '/helper/Observer.js'
 
 import DB from '/db.js'
 
+//Expor api for class Api()
+class ApiUploadController {
+    constructor(URL, baseResponse){
+        this.URL = URL
+        this.response = new Response(baseResponse)
+    }
+    startUp(files) {
+        console.log('startup');
+
+        this.response.hide()
+        this.response.clearAll()
+        
+        this.xhr = new XMLHttpRequest()
+        this.xhr.open('POST', this.URL, true)
+
+        if (files.length > 0) {
+            var file = files[0];
+            this.formData = new FormData();
+            this.formData.append('file', file);
+        } else return console.log('Nenhum arquivo selecionado');
+                    
+        this.start()
+        this.progress()
+        this.end()
+
+        this.xhr.send(this.formData)
+    }
+
+    start() {
+        this.xhr.onloadstart = e => {
+            this.response.show()
+            this.response.clearAll()
+        }
+    }
+
+    progress() {
+        this.xhr.upload.onprogress = ({loaded, total}) => {
+            let size = this.calcSize(loaded, total)
+            this.response.barProgress(size.percentage)
+            console.log(size.percentage);
+        }
+    }
+
+    end() {
+        this.xhr.onload = e => {
+            const {err}  =  JSON.parse(this.xhr.response);
+            // if(err) return console.error(err);
+
+            if (this.xhr.status == 409) {
+                this.response.end(JSON.parse(this.xhr.response).err, 'error')
+            } else if (this.xhr.status < 200 && this.xhr.status >= 300) {
+                this.response.end('Erro desconhecido', 'error')
+            } else {
+                this.response.end("Carregado com sucesso", 'success')
+                document.querySelector('#in_filePath').value = JSON.parse(this.xhr.response).filePath
+            }
+            
+            if (e.loaded == e.total) this.response.barProgress(100)
+        }
+    }
+
+    calcSize(loaded, total) {
+        var loadedKb = Math.floor(loaded/1000)
+        var totalKb = Math.floor(total/1000)
+        var percentage = Math.floor(loadedKb/totalKb * 100)
+        return {
+            loadedKb: loadedKb,
+            totalKb: totalKb,
+            percentage: percentage,
+            size: totalKb < 1024 ? `${loadedKb} KB` : `${(loadedKb/1024).toFixed(2)} MB`
+        }
+    }
+}
+//Inserted Response in other local
+class Response {
+    constructor(base) {
+        this.base = base
+        this.elements = {
+            text: () => this.base.querySelector('.text'),
+            bar: () => this.base.querySelector('.concluided'),
+            response: () => this.base.querySelector('.response')
+        }
+        this.time
+    }
+
+    show() { this.base.style.display = 'block' }
+    hide() { this.base.style.display = 'none' }
+
+    barProgress(percentage) {
+        this.elements.text().innerHTML = `${percentage}%`
+        this.elements.bar().style.width = `${percentage}%`
+    }
+
+    end(msg , type) {
+        this.elements.response().innerHTML = msg
+        this.elements.response().classList.add(type)
+        
+        this.time = setTimeout(() => {
+            this.hide()
+            this.clearAll()
+        }, 5000);
+    }
+
+    clearAll() {
+        clearTimeout(this.time)
+        this.barProgress(0)
+        this.elements.response().innerHTML = ""
+        this.elements.response().classList.remove('success')
+        this.elements.response().classList.remove('error')
+    }            
+}
+
+
 
 class ErrorsFunctions {
     constructor(form) {
@@ -45,8 +158,8 @@ class TelephoneFunctions  {
         this.baseTelephone = baseTelephone
 
         // Build buttons
-        this.baseTelephone.querySelector('#insert [value="whatsapp"]').addEventListener('click', () => this.add.whatsapp())
-        this.baseTelephone.querySelector('#insert [value="telephone"]').addEventListener('click', () => this.add.telephone())
+        this.baseTelephone.querySelector('.insert-cell [value="whatsapp"]').addEventListener('click', () => this.add.whatsapp())
+        this.baseTelephone.querySelector('.insert-cell [value="telephone"]').addEventListener('click', () => this.add.telephone())
     }
     addMain(type, value) {
         if (!type) throw new Error('The type parameter must be passed')
@@ -130,6 +243,61 @@ class LocalFunctions {
         e.value = t
     }
 }
+class ImageFunctions {
+    constructor(base) {
+        this.base = base
+        this.apiUploadController = new ApiUploadController('/api/uploads/upload', this.base.querySelector('.uploading'))
+
+        this.elements = {
+            img: this.base.querySelector('img'),
+            input: this.base.querySelector('input#in_picture'),
+            pictureName: this.base.querySelector('#in_filePath'),
+            span: {
+                select: this.base.querySelector('.select'),
+                insert: this.base.querySelector('.new')
+            },
+            options: this.base.querySelector('.options')
+        }
+        this.btns = {
+            clear: this.base.querySelector('.options .clear')
+        }
+
+        //Starting button
+        this.elements.input.addEventListener('change', evt => {
+            this.apiUploadController.startUp(evt.target.files)
+
+            const [file] = evt.target.files
+            if (file) return this.insertImg(file)
+
+            this.clearImg()
+        })
+        this.elements.pictureName.addEventListener('change', evt => {
+            if (this.elements.pictureName.value != '') return this.elements.img.src = '/uploads/'+this.elements.pictureName.value
+            this.elements.img.src = '/images/no-image.png'
+        })
+        // this.btns.clear.addEventListener('click', (evt) => {
+        //     evt.preventDefault()
+        //     this.clearImg()
+        // })
+    }
+    insertImg(file) {
+        this.elements.img.src = URL.createObjectURL(file)
+        this.elements.img.onload = () => {
+            URL.revokeObjectURL(this.elements.img.src) // free memory
+        }
+
+        // this.elements.options.style.display = 'block'
+        // this.elements.span.select.style.display = 'none'
+        // this.elements.span.insert.style.display = 'block'
+    }
+    clearImg() {
+        this.elements.img.src = "#"
+        // this.elements.options.style.display = 'none'
+        // this.elements.span.select.style.display = 'block'
+        // this.elements.span.insert.style.display = 'none'
+    }
+}
+
 
 class Functions {
     constructor(form) {
@@ -138,10 +306,12 @@ class Functions {
         this.telephoneFunctions = new TelephoneFunctions(form.querySelector('#telephones'))
         new CategoryFunctions(form.querySelector('#category'))
         new LocalFunctions(form.querySelector('#local'))
+        new ImageFunctions(document.querySelector('#picture'))
     }
     get = {
         id: () => this.form.querySelector('#id input'),
-        picture: () => this.form.querySelector('#picture input'),
+        picture: () => this.form.querySelector('#picture input[type="file"]'),
+        pictureName: () => this.form.querySelector('#picture #in_filePath'),
         name: () => this.form.querySelector('#name input'),
         resume: () => this.form.querySelector('#resume textarea'),
         category: {
@@ -173,7 +343,7 @@ class Functions {
 
     getDataInsert() {
         let data = {
-            picture: this.get.picture().value,
+            picture: this.get.pictureName().value,
             name: this.get.name().value,
             resume: this.get.resume().value,
             category: {
@@ -207,7 +377,7 @@ class Functions {
     getDataUpdate() {
         let data = {
             id: this.get.id().value,
-            picture: this.get.picture().value,
+            picture: this.get.pictureName().value,
             name: this.get.name().value,
             resume: this.get.resume().value,
             category: {
@@ -241,7 +411,8 @@ class Functions {
 
     set(data) {
         if (data._id) this.get.id().value = data._id
-        // picture: this.form.querySelector('#picture input').value,
+        if (data.picture) this.get.pictureName().value = data.picture
+        if (data.picture) this.get.pictureName().dispatchEvent(new Event('change'))
         this.get.name().value = data.name
         if (data.resume) this.get.resume().value = data.resume
         if (data.informations) this.get.informations().value = data.informations
@@ -287,6 +458,10 @@ class Functions {
     }
     clear() {
         this.get.id().value = ''
+        this.get.picture().value = ''
+        this.get.picture().dispatchEvent(new Event('change'))
+        this.get.pictureName().value = ''
+        this.get.pictureName().dispatchEvent(new Event('change'))
         this.get.name().value = ''
         this.get.resume().value = ''
         this.get.category.type().value = 'restaurante'
@@ -337,7 +512,7 @@ class Form {
     constructor(form) {
         errorsFunctions.start()
         this.form = form
-        this.functions = new Functions( form, this.telephoneFunctions )
+        this.functions = new Functions(form, this.telephoneFunctions )
 
         this.obResponses = new Observer()
         this.db = new DB(this.obResponses, obErrors)
@@ -353,7 +528,6 @@ class Form {
             btn.insert.disabled = true
 
             let data = this.functions.getDataInsert()
-            console.log(data);
             this.db.profile.insert(data)
                 .finally(() => {
                     btn.insert.disabled = false
@@ -372,7 +546,7 @@ class Form {
     }
 
     hide() { this.form.style.display = 'none' }
-    show() { this.form.style.display = 'block' }
+    show() { this.form.style.display = 'grid' }
 }
 
 const errorsFunctions =  new ErrorsFunctions(document.querySelector('#form'))

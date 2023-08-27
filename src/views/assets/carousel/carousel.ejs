@@ -2,7 +2,6 @@
     <div class="gallery js-flickity" >
         <% homePage.forEach(data => { %>
             <div class="gallery-cell js-gallery-cell">
-                <% data.profile['picture'] = `/images/carousel/${data.order+1}.png` %>
                 <%- include('./card.ejs', { profile: data.profile }) %>
             </div>
         <% }) %>

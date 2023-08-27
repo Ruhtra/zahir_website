@@ -1,25 +1,8 @@
 export const Profile = {
-    // card: (data)  => `
-    //     <div id="_${data._id}" class="profiles" >
-    //         <input class="openCard" type="button" value="Abrir"> <br>
-
-    //         _id: ${data._id}, <br>
-    //         name: ${data.name}, <br>
-    //         picture: ${data.picture}, <br>
-    //         promotion: { <br>
-    //             &nbsp;&nbsp; title: ${data.promotion.title}, <br>
-    //             &nbsp;&nbsp; description: ${data.promotion.description} <br>
-    //         }, <br>
-    //         uf: ${data.uf}, <br>
-    //         category: {<br>
-    //             &nbsp;&nbsp; type: ${data.category.type}, <br>
-    //             &nbsp;&nbsp; categories: ${data.category.categories} <br>
-    //         }
-    //     </div>`,
     card: (data) => `
         <div id="_${data._id}" class="profiles profile" >
             <input class="openCard" type="button" value="Abrir" style="display: none;">
-            <img src="${'/images/carousel/1.png'}" alt=""> <!-- implemented image here -->
+            <img src="${data.picture != undefined ? '/uploads/'+data.picture : '/images/no-image.png'}" alt="">
             <div class="elements">
                 <span class="name">${data.name}</span>
                 <span class="local">${data.local.uf} - ${data.local.city}</span>
@@ -39,7 +22,7 @@ export const Profile = {
                 </div>
 
                 <input class="openCard" type="button" value="Abrir" style="display: none;">
-                <img src="${'/images/carousel/1.png'}" alt=""> <!-- implemented image here -->
+                <img src="${data.picture != undefined ? '/uploads/'+data.picture : '/images/no-image.png'}" alt="">
                 <div class="elements">
                     <span class="name">${data.name}</span>
                     <span class="local">${data.local.uf} - ${data.local.city}</span>
@@ -55,45 +38,6 @@ export const Profile = {
                 <button id="insert">+</button>
             </div>
         `,
-    // cardAdmin: (data) => `
-    //     <div id="_${data._id}" class="profiles">
-    //         <input class="openCard" type="button" value="Abrir"> <br>
-    //         <input class="updateCard" type="button" value="Update"> <br>
-    //         <input class="deleteCard" type="button" value="Delete"> <br>
-            
-    //         _id: ${data._id}, <br>
-    //         name: ${data.name}, <br>
-    //         picture: ${data.picture}, <br>
-    //         promotion: { <br>
-    //             &nbsp;&nbsp; title: ${data.promotion.title}, <br>
-    //             &nbsp;&nbsp; description: ${data.promotion.description} <br>
-    //         }, <br>
-    //         uf: ${data.uf}, <br>
-    //         category: {<br>
-    //             &nbsp;&nbsp; type: ${data.category.type}, <br>
-    //             &nbsp;&nbsp; categories: ${data.category.categories} <br>
-    //         }
-    //     </div>`,
-    // cardHomePage: (data) => `
-    // <div id="_${data._id}" class="profiles" >
-    //     <input class="openCard" type="button" value="Abrir"> <br>
-
-    //     _id: ${data._id}, <br>
-    //     name: ${data.name}, <br>
-    //     picture: ${data.picture}, <br>
-    //     promotion: { <br>
-    //         &nbsp;&nbsp; title: ${data.promotion.title}, <br>
-    //         &nbsp;&nbsp; description: ${data.promotion.description} <br>
-    //     }, <br>
-    //     uf: ${data.uf}, <br>
-    //     category: {<br>
-    //         &nbsp;&nbsp; type: ${data.category.type}, <br>
-    //         &nbsp;&nbsp; categories: ${data.category.categories} <br>
-    //     }
-    //     <input class="insertOrd" type="number" placeholder="order" max="6" min="0"><br>  
-    //     <input class="insertCard" type="button" value="Inserir"><br>
-    // </div>`
-
         
 }
 
@@ -121,7 +65,7 @@ export const Filter = {
 
 export const HomePage = {
     profile: (data) => {
-        if (data.picture != undefined) return `<img src="/images/carousel/${data.picture}">`
+        if (data.picture != undefined) return `<img src="${data.picture != undefined ? '/uploads/'+data.picture : '/images/no-image.png'}" alt="">`
         return `<img style="width: 50%;height: 50%;" src="/images/notImage.png">`
     },
     btns: () => `
@@ -144,5 +88,4 @@ export const HomePage = {
             <span>${Number(position)+1}</span>
         </div>
     `
-    
 }

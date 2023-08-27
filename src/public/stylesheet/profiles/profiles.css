@@ -135,6 +135,7 @@
         margin: auto;
 
         width: 80%;
+        max-width: 70em;
         height: 80%;
 
         border-radius: 1em;
@@ -158,6 +159,7 @@
     /* middle */
         #screen .back .middle {
             position: relative;
+            overflow-y: auto;
         }
         /* loading */
             #screen .back .middle #loading {
