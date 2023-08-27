@@ -29,5 +29,10 @@ module.exports = {
         homePage: (req, res) => {
             return res.render('config/homePage.ejs')
         }
+    },
+    authenticator: {
+        login: (req, res) => {
+            return res.render('login.ejs')
+        }
     }
 }

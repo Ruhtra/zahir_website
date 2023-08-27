@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            /* background-image: url('/images/ProfilePage.png'); remove  */
+            background-image: url('/images/back_10.png');
+            background-size: 50%;
+        }
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="/stylesheet/assets/variables.css">
+    <link rel="stylesheet" href="/stylesheet/assets/navbar.css">
+    <link rel="stylesheet" href="/stylesheet/assets/footer.css">
+
+    <link rel="stylesheet" href="/stylesheet/login/login.css">
+
+    <title>Profile</title>
+</head>
+<body>
+    <%- include('./assets/navbar.ejs', {active: null})%>
+    <main>
+        <div class="loginScreen">
+            <h2>Login</h2>
+            <input type="text" name="username" id="username" placeholder="Username">
+            <input type="password" name="password" id="password" placeholder="Password">
+            <input type="button" value="Entrar">
+        </div>
+    </main>
+
+    <%- include('./assets/footer.ejs') %>
+</body>
+</html>
