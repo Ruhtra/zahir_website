@@ -3,15 +3,16 @@ const express = require("express");
 const http = require('http');
 const Joi = require('joi');
 const cors = require('cors')
+const cookieParser = require('cookie-parser');
 
 const configEngine = require("./config/viewEngine.js");
 const Database = require("./functions/queryDB.js");
+const { includeJWTInHeader } = require('./middleware/jwt.js');
 
 async function startingModules() {
     console.log(" >. starting modules")
     console.log(await Database.testConnect())
 }
-
 
 const main = async () => {
     // Variables
@@ -31,10 +32,12 @@ const main = async () => {
                 app.use(express.urlencoded({ extended: true }))
             // json parser
                 app.use(express.json())
+        //config cookie
+            app.use(cookieParser());
 
     // Routes
-        app.use('/api', require('./routes/api.js'))
-        app.use('/', require('./routes/main.js'))
+        app.use('/api', includeJWTInHeader, require('./routes/api.js'))
+        app.use('/', includeJWTInHeader, require('./routes/main.js'))
 
     // Erros
         app.use((err, req, res, next) => {

@@ -128,28 +128,28 @@ class ErrorsFunctions {
         // Clear error when changes
         this.form.querySelectorAll('input, select, textarea').forEach(e => {
             e.addEventListener('change', () => {
-                    this.clear(e)
-                })
+                this.clear(e)
             })
+        })
+    }
+    clear(element) {
+        if (element) {
+            element.classList.remove('error')
+            return
         }
-        clear(element) {
-            if (element) {
-                element.classList.remove('error')
-                return
-            }
-            this.form.querySelectorAll('.error').forEach(e => {
-                e.classList.remove('error')
-            })
-            
-        }
-        insert(path, msg) {
-            var element = path[0] == 'telephones'
-                ? this.form.querySelectorAll(`#telephones .${path[1]}`)[path[2]]
-                : this.form.querySelector(`#${path.join(' #')}`)
+        this.form.querySelectorAll('.error').forEach(e => {
+            e.classList.remove('error')
+        })
+        
+    }
+    insert(path, msg) {
+        var element = path[0] == 'telephones'
+            ? this.form.querySelectorAll(`#telephones .${path[1]}`)[path[2]]
+            : this.form.querySelector(`#${path.join(' #')}`)
 
-            console.log(path, msg)
-            let input = element.querySelector('input, select, textarea')
-        input.classList.add('error')
+        console.log(path, msg)
+        let input = element.querySelector('input, select, textarea')
+    input.classList.add('error')
     }
 }
 

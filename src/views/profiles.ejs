@@ -25,7 +25,7 @@
     </style>
 </head>
 <body>
-    <%- include('./assets/navbar.ejs', { active: "profiles" }) %>
+    <%- include('./assets/navbar.ejs', { active: "profiles", permission: permission }) %>
 
     <%- include('./profile/filter.ejs') %>
     <%- include('./profile/table.ejs') %>

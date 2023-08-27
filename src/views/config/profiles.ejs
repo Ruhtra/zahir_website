@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <%- include('../assets/navbar.ejs', {active: 'config/profiles'}) %>
+    <%- include('../assets/navbar.ejs', {active: 'config/profiles', permission: permission}) %>
 
     <%- include('../profile/filter.ejs') %>
     <%- include('../profile/table.ejs') %>

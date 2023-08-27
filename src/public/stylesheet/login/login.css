@@ -18,6 +18,24 @@ main {
     box-shadow: 0.5em 0.5em 0 var(--color-4), 0.5em 0.5em 0 var(--color-3) inset;
 }
 
+main #notifications {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    margin: 1em 0;
+    /* padding: .5em; */
+    
+    width: fit-content;
+    
+    font-size: 1em;
+    white-space: nowrap;
+    border-radius: .4em;
+    box-shadow: 0.1em 0.1em 0.5em rgba(0, 0, 0, .3);
+    background: red;
+}
+
 main .loginScreen {
     display: flex;
     gap: .5em;
@@ -58,6 +76,10 @@ main .loginScreen input[type="button"] {
 }
 main .loginScreen input[type="button"]:hover {
     box-shadow: .1em .1em 0 rgba(0, 0, 0, .5) inset;
+}
+
+main .loginScreen input.error {
+    border: .2em solid red;
 }
 
 

@@ -61,4 +61,13 @@ export default new class Api {
     promotions = {
         getAll: async() => structure('/api/promotions/getAll')
     }
+    auth = {
+        login: async (data) => structure('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        })
+    }
 }

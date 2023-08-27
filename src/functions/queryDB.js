@@ -215,11 +215,23 @@ const categories = {
     }
 }
 
+
+const auth = {
+    login: async (username, password) => {
+        const db = await connect();
+        return await db.collection('login').findOne({
+            username: username, 
+            password: password
+        })
+    }
+}
+
 module.exports = {
     testConnect,
     getLogin,
     profile,
     homePage,
     categories,
-    promotions
+    promotions,
+    auth
 }
