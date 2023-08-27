@@ -268,7 +268,7 @@
                 }
                 /* title */
                     #filter #screenFilter .categories h2 {
-                    font-size: 2em;
+                    font-size: 1.5em;
                     color: white;
                 }
                 /* items */
@@ -317,3 +317,38 @@
                     color: white;
                     background-color: rgba(0, 0, 0, .4);
                 }
+
+
+@media screen and (max-width: 900px) {
+    #filter {
+        width: 90vw;
+        font-size: 1.3em;
+    }
+    #filter::before {
+        display: none;
+    }
+
+    #filter #screenFilter {
+        font-size: min(1rem, 4vw);;
+    }
+
+    #filter #screenFilter .mainFilter {
+        grid-template-columns: auto;
+        grid-template-rows: repeat(3, min-content) auto;
+    }
+    #filter #screenFilter .mainFilter #promotion {
+        justify-self: start;
+        grid-row: 1/ span 1;
+    }
+    #filter #screenFilter .categories {
+        grid-area: 4 / 1 / -1 / -1;
+    }
+    #filter #screenFilter .categories div#categories {
+        flex-wrap: wrap;
+    }
+
+    /* disabled hover */
+    #filter #screenFilter .categories div#categories .item label:hover {
+        background-color: rgba(0, 0, 0, .3);
+    }
+}
