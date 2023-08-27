@@ -1,0 +1,82 @@
+main {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    display: flex;
+    justify-content: center;
+    
+    align-items: center;
+    width: 60vw;
+    max-width: 20em;
+    height: 50vh;
+    
+    font-size: 2em;
+    border-radius: 1em;
+    background: var(--color-1);
+    box-shadow: 0.5em 0.5em 0 var(--color-4), 0.5em 0.5em 0 var(--color-3) inset;
+}
+
+main .loginScreen {
+    display: flex;
+    gap: .5em;
+    flex-direction: column;
+    justify-content: center;
+    width: 70%;
+    background: #0000004f;
+    padding: 1em 1em;
+    border-radius: inherit;
+}
+main .loginScreen h2 {
+    font-size: 1.4em;
+    margin-bottom: .5em;
+    letter-spacing: .1em;
+}
+main .loginScreen input[type="text"],
+main .loginScreen input[type="password"] {
+    all: unset;
+    background: white;
+    text-indent: .5em;
+    font-size: .8em;
+    padding: .2em 0;
+    border-radius: .1em;
+    max-width: 15em;
+    margin-left: 1em;
+}
+main .loginScreen input[type="button"] {
+    all: unset;
+    margin-top: .5em;
+    cursor: pointer;
+    background: green;
+    align-self: center;
+    padding: .2em 1em;
+    letter-spacing: .1em;
+    font-weight: 700;
+    border-radius: .4em;
+    box-shadow: .1em .1em 0 rgba(0, 0, 0, .5);
+}
+main .loginScreen input[type="button"]:hover {
+    box-shadow: .1em .1em 0 rgba(0, 0, 0, .5) inset;
+}
+
+
+@media screen and (max-width: 1000px) {
+    main {
+        width: 90%;
+        font-size: min(1.5em, 4vw);
+    }
+}
+@media screen and (max-width: 700px) {
+    main .loginScreen {
+        width: 90%;
+    }
+    main .loginScreen input[type="text"],
+    main .loginScreen input[type="password"] {
+        margin-left: auto;
+        width: 100%;
+        max-width: inherit;
+        font-size: 1.2em;
+    }
+    
+}

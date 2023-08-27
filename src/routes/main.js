@@ -14,4 +14,7 @@ router.get('/test', use(controllerMain.test))
 router.get('/config/profiles', use(controllerMain.config.profiles))
 router.get('/config/homePage', use(controllerMain.config.homePage))
 
+// authenticator
+router.get('/login', use(controllerMain.authenticator.login))
+
 module.exports = router
