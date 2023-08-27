@@ -63,5 +63,11 @@ export default {
     homePage: {
         insert: validator(insertHomePageScheme),
         order: validator(orderScheme.required())
+    },
+    auth: {
+        login: validator(Joi.object().keys({
+            username: Joi.string().required(),
+            password: Joi.string().required()
+        }))
     }
 }

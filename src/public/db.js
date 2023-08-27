@@ -64,5 +64,13 @@ export default class DB {
             })
         }
     }
+    auth = {
+        login: async (data) => {
+            await this.trycatch(validate.auth.login, data, async (value) => {
+                console.log('Searching...')
+                this.obResponses.notify({type: 'login', response: await api.auth.login(value)})
+            })
+        }
+    }
     
 }

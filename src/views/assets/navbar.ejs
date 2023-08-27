@@ -26,22 +26,23 @@
                     Anuncie
                 </a>
             </li>
-            <li class="line"></li>
-            
-            <li>
-                <input type="checkbox" id="cb_desktop_config" style="display: none;">
-                <label for="cb_desktop_config">
-                    <a class="item dropdown <% if (active == 'config/homePage' || active == 'config/profiles') { %>active<% } %>">
-                        Config
-                        <%- include('./icons/arrow.ejs') %>
-                    </a>
-                </label>
-                
-                <ul class="content">
-                    <li><a href="/config/profiles" class="<% if (active == 'config/profiles') { %>active<% } %>"> • Reviews</a></li>
-                    <li><a href="/config/homepage?promotion=true" class="<% if (active == 'config/homePage') { %>active<% } %>"> • Home Page</a></li>
-                </ul>
-            </li>
+            <% if (permission == 'admin') { %>
+                <li class="line"></li>
+                <li>
+                    <input type="checkbox" id="cb_desktop_config" style="display: none;">
+                    <label for="cb_desktop_config">
+                        <a class="item dropdown <% if (active == 'config/homePage' || active == 'config/profiles') { %>active<% } %>">
+                            Config
+                            <%- include('./icons/arrow.ejs') %>
+                        </a>
+                    </label>
+                    
+                    <ul class="content">
+                        <li><a href="/config/profiles" class="<% if (active == 'config/profiles') { %>active<% } %>"> • Reviews</a></li>
+                        <li><a href="/config/homepage?promotion=true" class="<% if (active == 'config/homePage') { %>active<% } %>"> • Home Page</a></li>
+                    </ul>
+                </li>
+            <% } %>
         </ul>
 
         <div class="btns">
@@ -74,26 +75,28 @@
                     <%- include('./icons/anuncie.ejs') %>
                     • Anuncie
                 </a></li>
-                <li>
-                    <input type="checkbox" id="cb_sidebar_config" style="display: none;">
-                    <label for="cb_sidebar_config">
-                        <a class="config dropdown">
-                            <%- include('./icons/config.ejs') %>
-                            • Config
-                            <%- include('./icons/arrow.ejs') %>
-                        </a>
-                    </label>
-                    <ul class="content links">
-                        <li><a href="/config/profiles" class="reviews">
-                                <%- include('./icons/movieConfig.ejs') %>
-                                • Reviews
-                        </a></li>
-                        <li><a href="/config/homepage" class="homepage">
-                            <%- include('./icons/tripleStar.ejs') %>
-                            • Destaques
-                        </a></li>
-                    </ul>
-                </li>
+                <% if (permission == 'admin') { %>
+                    <li>
+                        <input type="checkbox" id="cb_sidebar_config" style="display: none;">
+                        <label for="cb_sidebar_config">
+                            <a class="config dropdown">
+                                <%- include('./icons/config.ejs') %>
+                                • Config
+                                <%- include('./icons/arrow.ejs') %>
+                            </a>
+                        </label>
+                        <ul class="content links">
+                            <li><a href="/config/profiles" class="reviews">
+                                    <%- include('./icons/movieConfig.ejs') %>
+                                    • Reviews
+                            </a></li>
+                            <li><a href="/config/homepage" class="homepage">
+                                <%- include('./icons/tripleStar.ejs') %>
+                                • Destaques
+                            </a></li>
+                        </ul>
+                    </li>
+                <% } %>
             </ul>
         </div>
     </div>

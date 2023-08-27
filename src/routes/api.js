@@ -1,4 +1,5 @@
 const controllerApi = require('../controllers/api.js')
+const controllerAuth = require('../controllers/auth.js')
 const router = require('express').Router()
 
 const use = fn => (req, res, next) => {
@@ -20,5 +21,8 @@ router.get('/categories/getAll', use(controllerApi.categories.getAll))
 router.get('/promotions/getAll', use(controllerApi.promotions.getAll))
 
 router.post('/uploads/upload', use(controllerApi.uploads.upload))
+
+router.post('/auth/login', use(controllerAuth.login))
+router.post('/auth/verifyJWT', use(controllerAuth.verifyJWT))
 
 module.exports = router

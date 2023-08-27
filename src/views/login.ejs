@@ -32,8 +32,9 @@
     <title>Profile</title>
 </head>
 <body>
-    <%- include('./assets/navbar.ejs', {active: null})%>
+    <%- include('./assets/navbar.ejs', {active: null, permission: permission})%>
     <main>
+        <div id="notifications"></div>
         <div class="loginScreen">
             <h2>Login</h2>
             <input type="text" name="username" id="username" placeholder="Username">
@@ -43,5 +44,59 @@
     </main>
 
     <%- include('./assets/footer.ejs') %>
+
+    <script type="module">
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+        }
+
+        import DB from '/db.js'
+        import Observer from '/helper/Observer.js'
+
+        const obResponses = new Observer()
+        obResponses.subscribe((data) => {
+            document.querySelector('#notifications').innerHTML =''
+            if (data.response.statusCode == 401) db.notifications.insert('Usuário ou senha está incorreto')
+            else if (data.response.statusCode == 200) {
+                setCookie("jwt_token", data.response.data.token, 1)
+                window.location.href = '/'
+            } else {db.notifications.insert('Não foi possível identificar o erro') }
+
+            document.querySelector('#password').value = ''
+        })
+
+        const obErrors = new Observer()
+        obErrors.subscribe((data) => {
+            console.log(data);
+            data.forEach(e => {
+                const input = document.querySelector(`#${e.path.join('_')}`)
+                input.classList.add('error')
+            });
+        })
+
+        const db = new DB(obResponses, obErrors)
+        document.querySelectorAll('#username, #password').forEach(e => {
+            e.addEventListener('change', (evt) => {
+                    e.classList.remove('error')
+            })
+        });
+
+        const btn = document.querySelector('input[type="button"]')
+        btn.addEventListener('click', async (evt) => {
+            evt.preventDefault()
+            const data = {
+                username: document.querySelector('input[type="text"]#username').value,
+                password: document.querySelector('input[type="password"]#password').value,
+            }
+            btn.disabled = true
+            db.auth.login(data)
+                .finally(() => {
+                    btn.disabled = false
+                })
+
+        })
+    </script>
 </body>
 </html>
