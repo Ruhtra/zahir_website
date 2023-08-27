@@ -21,7 +21,7 @@
             
             padding: .5em;
 
-            font-size: 1rem;
+            font-size: 1em;
             border-radius: .5em;
             background-color: #d9d9d9;
             box-shadow: 0.05em 0.05em 0.5em black;
@@ -207,5 +207,14 @@
         }
         100% {
             transform: rotate(360deg) scale(1.25);
+        }
+    }
+
+    @media screen and (max-width: 1000px) {
+        #profiles {
+            font-size: .7rem;
+        }
+        #profiles .profile {
+            width: 180px;
         }
     }

@@ -112,6 +112,11 @@ export default class Filter extends FilterSstructure  {
             openFilter: this.baseFilter.querySelector('#openFilter')
         }
 
+        //Active Promotion in url variable
+        const searchParams = new URLSearchParams(window.location.search);
+        let promotion = searchParams.get('promotion')
+        if (promotion == 'true') this.btn.promotion.querySelector('input').checked = true
+
         this.btn.promotion.addEventListener('click', (e) => {
             e.preventDefault()
 
