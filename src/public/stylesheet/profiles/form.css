@@ -1,17 +1,3 @@
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-.middle {
-    background-color: red;
-    width: 80%;
-    height: 80%;
-    margin: 5em auto;
-    padding: 1em;
-}
-
 #form {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -20,7 +6,6 @@
 }
 #form > div {
     padding: 1em;
-    background-color: green;
 }
 /* global */
     #form select{
@@ -122,7 +107,6 @@
                 width: 90%;
 
                 border-radius: 2em;
-                background: red;
                 z-index: 2;
             }
             /* response */
@@ -322,7 +306,6 @@
 
         gap: .5em;
         height: fit-content;
-        background-color: green;
     }
     /* item */
         #form #telephones .item {
@@ -349,15 +332,14 @@
             ;
         }
     /* insert */
-        #form #insert {
+        #form .insert-cell {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1em;
 
             justify-self: end;
-            background-color: red;
         }
-        #form #insert input {
+        #form .insert-cell input {
             font-size: 1.5em;
         }
 
@@ -370,7 +352,6 @@
         gap: .5em;
     }
     #form #local > div {
-        background-color: blue;
         font-size: 1.5em;
     }
     /* inputs */
@@ -411,5 +392,5 @@
 
             
     #form .error {  
-        border: .1em solid red !important;
+        border: .2em solid red !important;
     }

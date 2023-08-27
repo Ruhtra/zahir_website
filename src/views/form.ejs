@@ -1,18 +1,39 @@
 <form action="POST" id="form">
-    <div id="id">
+    <div id="id" style="display: none;">
         <input type="hidden" name="id">
     </div>
-    <div id="picture">
-        <label for="in_picture">Picture: </label>
-        <input id="in_picture" type="file" name="picture">
-    </div>
     <div id="name">
-        <label for="in_name">Name: </label>
-        <input id="in_name" type="text" name="name">
+        <input id="in_name" type="text" name="name" placeholder="Insira o nome">
+    </div>
+    <div id="promotion">
+        <div id="title">
+            <input id="in_title" type="text" name="title" placeholder="Titulo da promoção">
+        </div>
+        <div id="description">
+            <textarea id="in_description" name="description" placeholder="Descrição da promoção"></textarea>
+        </div>
+    </div>
+    <div id="picture">
+        <label for="in_picture">
+            <img src="" alt="">
+            <div class="uploading">
+                <span class="response"></span>
+                <div class="bar">
+                    <span class="text">0%</span>
+                    <div class="concluided"></div>
+                </div>
+            </div>
+            <span class="select msg">select img</span>
+            <span class="new msg">insira nova mensage</span>
+            <div class="options">
+                <button type="button" class="clear">clear</button>
+            </div>
+        </label>
+        <input id="in_filePath" type="hidden" name="picture_url">
+        <input id="in_picture" type="file" name="picture" accept=".png,.jpg,.jpeg" style="display: none;">
     </div>
     <div id="resume">
-        <label for="in_resume">Resume: </label>
-        <textarea id="in_resume" name="resume" cols="30" rows="10"></textarea>
+        <textarea id="in_resume" name="resume" placeholder="Pequeno resumo"></textarea>
     </div>
     <div id="category">
         <select name="type" id="type">
@@ -22,26 +43,26 @@
         <div id="categories">
         </div>
         <div id="newCategories">
-            <div id="new">
-                <label for="in_new"></label>
-                <input type="text" id="in_new">
+            <div id="new" class="item">
+                <input type="text" id="in_new" placeholder="Adicionar" >
             </div>
         </div>
-    </div> 
+    </div>
+    <div id="movie">
+        <input id="in_movie" type="url" name="movie" placeholder="Url do video">
+    </div>  
     <div id="informations">
-        <label for="in_informations">Informations: </label>
-        <textarea id="in_informations" name="informations" cols="30" rows="10"></textarea>
+        <textarea id="in_informations" name="informations" cols="30" rows="10" placeholder="Informações"></textarea>
     </div>
     <div id="telephones">
-        <div id="insert">
+        <div class="insert-cell">
             <input type="button" value="telephone">
             <input type="button" value="whatsapp">
         </div>
-    </div>
+    </div> 
     <div id="local">
         <div id="cep">
-            <label for="in_cep">Cep:</label>
-            <input id="in_cep" type="text" name="cep">
+            <input id="in_cep" type="text" name="cep" placeholder="cep">
         </div>
         <div id="uf">
             <select name="uf">
@@ -76,38 +97,19 @@
             </select>
         </div>
         <div id="city">
-            <label for="in_city">City:</label>
-            <input id="in_city" type="text" name="city">
+            <input id="in_city" type="text" name="city" placeholder="city">
         </div>
         <div id="neighborhood">
-            <label for="in_neighborhood">Neighborhood:</label>
-            <input id="in_neighborhood" type="text" name="neighborhood">
-        </div>
-        <div id="street">
-            <label for="in_street">Street:</label>
-            <input id="in_street" type="text" name="street">
+            <input id="in_neighborhood" type="text" name="neighborhood" placeholder="neighborhood">
         </div>
         <div id="number" maxlength="10">
-            <label for="in_number">Number:</label>
-            <input id="in_number" type="text" name="number">
+            <input id="in_number" type="text" name="number" placeholder="number">
+        </div>
+        <div id="street">
+            <input id="in_street" type="text" name="street" placeholder="street">
         </div>
         <div id="complement">
-            <label for="in_complement">Complement:</label>
-            <textarea id="in_complement" name="complement" cols="30" rows="10"></textarea>
-        </div>
-    </div>
-    <div id="movie">
-        <label for="in_movie">Movie:</label>
-        <input id="in_movie" type="text" name="movie">
-    </div>
-    <div id="promotion">
-        <div id="title">
-            <label for="in_title">Title:</label>
-            <input id="in_title" type="text" name="title">
-        </div>
-        <div id="description">
-            <label for="in_description">Description:</label>
-            <textarea id="in_description" name="description" cols="30" rows="10"></textarea>
+            <textarea id="in_complement" name="complement" placeholder="complement"></textarea>
         </div>
     </div>
 

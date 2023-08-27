@@ -18,7 +18,8 @@ class Upload {
             filename: (req, file, cb) => {
                 // console.log(file.originalname);
                 //   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-                cb(null, file.originalname)
+                const type = mime.extension(file.mimetype);
+                cb(null, `${file.fieldname}-${Date.now()}.${type}`)
             }
         })
     }

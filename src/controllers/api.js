@@ -15,7 +15,7 @@ module.exports = {
         getList: async (req, res) => {
             return res.send(await Database.profile.getList())
         },
-        insert: async (req, res) => {    
+        insert: async (req, res) => {
             const {error, value} = validate.profile.insert(req.body)
             if (error) throw error
 
@@ -73,7 +73,7 @@ module.exports = {
 
                 if (!req.file) return res.status(409).json({err: 'Permitido apenas .png ou .jpg '})
                 const filename = req.file.filename;
-                res.status(200).json({"msg": "file uploaded.......", "filename": filename});
+                res.status(200).json({"msg": "file uploaded.......", filePath: filename});
             })
         }
     }

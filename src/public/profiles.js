@@ -43,10 +43,6 @@ class ScreenFunctions {
             evt.preventDefault()
             this.hide()
         })
-        document.querySelector('#insert').addEventListener('click', (evt) => {
-            evt.preventDefault()
-            this.build()
-        })
     }
     async build(id) {
         this.show()
@@ -62,7 +58,6 @@ class ScreenFunctions {
             this.form.functions.new(data)
         }
             
-        await new Promise(r => setTimeout(r, 2000)); // teste
         this.loading.hide()
         this.form.show()
     }
