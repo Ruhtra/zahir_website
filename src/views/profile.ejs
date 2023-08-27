@@ -32,7 +32,6 @@
     <header>
         <div class="top">
             <div class="left">
-                <% profile['picture'] = `/images/carousel/1.png` %>
                 <%- include('./assets/carousel/card.ejs'), { profile } %>
                 <% console.log(profile) %>
                 <div class="back"></div>
@@ -76,7 +75,7 @@
                 <div class="embed">
                     <iframe src="<%= profile.movie %>" frameborder="0" scrolling="no" loading="lazy" allowfullscreen></iframe>
                 </div>
-                <div class="note">
+                <!-- <div class="note">
                     <div class="stars">
                         <%- include('./assets/icons/star.ejs') %>
                         <%- include('./assets/icons/star.ejs') %>
@@ -85,7 +84,7 @@
                         <%- include('./assets/icons/star.ejs') %>
                     </div>
                     <p>Nota do Zahir: <span>8.5</span></p>
-                </div>
+                </div> -->
             </div>
             <div class="reviewdeo">
                     <% if (profile.resume) { %>

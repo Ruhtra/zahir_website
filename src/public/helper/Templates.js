@@ -16,7 +16,6 @@ export const Profile = {
         cardAdmin: (data) => `
             <div id="_${data._id}" class="profiles profile" >
                 <div class="options">
-                    <input class="openCard" type="button" value="Abrir">
                     <input class="updateCard" type="button" value="Update">
                     <input class="deleteCard" type="button" value="Delete">
                 </div>

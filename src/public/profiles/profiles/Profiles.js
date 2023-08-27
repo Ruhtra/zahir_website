@@ -17,7 +17,7 @@ export default class Profiles {
         data.forEach(e => {
             this.base.insertAdjacentHTML("beforeend", Profile.card(e))
 
-            this.base.querySelector(`#_${e._id} > input.openCard`).addEventListener('click', evt => {
+            this.base.querySelector(`#_${e._id}`).addEventListener('click', evt => {
                 evt.preventDefault()
                 
                 location.href = '/profile?id='+e._id
