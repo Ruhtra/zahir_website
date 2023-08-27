@@ -171,7 +171,15 @@ header { font-size: var(--profile-font-size); }
                 background-color: var(--color-2);
                 z-index: -1;
             }
-            header .bottom .movie .embed iframe {
+            header .bottom .movie .embed .text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: 900;
+                font-size: 2em;
+                color: white;
+            }
+            header .bottom .movie .embed > * {
                 width: 400px;
                 height: 720px;
                 border-radius: .5em;
@@ -343,7 +351,7 @@ header { font-size: var(--profile-font-size); }
                 padding: 1rem;
                 grid-area: auto;
             }
-            header .bottom .movie .embed iframe {
+            header .bottom .movie .embed > * {
                 width: 300px;
                 height: 600px;
             }

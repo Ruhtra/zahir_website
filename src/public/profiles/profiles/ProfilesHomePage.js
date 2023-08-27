@@ -60,7 +60,8 @@ export default class ProfilesHomePage extends Profiles {
 
             if (this.id_toogle != data._id && this.id_toogle != undefined) return console.log("Não permitido selecionar dois");
     
-            this.toggleWaitPosition(profile, data._id);            
+            this.toggleWaitPosition(profile, data._id);
+            evt.stopPropagation();
         })
     }
     insertPosition(data) {
