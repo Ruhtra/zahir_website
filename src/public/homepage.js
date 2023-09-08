@@ -52,7 +52,7 @@ class MainFunctions {
 
         // Added buttons for inserted in HomePege
         let hpl = hpData.map(e => e.profile._id)
-        phpData.forEach(e => {
+        if (phpData) phpData.forEach(e => {
             if (!hpl.includes(e._id) && Object.keys(e.promotion).length > 0){
                 this.php.insertBtn(e)
             }

@@ -41,12 +41,14 @@
 </head>
 <body>
     <%- include('./assets/navbar.ejs', { active: 'home', permission: permission })%>
-    <section id="carousel">
-        <div class="top">
-            <h1> <span>Promoções</span> da <br> semana </h1>
-        </div>
-        <%- include('./assets/carousel/carousel.ejs', { homePage }) %>
-    </section>
+    <% if (homePage.length != 0) { %>
+        <section id="carousel">
+            <div class="top">
+                <h1> <span>Promoções</span> da <br> semana </h1>
+            </div>
+            <%- include('./assets/carousel/carousel.ejs', { homePage }) %>
+        </section>
+    <% } %>
     <section id="infos">
         <div class="left">
             <img src="/images/index/zahir.png" alt="Imagem do zahir comendo um hámburguer e um fundo em amarelo">
@@ -111,16 +113,18 @@
         })
     }
 
-    var flkty = new Flickity('.js-flickity', {
-      wrapAround: true,
-      setGallerySize: false,
-        on: {
-        ready: function () {  mainFlickity(this) }
-      }
-    });
+    if (document.querySelector('.js-flickity')  != undefined) {
+        var flkty = new Flickity('.js-flickity', {
+        wrapAround: true,
+        setGallerySize: false,
+            on: {
+            ready: function () {  mainFlickity(this) }
+        }
+        });
+        
     
-  
-    flkty.on( 'scroll', function() {mainFlickity(flkty)});
+        flkty.on( 'scroll', function() {mainFlickity(flkty)});
+    }
 </script>
 </body>
 </html>
