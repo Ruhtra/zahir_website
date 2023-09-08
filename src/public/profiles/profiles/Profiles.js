@@ -8,11 +8,6 @@ export default class Profiles {
         this.filter = new Filter( document.querySelector('#filter'), this.base, [] )
         if (!disableInicialize) this.build()
     }
-    resultNull() {
-        var screen = document.createElement('div')
-        screen.innerHTML = 'Nada foi encontrado, tente redefinir as pesquisas!'
-        this.base.appendChild(screen)
-    }
     insert(data) {
         data.forEach(e => {
             this.base.insertAdjacentHTML("beforeend", Profile.card(e))
@@ -29,8 +24,6 @@ export default class Profiles {
     async build(){
         this.clear()
         let data = await api.profile.getList()
-
-        if (data.length == 0) return this.resultNull()
 
         this.filter.setArray(data)
         this.insert(data)

@@ -30,6 +30,13 @@ class FilterSstructure {
     filterCategories(categories) {
         categories = categories.filter(e => e != undefined)
 
+        //checks if no category is selected
+        if (categories.length <= 0) {
+            return this.arrFilter = this.data.map((e, i) => {
+                return 1
+            })
+        }
+
         this.arrFilter = this.data.map((e, i) => {
             if (this.arrFilter[i]) {
                 if (e['category']['categories'] != undefined) {
