@@ -96,65 +96,6 @@
             object-fit: cover;
         }
         
-        /* uploading */
-            #form #picture label .uploading {
-                display: none;
-                position: absolute;
-                bottom: 1em;
-                left: 50%;
-                transform: translatex(-50%);
-
-                width: 90%;
-
-                border-radius: 2em;
-                z-index: 2;
-            }
-            /* response */
-                #form #picture label .uploading .response {
-                    position: absolute;
-                    top: calc(-100% - 1.25em);
-                    left: 50%;
-                    
-                    padding: .2em .4em;
-                    
-                    font-size: 1.5em;
-                    white-space: nowrap;
-                    line-height: 1em;
-                    border-radius: .2em;
-                    transform: translateX(-50%);
-                }
-                #form #picture label .uploading .response.error {
-                    background: red;
-                }
-                #form #picture label .uploading .response.success {
-                    background: green;
-                }
-            /* bar */
-                #form #picture label .uploading .bar {
-                    position: relative;
-                    width: 100%;
-                    background: yellow;
-                    border-radius: inherit;
-                    overflow: hidden;
-                }
-                #form #picture label .uploading .bar .text {
-                    display: block;
-                    position: absolute;
-                    top: 0;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    
-                    height: 1em;
-                    
-                    font-size: 1em;
-                    background-color: aqua;
-                }
-                #form #picture label .uploading .bar .concluided {
-                    width: 0%;
-                    height: 1em;
-                    
-                    background-color: gold;
-                }
         /* text */
             #form #picture label:hover span.msg { opacity: 1; }
             #form #picture label span.msg {

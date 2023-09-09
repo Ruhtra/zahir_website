@@ -55,7 +55,7 @@ export const Filter = {
     error: (data) => `<span class="error">${data}</span>`,
     build: {
         categories: (data) => `
-            <div id="${data.name}" class="item">
+            <div id="${data.name}" name="${data.name}" class="item">
             <input id="cb_${data.name}" type="checkbox" name="${data._id}" style="display: none;">
                 <label for="cb_${data.name}">${data.name}</label>
             </div>`
