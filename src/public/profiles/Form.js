@@ -6,117 +6,117 @@ import Observer from '/helper/Observer.js'
 
 import DB from '/db.js'
 
-//Expor api for class Api()
-class ApiUploadController {
-    constructor(URL, baseResponse){
-        this.URL = URL
-        this.response = new Response(baseResponse)
-    }
-    startUp(files) {
-        console.log('startup');
+// //Expor api for class Api()
+// class ApiUploadController {
+//     constructor(URL, baseResponse){
+//         this.URL = URL
+//         this.response = new Response(baseResponse)
+//     }
+//     startUp(files) {
+//         console.log('startup');
 
-        this.response.hide()
-        this.response.clearAll()
+//         this.response.hide()
+//         this.response.clearAll()
         
-        this.xhr = new XMLHttpRequest()
-        this.xhr.open('POST', this.URL, true)
+//         this.xhr = new XMLHttpRequest()
+//         this.xhr.open('POST', this.URL, true)
 
-        if (files.length > 0) {
-            var file = files[0];
-            this.formData = new FormData();
-            this.formData.append('file', file);
-        } else return console.log('Nenhum arquivo selecionado');
+//         if (files.length > 0) {
+//             var file = files[0];
+//             this.formData = new FormData();
+//             this.formData.append('file', file);
+//         } else return console.log('Nenhum arquivo selecionado');
                     
-        this.start()
-        this.progress()
-        this.end()
+//         this.start()
+//         this.progress()
+//         this.end()
 
-        this.xhr.send(this.formData)
-    }
+//         this.xhr.send(this.formData)
+//     }
 
-    start() {
-        this.xhr.onloadstart = e => {
-            this.response.show()
-            this.response.clearAll()
-        }
-    }
+//     start() {
+//         this.xhr.onloadstart = e => {
+//             this.response.show()
+//             this.response.clearAll()
+//         }
+//     }
 
-    progress() {
-        this.xhr.upload.onprogress = ({loaded, total}) => {
-            let size = this.calcSize(loaded, total)
-            this.response.barProgress(size.percentage)
-            console.log(size.percentage);
-        }
-    }
+//     progress() {
+//         this.xhr.upload.onprogress = ({loaded, total}) => {
+//             let size = this.calcSize(loaded, total)
+//             this.response.barProgress(size.percentage)
+//             console.log(size.percentage);
+//         }
+//     }
 
-    end() {
-        this.xhr.onload = e => {
-            const {err}  =  JSON.parse(this.xhr.response);
-            // if(err) return console.error(err);
+//     end() {
+//         this.xhr.onload = e => {
+//             const {err}  =  JSON.parse(this.xhr.response);
+//             // if(err) return console.error(err);
 
-            if (this.xhr.status == 409) {
-                this.response.end(JSON.parse(this.xhr.response).err, 'error')
-            } else if (this.xhr.status < 200 && this.xhr.status >= 300) {
-                this.response.end('Erro desconhecido', 'error')
-            } else {
-                this.response.end("Carregado com sucesso", 'success')
-                document.querySelector('#in_filePath').value = JSON.parse(this.xhr.response).filePath
-            }
+//             if (this.xhr.status == 409) {
+//                 this.response.end(JSON.parse(this.xhr.response).err, 'error')
+//             } else if (this.xhr.status < 200 && this.xhr.status >= 300) {
+//                 this.response.end('Erro desconhecido', 'error')
+//             } else {
+//                 this.response.end("Carregado com sucesso", 'success')
+//                 document.querySelector('#in_filePath').value = JSON.parse(this.xhr.response).filePath
+//             }
             
-            if (e.loaded == e.total) this.response.barProgress(100)
-        }
-    }
+//             if (e.loaded == e.total) this.response.barProgress(100)
+//         }
+//     }
 
-    calcSize(loaded, total) {
-        var loadedKb = Math.floor(loaded/1000)
-        var totalKb = Math.floor(total/1000)
-        var percentage = Math.floor(loadedKb/totalKb * 100)
-        return {
-            loadedKb: loadedKb,
-            totalKb: totalKb,
-            percentage: percentage,
-            size: totalKb < 1024 ? `${loadedKb} KB` : `${(loadedKb/1024).toFixed(2)} MB`
-        }
-    }
-}
-//Inserted Response in other local
-class Response {
-    constructor(base) {
-        this.base = base
-        this.elements = {
-            text: () => this.base.querySelector('.text'),
-            bar: () => this.base.querySelector('.concluided'),
-            response: () => this.base.querySelector('.response')
-        }
-        this.time
-    }
+//     calcSize(loaded, total) {
+//         var loadedKb = Math.floor(loaded/1000)
+//         var totalKb = Math.floor(total/1000)
+//         var percentage = Math.floor(loadedKb/totalKb * 100)
+//         return {
+//             loadedKb: loadedKb,
+//             totalKb: totalKb,
+//             percentage: percentage,
+//             size: totalKb < 1024 ? `${loadedKb} KB` : `${(loadedKb/1024).toFixed(2)} MB`
+//         }
+//     }
+// }
+// //Inserted Response in other local
+// class Response {
+//     constructor(base) {
+//         this.base = base
+//         this.elements = {
+//             text: () => this.base.querySelector('.text'),
+//             bar: () => this.base.querySelector('.concluided'),
+//             response: () => this.base.querySelector('.response')
+//         }
+//         this.time
+//     }
 
-    show() { this.base.style.display = 'block' }
-    hide() { this.base.style.display = 'none' }
+//     show() { this.base.style.display = 'block' }
+//     hide() { this.base.style.display = 'none' }
 
-    barProgress(percentage) {
-        this.elements.text().innerHTML = `${percentage}%`
-        this.elements.bar().style.width = `${percentage}%`
-    }
+//     barProgress(percentage) {
+//         this.elements.text().innerHTML = `${percentage}%`
+//         this.elements.bar().style.width = `${percentage}%`
+//     }
 
-    end(msg , type) {
-        this.elements.response().innerHTML = msg
-        this.elements.response().classList.add(type)
+//     end(msg , type) {
+//         this.elements.response().innerHTML = msg
+//         this.elements.response().classList.add(type)
         
-        this.time = setTimeout(() => {
-            this.hide()
-            this.clearAll()
-        }, 5000);
-    }
+//         this.time = setTimeout(() => {
+//             this.hide()
+//             this.clearAll()
+//         }, 5000);
+//     }
 
-    clearAll() {
-        clearTimeout(this.time)
-        this.barProgress(0)
-        this.elements.response().innerHTML = ""
-        this.elements.response().classList.remove('success')
-        this.elements.response().classList.remove('error')
-    }            
-}
+//     clearAll() {
+//         clearTimeout(this.time)
+//         this.barProgress(0)
+//         this.elements.response().innerHTML = ""
+//         this.elements.response().classList.remove('success')
+//         this.elements.response().classList.remove('error')
+//     }            
+// }
 
 
 
@@ -246,12 +246,11 @@ class LocalFunctions {
 class ImageFunctions {
     constructor(base) {
         this.base = base
-        this.apiUploadController = new ApiUploadController('/api/uploads/upload', this.base.querySelector('.uploading'))
+        // this.apiUploadController = new ApiUploadController('/api/uploads/upload', this.base.querySelector('.uploading'))
 
         this.elements = {
             img: this.base.querySelector('img'),
             input: this.base.querySelector('input#in_picture'),
-            pictureName: this.base.querySelector('#in_filePath'),
             span: {
                 select: this.base.querySelector('.select'),
                 insert: this.base.querySelector('.new')
@@ -264,16 +263,9 @@ class ImageFunctions {
 
         //Starting button
         this.elements.input.addEventListener('change', evt => {
-            this.apiUploadController.startUp(evt.target.files)
-
             const [file] = evt.target.files
             if (file) return this.insertImg(file)
-
             this.clearImg()
-        })
-        this.elements.pictureName.addEventListener('change', evt => {
-            if (this.elements.pictureName.value != '') return this.elements.img.src = '/uploads/'+this.elements.pictureName.value
-            this.elements.img.src = '/images/no-image.png'
         })
         // this.btns.clear.addEventListener('click', (evt) => {
         //     evt.preventDefault()
@@ -285,17 +277,8 @@ class ImageFunctions {
         this.elements.img.onload = () => {
             URL.revokeObjectURL(this.elements.img.src) // free memory
         }
-
-        // this.elements.options.style.display = 'block'
-        // this.elements.span.select.style.display = 'none'
-        // this.elements.span.insert.style.display = 'block'
     }
-    clearImg() {
-        this.elements.img.src = "#"
-        // this.elements.options.style.display = 'none'
-        // this.elements.span.select.style.display = 'block'
-        // this.elements.span.insert.style.display = 'none'
-    }
+    clearImg() { this.elements.img.src = "#" }
 }
 
 
@@ -311,7 +294,7 @@ class Functions {
     get = {
         id: () => this.form.querySelector('#id input'),
         picture: () => this.form.querySelector('#picture input[type="file"]'),
-        pictureName: () => this.form.querySelector('#picture #in_filePath'),
+        picturePreview: () => this.form.querySelector('#picture img'),
         name: () => this.form.querySelector('#name input'),
         resume: () => this.form.querySelector('#resume textarea'),
         category: {
@@ -342,8 +325,8 @@ class Functions {
     }
 
     getDataInsert() {
+        let file = this.get.picture().files[0]
         let data = {
-            picture: this.get.pictureName().value,
             name: this.get.name().value,
             resume: this.get.resume().value,
             category: {
@@ -372,12 +355,15 @@ class Functions {
         if (data.category.type == 'restaurante') data.category['categories'] = [ ... this.form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
         if (data.category.type == 'restaurante') data.category['newCategories'] = [ ... this.form.querySelectorAll('#category #newCategories input:checked') ].map(e => e.getAttribute('name'))
 
-        return f.removeEmptyValues(data)
+        return {
+            data: f.removeEmptyValues(data),
+            file: file
+        }
     }
     getDataUpdate() {
+        let file = this.get.picture().files[0]
         let data = {
             id: this.get.id().value,
-            picture: this.get.pictureName().value,
             name: this.get.name().value,
             resume: this.get.resume().value,
             category: {
@@ -406,13 +392,16 @@ class Functions {
         if (data.category.type == 'restaurante') data.category['categories'] = [ ... this.form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
         if (data.category.type == 'restaurante') data.category['newCategories'] = [ ... this.form.querySelectorAll('#category #newCategories input:checked') ].map(e => e.getAttribute('name'))
 
-        return f.removeEmptyValues(data)
+        return {
+            data: f.removeEmptyValues(data),
+            file: file
+        }
     }
 
     set(data) {
         if (data._id) this.get.id().value = data._id
-        if (data.picture) this.get.pictureName().value = data.picture
-        if (data.picture) this.get.pictureName().dispatchEvent(new Event('change'))
+        if (data.picture) this.get.picturePreview().src = data.picture // funciona
+        // if (data.picture) this.get.pictureName().dispatchEvent(new Event('change'))
         this.get.name().value = data.name
         if (data.resume) this.get.resume().value = data.resume
         if (data.informations) this.get.informations().value = data.informations
@@ -460,8 +449,6 @@ class Functions {
         this.get.id().value = ''
         this.get.picture().value = ''
         this.get.picture().dispatchEvent(new Event('change'))
-        this.get.pictureName().value = ''
-        this.get.pictureName().dispatchEvent(new Event('change'))
         this.get.name().value = ''
         this.get.resume().value = ''
         this.get.category.type().value = 'restaurante'
@@ -527,8 +514,8 @@ class Form {
             evt.preventDefault()
             btn.insert.disabled = true
 
-            let data = this.functions.getDataInsert()
-            this.db.profile.insert(data)
+            let {data, file} = this.functions.getDataInsert()
+            this.db.profile.insert(data, file)
                 .finally(() => {
                     btn.insert.disabled = false
                 })
@@ -537,8 +524,8 @@ class Form {
             evt.preventDefault()
             btn.update.disabled = true
 
-            let data = this.functions.getDataUpdate()
-            this.db.profile.update(data)
+            let {data, file} = this.functions.getDataUpdate()
+            this.db.profile.update(data, file)
                 .finally(() => {
                     btn.update.disabled = false
                 })

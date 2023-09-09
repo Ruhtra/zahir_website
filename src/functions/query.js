@@ -14,7 +14,7 @@ module.exports.listProfile = () => { return [
         city: "$local.city"
       },
       name: 1,
-      picture: 1,
+      picture: "$picture.url",
       category: {
         type: 1,
         categories: {
@@ -48,7 +48,7 @@ module.exports.profile = (id) => { return  [
     telephones: 1,
     local: 1,
     movie: 1,
-    picture: 1,
+    picture: "$picture.url",
     resume: 1,
     category: {
       type: 1,

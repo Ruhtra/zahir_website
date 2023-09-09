@@ -28,16 +28,17 @@ export default class DB {
     }
 
     profile = {
-        insert: async (data) =>  {
+        insert: async (data, file) =>  {
             await this.trycatch(validate.profile.insert, data, async (value) => {
                 console.log('inserting...')
-                this.obResponses.notify({type: 'insert', response: await api.profile.insert(value)})
+                let response = await api.profile.insert(value, file)
+                this.obResponses.notify({type: 'insert', response: response})
             })
         },
-        update: async (data) => {
+        update: async (data, file) => {
             await this.trycatch(validate.profile.update, data, async (value) => {
                 console.log('updating...')
-                let response = await api.profile.update(value)
+                let response = await api.profile.update(value, file)
                 this.obResponses.notify({type: 'update', response: response})
             })
         },

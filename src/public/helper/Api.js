@@ -16,20 +16,28 @@ export default new class Api {
     profile = {
         get: async (id) => structure('/api/profile/get?id='+id),
         getList: async () => structure('/api/profile/getList'),
-        insert: async (data) => structure('/api/profile/insert', {
+        insert: async (data, file) => {
+            var body = new FormData()
+            if (file) body.append("file", file)
+
+            body.append("json", JSON.stringify(data))
+
+            return structure('/api/profile/insert', {
                 method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data)
-            }),
-        update: async (data) => structure('/api/profile/update', {
+                body: body
+            })
+        },
+        update: async (data, file) => {
+            var body = new FormData()
+            if (file) body.append("file", file)
+
+            body.append("json", JSON.stringify(data))
+
+            return structure('/api/profile/update', {
                 method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data)
-            }),
+                body: body
+            })
+        },
         delete: async (data) => structure('/api/profile/delete', {
                 method: 'POST',
                 headers: {
