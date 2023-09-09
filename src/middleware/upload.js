@@ -9,21 +9,8 @@ class Upload {
 
     constructor() {}
 
-    storage() {
-        return multer.diskStorage({
-            destination: (req, file, cb) => {
-                if (!fs.existsSync(this.URL)) fs.mkdirSync(this.URL);
-                cb(null, this.URL)
-            },
-            filename: (req, file, cb) => {
-                // console.log(file.originalname);
-                //   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-                const type = mime.extension(file.mimetype);
-                cb(null, `${file.fieldname}-${Date.now()}.${type}`)
-            }
-        })
-    }
-
+    storage() { return multer.memoryStorage() }
+    
     fileFilter() {
         return (req, file, cb) => {
             const type = mime.extension(file.mimetype);

@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 
-const { connect } = require('../config/mongoDB.js')
+const bucket = require("./consumerBucket.js");
+const { connect, connectSession } = require('../config/mongoDB.js')
 const query = require("./query.js");
 const { queryDB } = require('../Errors.js')
 
@@ -65,85 +66,139 @@ const profile = {
     getList: async () => {
         const db = await connect();
         let res = await db.collection('profile').aggregate(query.listProfile()).toArray()
-        console.log(res);
+
         return res
     },
-    insert: async (data) => {
-        const db = await connect();
-        
-        // validate ids
-        if (data.category.categories != undefined) {
-            promises = data.category.categories.map(async (id) => {
-                let find = await db.collection('categories').findOne({_id: new ObjectId(id)})
-                if (!find) throw new Error(queryDB.profile.insert.categorieNotFound)
-            })
-        }
+    insert: async (data, file) => {
+        const { session, db } = await connectSession();
+        try {
+            session.startTransaction();
 
-        // insert new categories
-        if (data.category.newCategories != undefined) {
-            let names = data.category.newCategories.map(e => {return {name: e}})
-            if (names.length > 0) {
-                let response = await db.collection('categories').insertMany(names)
-    
-                Object.values(response.insertedIds).forEach(e => {
-                    data.category.categories.push(e.toString())
+            // validate ids
+            if (data.category.categories != undefined) {
+                promises = data.category.categories.map(async (id) => {
+                    let find = await db.collection('categories').findOne({_id: new ObjectId(id)})
+                    if (!find) throw new Error(queryDB.profile.insert.categorieNotFound)
                 })
+                await Promise.all(promises);
             }
-        }
 
-        return await db.collection('profile').insertOne(structure(data))
-    },
-    update: async (data) => {
-        const db = await connect();
+            // insert new categories
+            var rCategories
+            if (data.category.newCategories != undefined) {
+                let names = data.category.newCategories.map(e => {return {name: e}})
+                if (names.length > 0) {
+                    rCategories = await db.collection('categories').insertMany(names)
         
-        // validate ids
-        if (data.category.categories != undefined) {
-            promises = data.category.categories.map(async (id) => {
-                let find = await db.collection('categories').findOne({_id: new ObjectId(id)})
-                if (!find) throw new Error(queryDB.profile.insert.categorieNotFound)
-            })
-        }
-
-        // insert new categories
-        if (data.category.newCategories != undefined) {
-            let names = data.category.newCategories.map(e => {return {name: e}})
-            if (names.length > 0) {
-                let response = await db.collection('categories').insertMany(names)
-    
-                Object.values(response.insertedIds).forEach(e => {
-                    data.category.categories.push(e.toString())
-                })            
+                    Object.values(rCategories.insertedIds).forEach(e => {
+                        data.category.categories.push(e.toString())
+                    })
+                }
             }
-        }
 
-        let response =  await db.collection('profile').replaceOne(
-            {_id: new ObjectId(data.id)}, structure(data)
-        )
+            try {
+                // verified file
+                if (file) {
+                    let resbkt = await bucket.insert(file) // upload image for aws
+                    data.picture = resbkt // inserted _id in profile
+                }
+                let response = await db.collection('profile').insertOne(structure(data))
+                
+                await session.commitTransaction();
+                return response
+            } catch (err) {
+                //deletar imagem do s3 caso haja algum erro
+                await session.abortTransaction();
+                throw err
+            }
+        } finally { session.endSession(); }
+    },
+    update: async (data, file) => {
+        const { session, db } = await connectSession();
+        try {
+            session.startTransaction();
+            try {
+                let item = await db.collection('profile').findOne({_id: new ObjectId(data.id)})
+                if (item == undefined) throw new Error('perfil não encontrado')
             
-        //remove categories
-        const categoriesCollection = db.collection('categories');
-        const cat = await categoriesCollection.aggregate(query.categoriesNotUsed()).toArray()
+                // validate ids
+                if (data.category.categories != undefined) {
+                    promises = data.category.categories.map(async (id) => {
+                        let find = await db.collection('categories').findOne({_id: new ObjectId(id)})
+                        if (!find) throw new Error(queryDB.profile.insert.categorieNotFound)
+                    })
+                }
+
+                // insert new categories
+                if (data.category.newCategories != undefined) {
+                    let names = data.category.newCategories.map(e => {return {name: e}})
+                    if (names.length > 0) {
+                        let response = await db.collection('categories').insertMany(names)
             
-        await categoriesCollection.deleteMany({_id: { $in: cat.map(e => e._id) }})
-        console.log(`Categories deletadas com sucesso`)
+                        Object.values(response.insertedIds).forEach(e => {
+                            data.category.categories.push(e.toString())
+                        })            
+                    }
+                }
 
-        return response
+                //verified file
+                if (file) {
+                    //verified if item exists file
+                    if (item.picture != undefined) await bucket.delete(item.picture.key)
+                    let resbkt = await bucket.insert(file) // upload image for aws
+                    data.picture = resbkt // inserted _id in profile
+                } else {
+                    //copy picture
+                    if (item.picture != undefined) data.picture = item.picture
+                }
 
+                let response =  await db.collection('profile').replaceOne(
+                    {_id: new ObjectId(data.id)}, structure(data)
+                )
+                    
+                //remove categories
+                const categoriesCollection = db.collection('categories');
+                const cat = await categoriesCollection.aggregate(query.categoriesNotUsed()).toArray()
+                    
+                await categoriesCollection.deleteMany({_id: { $in: cat.map(e => e._id) }})
+                console.log(`Categories deletadas com sucesso`)
+
+                await session.commitTransaction();
+                return response
+            } catch(err) {
+                //deletar imagem do s3 caso haja algum erro
+                await session.abortTransaction();
+                throw err
+            }
+        } finally { session.endSession(); }
     },
     delete: async (id) => {
-        const db = await connect();
+        const { session, db } = await connectSession();
+        try {
+            session.startTransaction();
 
-
-        let response =  await db.collection('profile').deleteOne({_id: new ObjectId(id)})
-        
-        //remove categories
-        const categoriesCollection = db.collection('categories');
-        const cat = await categoriesCollection.aggregate(query.categoriesNotUsed()).toArray()
+            try {
+                let item = await db.collection('profile').findOne({_id: new ObjectId(id)})
+                let response =  await db.collection('profile').deleteOne({_id: new ObjectId(id)})
             
-        await categoriesCollection.deleteMany({_id: { $in: cat.map(e => e._id) }})
-        console.log(`Categories deletadas com sucesso`)
+                //remove categories
+                const categoriesCollection = db.collection('categories');
+                const cat = await categoriesCollection.aggregate(query.categoriesNotUsed()).toArray()
+                    
+                await categoriesCollection.deleteMany({_id: { $in: cat.map(e => e._id) }})
+                console.log(`Categories deletadas com sucesso`)
 
-        return response
+                if (item.picture != undefined) await bucket.delete(item.picture.key)
+    
+                await session.commitTransaction();
+                return response
+            } catch(err) {
+                //deletar imagem do s3 caso haja algum erro
+                await session.abortTransaction();
+                throw err
+            }
+            
+        } finally { session.endSession(); }
     },
     recents: async () => {
         // internal
@@ -155,7 +210,7 @@ const profile = {
             .sort({ createdAt: -1 })
             .limit(4)
         .toArray()
-    } 
+    }
 }
 
 const homePage = {
@@ -214,7 +269,6 @@ const categories = {
         return await db.collection('categories').find({}).toArray()
     }
 }
-
 
 const auth = {
     login: async (username, password) => {
