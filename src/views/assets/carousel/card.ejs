@@ -1,7 +1,7 @@
 
 <div class="card">
     <img src="<% if (profile.picture != undefined) { %>
-        /uploads/<%= profile.picture %>
+        <%= profile.picture %>
     <% } else { %>
         /images/no-image.png
     <% } %>" alt="">

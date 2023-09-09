@@ -1,5 +1,6 @@
 const Database = require("../functions/queryDB.js");
 const validate = require("../functions/validator.js");
+const crypto = require("crypto")
 const fs = require('fs')
 
 const verifyJson = async (json) => {
@@ -27,7 +28,7 @@ module.exports = {
             var { file } = req
             var { json } = req.body
             
-            if (file) file.filename = file.originalname
+            if (file) file.filename = `${crypto.randomBytes(16).toString('hex')}-${file.originalname}`
 
             var jsonConverse = await verifyJson(json)
 
@@ -40,7 +41,7 @@ module.exports = {
             var { file } = req
             var { json } = req.body
             
-            if (file) file.filename = file.originalname
+            if (file) file.filename = `${crypto.randomBytes(16).toString('hex')}-${file.originalname}`
 
             var jsonConverse = await verifyJson(json)
 

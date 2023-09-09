@@ -33,7 +33,7 @@ class FilterSstructure {
         //checks if no category is selected
         if (categories.length <= 0) {
             return this.arrFilter = this.data.map((e, i) => {
-                return 1
+                if (this.arrFilter[i]) return 1
             })
         }
 

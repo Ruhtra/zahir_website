@@ -2,7 +2,7 @@ export const Profile = {
     card: (data) => `
         <div id="_${data._id}" class="profiles profile" >
             <input class="openCard" type="button" value="Abrir" style="display: none;">
-            <img src="${data.picture != undefined ? '/uploads/'+data.picture : '/images/no-image.png'}" alt="">
+            <img src="${data.picture != undefined ? data.picture : '/images/no-image.png'}" alt="">
             <div class="elements">
                 <span class="name">${data.name}</span>
                 <span class="local">${data.local.uf} - ${data.local.city}</span>
@@ -21,7 +21,7 @@ export const Profile = {
                 </div>
 
                 <input class="openCard" type="button" value="Abrir" style="display: none;">
-                <img src="${data.picture != undefined ? '/uploads/'+data.picture : '/images/no-image.png'}" alt="">
+                <img src="${data.picture != undefined ? data.picture : '/images/no-image.png'}" alt="">
                 <div class="elements">
                     <span class="name">${data.name}</span>
                     <span class="local">${data.local.uf} - ${data.local.city}</span>
@@ -63,10 +63,7 @@ export const Filter = {
 }
 
 export const HomePage = {
-    profile: (data) => {
-        if (data.picture != undefined) return `<img src="${data.picture != undefined ? '/uploads/'+data.picture : '/images/no-image.png'}" alt="">`
-        return `<img style="width: 50%;height: 50%;" src="/images/notImage.png">`
-    },
+    profile: (data) => `<img src="${data.picture != undefined ? data.picture : '/images/no-image.png'}" alt="">`,
     btns: () => `
         <button class="insertCard">
             <div class="icon-add">
