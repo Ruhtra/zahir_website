@@ -202,6 +202,9 @@ nav {
                 text-align: center;
             }
         /* links */ 
+            /* globals */
+                .nav.mobile .sidebar .links svg { height: 1em; }
+
             .nav.mobile .sidebar .links {
                 display: flex;
                 flex-direction: column;
@@ -217,6 +220,7 @@ nav {
                 padding: .5em;
 
                 font-size: 1em;
+                line-height: 1em;
                 border-radius: .5em;
                 transition: all 500ms;
                 cursor: pointer;

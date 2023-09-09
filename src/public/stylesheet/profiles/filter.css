@@ -274,6 +274,7 @@
                 /* items */
                     #filter #screenFilter .categories div#categories {
                         display: flex;
+                        flex-wrap: wrap;
                         gap: 1em;
                         padding: 1em;
                     }
@@ -282,6 +283,7 @@
                         cursor: pointer;
                         padding: .4em 1.2em;
 
+                        white-space: nowrap;
                         border-radius: 1em;
                         background-color: rgba(0, 0, 0, .3);
                         transition: .2s background ease-in-out;

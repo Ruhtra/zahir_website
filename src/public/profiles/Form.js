@@ -6,120 +6,6 @@ import Observer from '/helper/Observer.js'
 
 import DB from '/db.js'
 
-// //Expor api for class Api()
-// class ApiUploadController {
-//     constructor(URL, baseResponse){
-//         this.URL = URL
-//         this.response = new Response(baseResponse)
-//     }
-//     startUp(files) {
-//         console.log('startup');
-
-//         this.response.hide()
-//         this.response.clearAll()
-        
-//         this.xhr = new XMLHttpRequest()
-//         this.xhr.open('POST', this.URL, true)
-
-//         if (files.length > 0) {
-//             var file = files[0];
-//             this.formData = new FormData();
-//             this.formData.append('file', file);
-//         } else return console.log('Nenhum arquivo selecionado');
-                    
-//         this.start()
-//         this.progress()
-//         this.end()
-
-//         this.xhr.send(this.formData)
-//     }
-
-//     start() {
-//         this.xhr.onloadstart = e => {
-//             this.response.show()
-//             this.response.clearAll()
-//         }
-//     }
-
-//     progress() {
-//         this.xhr.upload.onprogress = ({loaded, total}) => {
-//             let size = this.calcSize(loaded, total)
-//             this.response.barProgress(size.percentage)
-//             console.log(size.percentage);
-//         }
-//     }
-
-//     end() {
-//         this.xhr.onload = e => {
-//             const {err}  =  JSON.parse(this.xhr.response);
-//             // if(err) return console.error(err);
-
-//             if (this.xhr.status == 409) {
-//                 this.response.end(JSON.parse(this.xhr.response).err, 'error')
-//             } else if (this.xhr.status < 200 && this.xhr.status >= 300) {
-//                 this.response.end('Erro desconhecido', 'error')
-//             } else {
-//                 this.response.end("Carregado com sucesso", 'success')
-//                 document.querySelector('#in_filePath').value = JSON.parse(this.xhr.response).filePath
-//             }
-            
-//             if (e.loaded == e.total) this.response.barProgress(100)
-//         }
-//     }
-
-//     calcSize(loaded, total) {
-//         var loadedKb = Math.floor(loaded/1000)
-//         var totalKb = Math.floor(total/1000)
-//         var percentage = Math.floor(loadedKb/totalKb * 100)
-//         return {
-//             loadedKb: loadedKb,
-//             totalKb: totalKb,
-//             percentage: percentage,
-//             size: totalKb < 1024 ? `${loadedKb} KB` : `${(loadedKb/1024).toFixed(2)} MB`
-//         }
-//     }
-// }
-// //Inserted Response in other local
-// class Response {
-//     constructor(base) {
-//         this.base = base
-//         this.elements = {
-//             text: () => this.base.querySelector('.text'),
-//             bar: () => this.base.querySelector('.concluided'),
-//             response: () => this.base.querySelector('.response')
-//         }
-//         this.time
-//     }
-
-//     show() { this.base.style.display = 'block' }
-//     hide() { this.base.style.display = 'none' }
-
-//     barProgress(percentage) {
-//         this.elements.text().innerHTML = `${percentage}%`
-//         this.elements.bar().style.width = `${percentage}%`
-//     }
-
-//     end(msg , type) {
-//         this.elements.response().innerHTML = msg
-//         this.elements.response().classList.add(type)
-        
-//         this.time = setTimeout(() => {
-//             this.hide()
-//             this.clearAll()
-//         }, 5000);
-//     }
-
-//     clearAll() {
-//         clearTimeout(this.time)
-//         this.barProgress(0)
-//         this.elements.response().innerHTML = ""
-//         this.elements.response().classList.remove('success')
-//         this.elements.response().classList.remove('error')
-//     }            
-// }
-
-
-
 class ErrorsFunctions {
     constructor(form) {
         this.form = form
@@ -412,7 +298,7 @@ class Functions {
 
         if (data.category.categories) {
             data.category.categories.forEach(e => {
-                this.form.querySelector(`#category #categories #${e} input`).checked = true
+                this.form.querySelector(`#category #categories div[name="${e}"] input`).checked = true
             })
         }
 
