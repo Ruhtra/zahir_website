@@ -1,8 +1,16 @@
-const multer = require("multer");
 const Database = require("../functions/queryDB.js");
 const validate = require("../functions/validator.js");
-const upload = require("../middleware/upload.js");
 const fs = require('fs')
+
+const verifyJson = async (json) => {
+    return new Promise((resolve, reject) => {
+        try {
+            if (!json) return resolve(undefined)
+            return resolve(JSON.parse(json))
+        }
+        catch (e) { reject(e) }
+    })
+};
 
 module.exports = {
     profile: {
@@ -16,16 +24,30 @@ module.exports = {
             return res.send(await Database.profile.getList())
         },
         insert: async (req, res) => {
-            const {error, value} = validate.profile.insert(req.body)
-            if (error) throw error
+            var { file } = req
+            var { json } = req.body
+            
+            if (file) file.filename = file.originalname
 
-            return res.send(await Database.profile.insert(value))
+            var jsonConverse = await verifyJson(json)
+
+            const {error, value} = validate.profile.insert(jsonConverse)
+            if (error) throw error
+        
+            return res.send(await Database.profile.insert(value, file))
         },
         update: async (req, res) => {
-            const {error, value} = validate.profile.update(req.body)
+            var { file } = req
+            var { json } = req.body
+            
+            if (file) file.filename = file.originalname
+
+            var jsonConverse = await verifyJson(json)
+
+            const {error, value} = validate.profile.update(jsonConverse)
             if (error) throw error
 
-            return res.send(await Database.profile.update(value))
+            return res.send(await Database.profile.update(value, file))
         },
         delete: async (req, res) => {
             const {error, value} = validate.profile.id(req.body.id)
@@ -59,22 +81,6 @@ module.exports = {
     promotions: {
         getAll: async (req, res) => {
             return res.send(await Database.promotions.getAll())
-        }
-    },
-    uploads: {
-        upload: async (req, res) => {
-            console.log(upload.getConfig)
-            multer(upload.getConfig).single('file')(req, res, function (err) {
-                if (err) {
-                    // A Multer error occurred when uploading.
-                    console.log('erro multer');
-                    return res.status(500).json({err: 'Erro interno'})
-                }
-
-                if (!req.file) return res.status(409).json({err: 'Permitido apenas .png ou .jpg '})
-                const filename = req.file.filename;
-                res.status(200).json({"msg": "file uploaded.......", filePath: filename});
-            })
         }
     }
 }

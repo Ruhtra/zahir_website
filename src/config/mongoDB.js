@@ -16,6 +16,19 @@ async function connect() {
     return singleton;
 }
 
+async function connectSession() {
+  const client = new MongoClient(uri)
+  await client.connect();
+
+  const session = client.startSession();
+  const db = client.db('zahir_website');
+  
+  return {
+    session,
+    db
+  }
+}
+
 function configFunctions() {
   const profilesCollection = singleton.collection('profile');
 
@@ -70,5 +83,6 @@ const verify = {
 }
 
 module.exports = { 
-  connect
+  connect,
+  connectSession
 }
