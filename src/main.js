@@ -16,7 +16,7 @@ async function startingModules() {
 
 const main = async () => {
     // Variables
-        const PORT = process.env.PORT || 4000
+        //const PORT = process.env.PORT || 4000
     
     // Config server
         const app = express();
@@ -52,9 +52,11 @@ const main = async () => {
     // Starting Modules
     await startingModules()
 
+    return app;
+
     //Server
-        server.listen(PORT, () => {
-            console.log(` >. Server running in: ${PORT}`)
-        })
+        //server.listen(PORT, () => {
+        //    console.log(` >. Server running in: ${PORT}`)
+        //})
 }
-main()
+module.exports = main()

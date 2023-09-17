@@ -1,0 +1,20 @@
+branch-defaults:
+  default:
+    environment: Zahir-website-env
+    group_suffix: null
+  main:
+    environment: Zahir-website-env
+global:
+  application_name: zahir-website
+  branch: null
+  default_ec2_keyname: null
+  default_platform: Node.js 18
+  default_region: sa-east-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  repository: null
+  sc: null
+  workspace_type: Application
