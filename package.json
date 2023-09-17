@@ -4,7 +4,7 @@
   "description": "Website para o zahir",
   "main": "src/main.js",
   "scripts": {
-    "start": "node src/main.js",
+    "start": "node ./bin/www",
     "dev": "nodemon src/main.js -e js,ejs"
   },
   "repository": {
