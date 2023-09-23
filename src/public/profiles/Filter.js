@@ -6,6 +6,15 @@ class FilterSstructure {
         this.arrFilter = this.data.map(() => 1)
     }
 
+    filterSearch(text) {
+        const textoBuscado = text.toLowerCase().trim();
+        this.arrFilter = this.data.map((e, i) => {
+            if (this.arrFilter[i] == 1) 
+                if (e['name'].toLowerCase().includes(textoBuscado))
+                    return 1
+            return 0
+        })
+    }
     filterPromotion() {
         this.arrFilter = this.data.map((e, i) => {
             if (this.arrFilter[i] == 1) 
@@ -115,6 +124,7 @@ export default class Filter extends FilterSstructure  {
         this.screenFilter = new ScreenFilter(baseFilter)
 
         this.btn = {
+            search: this.baseFilter.querySelector('#search'),
             promotion: this.baseFilter.querySelector('#promotion'),
             type: this.baseFilter.querySelector('#type'),
             uf: this.baseFilter.querySelector('#uf'),
@@ -128,6 +138,9 @@ export default class Filter extends FilterSstructure  {
         let promotion = searchParams.get('promotion')
         if (promotion == 'true') this.btn.promotion.querySelector('input').checked = true
 
+        this.btn.search.addEventListener('keyup', (e) => {
+            this.filterMain()
+        })
         this.btn.promotion.addEventListener('click', (e) => {
             e.preventDefault()
 
@@ -175,6 +188,10 @@ export default class Filter extends FilterSstructure  {
             this.screenFilter.openFilter()
         })
     }
+    search() {
+        let search = this.btn.search.querySelector('input').value
+        if (search) this.filterSearch(search)
+    }
     promotion() {
         let promo = this.btn.promotion.querySelector('input').checked
         if (promo) this.filterPromotion()
@@ -200,6 +217,7 @@ export default class Filter extends FilterSstructure  {
         this.filterClean()
         this.screenProfiles.cardsClean()
 
+        this.search()
         this.type()
         this.promotion()
         this.uf()
