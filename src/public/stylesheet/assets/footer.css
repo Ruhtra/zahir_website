@@ -1,9 +1,9 @@
 footer {
-    margin-top: 5rem;
     display: grid;
     grid-template-rows: 1fr auto;
     gap: 1em;
-
+    
+    margin-top: 5rem;
     padding: 3.5em 0;
 
     background-color: var(--color-2);

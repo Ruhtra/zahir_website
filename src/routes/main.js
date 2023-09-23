@@ -10,7 +10,8 @@ const use = fn => (req, res, next) => {
 router.get('/', jwt.verifyJWT ,use(controllerMain.index))
 router.get('/profile', jwt.verifyJWT, use(controllerMain.profile))
 router.get('/profiles', jwt.verifyJWT, use(controllerMain.profiles))
-router.get('/test', jwt.verifyJWT, use(controllerMain.test))
+router.get('/loja', jwt.verifyJWT, use(controllerMain.loja))
+router.get('/anuncie', jwt.verifyJWT, use(controllerMain.anuncie))
 
 // config
 router.get('/config/profiles', jwt.requiredJWT, use(controllerMain.config.profiles))
