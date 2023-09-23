@@ -10,11 +10,6 @@ module.exports = {
             permission: req.permission
         })
     },
-    test: (req, res) => {
-        return res.render('test.ejs', {
-            permission: req.permission
-        })
-    },
     profile: async (req, res) => {
         const {error, value} = validate.profile.id(req.query.id)
         if (error) throw error
@@ -26,6 +21,16 @@ module.exports = {
     },
     profiles: (req, res) => {
         return res.render('profiles.ejs', {
+            permission: req.permission
+        })
+    },
+    loja: (req, res) => {
+        return res.render('loja.ejs', {
+            permission: req.permission
+        })
+    },
+    anuncie: (req, res) => {
+        return res.render('anuncie.ejs', {
             permission: req.permission
         })
     },
