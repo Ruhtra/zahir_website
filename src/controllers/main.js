@@ -1,10 +1,11 @@
 const Database = require("../functions/queryDB.js");
 const validate = require("../functions/validator.js");
+const f = require("../functions/functions.js")
 
 module.exports = {
     index: async (req, res) => { 
         return res.render('index.ejs', {
-            homePage: await Database.homePage.get(),
+            homePage: f.shuffle(await Database.homePage.get()),
             recents: await Database.profile.recents(),
             permission: req.permission
         })
