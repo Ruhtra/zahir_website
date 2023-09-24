@@ -46,8 +46,8 @@
                     </label>
                     
                     <ul class="content">
-                        <li><a href="/config/profiles" class="<% if (active == 'config/profiles') { %>active<% } %>"> • Reviews</a></li>
-                        <li><a href="/config/homepage?promotion=true" class="<% if (active == 'config/homePage') { %>active<% } %>"> • Home Page</a></li>
+                        <li><a href="/config/profiles" class="reviews <% if (active == 'config/profiles') { %>active<% } %>"> • Reviews</a></li>
+                        <li><a href="/config/homepage?promotion=true" class="homepage <% if (active == 'config/homePage') { %>active<% } %>"> • Home Page</a></li>
                     </ul>
                 </li>
             <% } %>
@@ -71,15 +71,19 @@
                 </div>
             </div>
             <ul class="links">
-                <li><a href="/" class="home active">
+                <li><a href="/" class="home <% if (active == 'home') { %>active<% } %>">
                     <%- include('./icons/home.ejs') %>
                     • Home
                 </a></li>
-                <li><a href="/profiles" class="reviews">
+                <li><a href="/profiles" class="reviews <% if (active == 'profiles') { %>active<% } %>">
                     <%- include('./icons/reviews.ejs') %>
                     • Reviews
                 </a></li>
-                <li><a href="/" class="anuncie">
+                <li><a href="/loja" class="loja <% if (active == 'loja') { %>active<% } %>">
+                    <%- include('./icons/shoppingCart.ejs') %>
+                    • Loja
+                </a></li>
+                <li><a href="/anuncie" class="anuncie <% if (active == 'anuncie') { %>active<% } %>">
                     <%- include('./icons/anuncie.ejs') %>
                     • Anuncie
                 </a></li>
@@ -87,18 +91,18 @@
                     <li>
                         <input type="checkbox" id="cb_sidebar_config" style="display: none;">
                         <label for="cb_sidebar_config">
-                            <a class="config dropdown">
+                            <a class="config dropdown <% if (active == 'config/homePage' || active == 'config/profiles') { %>active<% } %>">
                                 <%- include('./icons/config.ejs') %>
                                 • Config
                                 <%- include('./icons/arrow.ejs') %>
                             </a>
                         </label>
                         <ul class="content links">
-                            <li><a href="/config/profiles" class="reviews">
+                            <li><a href="/config/profiles" class="reviews <% if (active == 'config/profiles') { %>active<% } %>">
                                     <%- include('./icons/movieConfig.ejs') %>
                                     • Reviews
                             </a></li>
-                            <li><a href="/config/homepage" class="homepage">
+                            <li><a href="/config/homepage" class="homepage <% if (active == 'config/homePage') { %>active<% } %>">
                                 <%- include('./icons/tripleStar.ejs') %>
                                 • Destaques
                             </a></li>
