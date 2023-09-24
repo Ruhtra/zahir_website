@@ -65,7 +65,11 @@
                 </div>
                 <p class="address text-color">
                     <%- include('./assets/icons/local.ejs') %>
-                    <span>Endereo grande com descrição bem bonitinho e completamente enorme vai entrar aqui</span>
+                    <span><%= profile.local.uf %>, <%= profile.local.city %>, <%= profile.local.neighborhood %>, <%= profile.local.street %>, nº <%= profile.local.number %>
+                        <% if (profile.local.complement != null) { %>
+                            , <%= profile.local.complement %>
+                        <% } %>
+                    </span>
                 </p>
             </div>
         </div>

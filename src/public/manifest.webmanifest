@@ -1,0 +1,32 @@
+{
+    "theme_color": "#7152a0",
+    "background_color": "#000000",
+    "display": "browser",
+    "scope": "/",
+    "start_url": "/",
+    "name": "sitedozahir",
+    "short_name": "sitedozahir",
+    "description": "Oi, meu nome \u00e9 Ramon Sanmir, tenho 34 anos e moro em Fortaleza, desde que eu era muito novo j\u00e1 gostava do meio artistico e internet no geral, com 12 anos fiz um canal no YouTube com amigos e depois comecei a gravar v\u00eddeos para as redes sociais, no tempo sem muito apoio e por ser novo acabei sem dar continuidade. J\u00e1 vendi dindim alco\u00f3lico na praia para conseguir comprar meu computador e iniciar a vida na internet, tive alguns planos atrasados pela pandemia e comecei a fazer transmiss\u00f5es na twitch, ap\u00f3s esse per\u00edodo tendo como \u00fanica fonte de renda os jogos e streams, comecei a fazer conte\u00fado de experi\u00eancias e estou me reiventando a cada dia.",
+    "icons": [
+        {
+            "src": "/manifest/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/manifest/icon-256x256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "/manifest/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/manifest/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
