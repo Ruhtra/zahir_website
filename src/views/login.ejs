@@ -37,12 +37,12 @@
     <%- include('./assets/navbar.ejs', {active: null, permission: permission})%>
     <main>
         <div id="notifications"></div>
-        <div class="loginScreen">
+        <form class="loginScreen" onsubmit="event.preventDefault()">
             <h2>Login</h2>
             <input type="text" name="username" id="username" placeholder="Username">
             <input type="password" name="password" id="password" placeholder="Password">
-            <input type="button" value="Entrar">
-        </div>
+            <input type="submit" value="Entrar">
+        </form>
     </main>
 
     <%- include('./assets/footer.ejs') %>
@@ -85,7 +85,7 @@
             })
         });
 
-        const btn = document.querySelector('input[type="button"]')
+        const btn = document.querySelector('input[type="submit"]')
         btn.addEventListener('click', async (evt) => {
             evt.preventDefault()
             const data = {

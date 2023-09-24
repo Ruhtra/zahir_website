@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="stylesheet/flickity.css" media="screen">
     <link rel="icon" type="image/x-icon" href="/manifest/favicon.ico">
     <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#7152a0"/>
 
     <!-- <meta http-equiv="refresh" content="2" /> -->
 
@@ -89,6 +90,20 @@
     <%- include('assets/footer.ejs') %>
 
 <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+<script>
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js").then(
+            (registration) => {
+                console.log("Service worker registration succeeded:", registration);
+            },
+            (error) => {
+                console.error(`Service worker registration failed: ${error}`);
+            },
+        );
+    } else {
+        console.error("Service workers are not supported.");
+    }
+</script>
 <script>
     function mainFlickity(flkty) {
         let elements = flkty.cells.map(e => e.element)
