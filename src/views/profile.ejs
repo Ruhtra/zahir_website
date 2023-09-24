@@ -99,17 +99,41 @@
                     </div>
                     <% } %>
                 </div>
-            <div class="map">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d30997.11679150667!2d-46.669899839951746!3d-23.578244383247092!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce448183a461d1%3A0x9ba94b08ff335bae!2zU8OjbyBQYXVsbywgU1A!5e1!3m2!1spt-BR!2sbr!4v1693102348578!5m2!1spt-BR!2sbr"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                ></iframe>
-            </div>
+            <div id="map" class="map"></div>
         </div>
     </header>
     <%- include('./assets/footer.ejs') %>
+    <script>
+        function initMap() {
+                const cep = '<%= profile.local.cep %>';
+                
+                const geocoder = new google.maps.Geocoder();
+                geocoder.geocode( { 'address': cep}, function(results, status) {
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        const location = results[0].geometry.location;
+                        
+                        const map = new google.maps.Map(document.getElementById('map'), {
+                            center: location,
+                            zoom: 15
+                        });
+                        
+                        const marker = new google.maps.Marker({
+                            map: map,
+                            position: location
+                        });
+                    } else {
+                        const map = document.querySelector('#map')
+                        map.innerHTML = 'CEP não foi encontrado'
+                        map.style.display = 'flex'
+                        map.style.justifyContent = 'center'
+                        map.style.alignItems = 'center'
+                        map.style.fontSize = '2em'
+                        map.style.backgroundColor = 'rgba(0, 0, 0, .2)'
+                    }
+                });
+    
+            }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPTco1Jre2e_OinSY0ew44I7UiIzNsRls&callback=initMap"></script>
 </body>
 </html>
