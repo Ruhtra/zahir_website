@@ -37,10 +37,10 @@
                 <div class="back"></div>
             </div>
             <div class="rigth">
-                <% if (profile.resume) { %>
+                <% if (profile.promotion.title) { %>
                     <div class="description">
-                        <h3>Descrição do produto</h3>
-                        <p class="text-color"><%= profile.resume %></p>
+                        <h3>Produto em promoção: </h3>
+                        <p class="text-color"><%= profile.promotion.description %></p>
                     </div>
                 <% } %>
                 <% if (profile.informations) { %>
