@@ -7,7 +7,7 @@ const { queryDB } = require('../Errors.js')
 
 const f = require('../functions/functions.js')
 
-const structure = (obj) => {
+const structure = (obj, type) => {
     let data = {
         picture: obj.picture,
         name: obj.name,
@@ -37,7 +37,7 @@ const structure = (obj) => {
     }
     data = f.removeEmptyValues(data)
 
-    data['createdAt'] = new Date()
+    if (type = 'insert') data['createdAt'] = new Date()
     if (obj.category.categories != undefined) data['category']['categories'] = obj.category.categories.map((e) => new ObjectId(e))
 
     return data
@@ -102,7 +102,7 @@ const profile = {
                     let resbkt = await bucket.insert(file) // upload image for aws
                     data.picture = resbkt // inserted _id in profile
                 }
-                let response = await db.collection('profile').insertOne(structure(data))
+                let response = await db.collection('profile').insertOne(structure(data, 'insert'))
                 
                 await session.commitTransaction();
                 return response
@@ -153,7 +153,7 @@ const profile = {
                 }
 
                 let response =  await db.collection('profile').replaceOne(
-                    {_id: new ObjectId(data.id)}, structure(data)
+                    {_id: new ObjectId(data.id)}, structure(data, 'update')
                 )
                     
                 //remove categories
