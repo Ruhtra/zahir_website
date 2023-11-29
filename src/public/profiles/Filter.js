@@ -155,7 +155,7 @@ export default class Filter extends FilterSstructure  {
             e.preventDefault()
 
             // change visible categories
-            if (this.btn.type.querySelector('select').value == 'restaurante') this.btn.categories.parentNode.style.display = 'block'
+            if (['restaurante', 'all'].includes(this.btn.type.querySelector('select').value)) this.btn.categories.parentNode.style.display = 'block'
             else this.btn.categories.parentNode.style.display = 'none'
 
             this.filterMain()
@@ -206,7 +206,7 @@ export default class Filter extends FilterSstructure  {
         if (uf) this.filterUf(uf)
     }
     categories() {
-        if (this.btn.type.querySelector('select').value != 'restaurante') return
+        if (!['restaurante', 'all'].includes(this.btn.type.querySelector('select').value)) return
 
         let categories = [ ... this.btn.categories.querySelectorAll('input') ].map(e => {
             if (e.checked) return e.getAttribute('name')
