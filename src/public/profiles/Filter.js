@@ -25,6 +25,7 @@ class FilterSstructure {
     filterCategory(type) {
         this.arrFilter = this.data.map((e, i) => {
             if (this.arrFilter[i]) 
+                if (type == 'all') return 1
                 if (e['category'].type == type) return 1
             return 0
         });
@@ -170,7 +171,7 @@ export default class Filter extends FilterSstructure  {
                 e.preventDefault()
                 
                 this.btn.promotion.querySelector('input').checked = false
-                this.btn.type.querySelector('select').value = 'restaurante'
+                this.btn.type.querySelector('select').value = 'all'
                 this.btn.uf.querySelector('select').value = ''
                 this.btn.categories.style.display = 'flex'
                 this.btn.categories.querySelectorAll('input').forEach(e => {

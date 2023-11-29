@@ -7,7 +7,7 @@ const { queryDB } = require('../Errors.js')
 
 const f = require('../functions/functions.js')
 
-const structure = (obj, type) => {
+const structure = (obj, typeFunction) => {
     let data = {
         picture: obj.picture,
         name: obj.name,
@@ -37,7 +37,9 @@ const structure = (obj, type) => {
     }
     data = f.removeEmptyValues(data)
 
-    if (type = 'insert') data['createdAt'] = new Date()
+    if (obj.createdAt == undefined) data['createdAt'] = new Date()
+    else data['createdAt'] = obj.createdAt 
+
     if (obj.category.categories != undefined) data['category']['categories'] = obj.category.categories.map((e) => new ObjectId(e))
 
     return data
@@ -120,6 +122,9 @@ const profile = {
             try {
                 let item = await db.collection('profile').findOne({_id: new ObjectId(data.id)})
                 if (item == undefined) throw new Error('perfil não encontrado')
+
+                //Atribui data de criação
+                if (item.createdAt != undefined) data.createdAt = item.createdAt
             
                 // validate ids
                 if (data.category.categories != undefined) {
