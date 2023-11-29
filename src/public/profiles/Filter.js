@@ -94,11 +94,17 @@ class ScreenFilter {
             filterScreen: () => this.baseFilter.querySelector('#screenFilter')
         }
         this.btn = {
-            close: this.elements.filterScreen().querySelector('.close')
+            close: this.elements.filterScreen().querySelector('.close'),
+            confirm: this.elements.filterScreen().querySelector('.confirm')
         }
 
         // Starting buttons
         this.btn.close.addEventListener('click', (e) => {
+            e.preventDefault()
+
+            this.closeFilter()
+        })
+        this.btn.confirm.addEventListener('click', (e) => {
             e.preventDefault()
 
             this.closeFilter()

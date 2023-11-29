@@ -67,7 +67,10 @@ const profile = {
     },
     getList: async () => {
         const db = await connect();
-        let res = await db.collection('profile').aggregate(query.listProfile()).toArray()
+        let res = await db.collection('profile')
+            .aggregate(query.listProfile()).
+            sort({ "name": 1 })    
+        .toArray()
 
         return res
     },
