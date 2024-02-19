@@ -24,7 +24,7 @@ const main = async () => {
 
         // Config publics
             app.use(express.static('src/public'));
-            // app.use(cors());
+            app.use(cors());
         // Config ejs
             configEngine(app)
         // parse application
