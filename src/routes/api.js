@@ -10,6 +10,7 @@ const use = fn => (req, res, next) => {
 
 router.get('/profile/get', use(controllerApi.profile.get))
 router.get('/profile/getList', use(controllerApi.profile.getList))
+router.get('/profile/getRecents', use(controllerApi.profile.getRecents))
 
 router.post('/profile/insert', multer(upload.getConfig).single('file'), use(controllerApi.profile.insert))
 router.post('/profile/update', multer(upload.getConfig).single('file'), use(controllerApi.profile.update))
