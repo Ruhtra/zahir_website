@@ -55,6 +55,9 @@ module.exports = {
             if (error) throw error
 
             return res.send(await Database.profile.delete(value))
+        },
+        getRecents: async (req, res) => {
+            return res.send(await Database.profile.recents())
         }
     },
     homePage: {
