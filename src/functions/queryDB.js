@@ -5,7 +5,10 @@ const { connect, connectSession } = require('../config/mongoDB.js')
 const query = require("./query.js");
 const { queryDB } = require('../Errors.js')
 
-const f = require('../functions/functions.js')
+const f = require('../functions/functions.js');
+const { default: axios } = require("axios");
+
+const key = process.env.KEYGOOGLE
 
 const structure = (obj, typeFunction) => {
     let data = {
@@ -27,7 +30,9 @@ const structure = (obj, typeFunction) => {
           neighborhood: obj.local.neighborhood,
           street: obj.local.street,
           number: obj.local.number,
-          complement: obj.local.complement
+          complement: obj.local.complement,
+          lat: obj.local.lat,
+          lng: obj.local.lng
         },
         movie: obj.movie,
         promotion: {
@@ -43,6 +48,16 @@ const structure = (obj, typeFunction) => {
     if (obj.category.categories != undefined) data['category']['categories'] = obj.category.categories.map((e) => new ObjectId(e))
 
     return data
+}
+
+async function getLatLng(cep) {
+    let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${cep}&key=${key}`
+            
+    const response_lat_log = await axios.get(url);
+    if (response_lat_log.status <= 200 && response_lat_log.status > 300) throw new Error(`Erro ao consumir API do Google Maps`);
+    if (response_lat_log.data.results.length <= 0) throw new Error('Não foi possivel encontrar o cep específicado');
+
+    return response_lat_log.data.results[0].geometry.location
 }
 
 
@@ -101,6 +116,10 @@ const profile = {
                 }
             }
 
+            var lat_log = await getLatLng(data.local.cep)
+            data.local.lat = lat_log.lat
+            data.local.lng = lat_log.lng
+
             try {
                 // verified file
                 if (file) {
@@ -148,6 +167,11 @@ const profile = {
                         })            
                     }
                 }
+
+
+                var lat_log = await getLatLng(data.local.cep)
+                data.local.lat = lat_log.lat
+                data.local.lng = lat_log.lng
 
                 //verified file
                 if (file) {
