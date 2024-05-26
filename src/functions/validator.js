@@ -7,8 +7,8 @@ const idScheme = Joi.string().hex().length(24)
 const telephoneScheme = Joi.array().items(Joi.string().length(14))
 
 const profileScheme = Joi.object().keys({
-    name: Joi.string().max(15).required(),
-    resume: Joi.string().max(250),
+    name: Joi.string().max(100).required(),
+    resume: Joi.string().max(500),
     category: Joi.object({
         type: Joi.string().valid('hospedagem', 'restaurante', 'parque', 'lugares').required(),
         categories: Joi.when('type', {
