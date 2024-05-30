@@ -36,6 +36,7 @@ const main = async () => {
             app.use(cookieParser());
 
     // Routes
+        app.use('/api', require('./routes/apiAuthGoogle.js'))
         app.use('/api', includeJWTInHeader, require('./routes/api.js'))
         app.use('/', includeJWTInHeader, require('./routes/main.js'))
 
