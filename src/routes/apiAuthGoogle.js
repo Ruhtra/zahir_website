@@ -72,7 +72,7 @@ async function findAndUpdateUser(query, update) {
 const accessTokenCookkieoptions = {
     maxAge: 15 * 60 * 1000, // 15 min
     httpOnly: true,
-    domain: "sitedozahir.com, localhost",
+    // domain: "sitedozahir.com, localhost",
     path: "/",
     nameSize: "strict",
     secure: false
