@@ -31,9 +31,9 @@ module.exports = {
                 res.cookie("accessToken", newAccessToken, {
                     maxAge: 900000, // 15 mins
                     httpOnly: true,
-                    // domain: "localhost",
+                    // domain: process.env.production ? "https://zahir-website.onrender.com": "localhost",
                     path: "/",
-                    sameSite: "strict",
+                    sameSite: "none",
                     secure: true,
                 });
             }
