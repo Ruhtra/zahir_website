@@ -62,8 +62,7 @@ async function getGoogleuser(id_token, access_token) {
 const accessTokenCookkieoptions = {
     maxAge: 15 * 60 * 1000, // 15 min
     httpOnly: true,
-    //o doominio especificado deve ser o da api
-    // domain: "sitedozahir.com, localhost",
+    domain: process.env.production ? "https://zahir-website.onrender.com": "localhost",
     path: "/",
     sameSite: "strict",
     secure: true
