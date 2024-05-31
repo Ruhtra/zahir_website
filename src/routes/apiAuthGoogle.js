@@ -62,9 +62,9 @@ async function getGoogleuser(id_token, access_token) {
 const accessTokenCookkieoptions = {
     maxAge: 15 * 60 * 1000, // 15 min
     httpOnly: true,
-    domain: process.env.production ? "https://zahir-website.onrender.com": "localhost",
+    // domain: process.env.production ? "https://zahir-website.onrender.com": "localhost",
     path: "/",
-    sameSite: "strict",
+    sameSite: "none",
     secure: true
 }
 const refreshTokenCookieOptions = {

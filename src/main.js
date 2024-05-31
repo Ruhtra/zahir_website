@@ -28,15 +28,7 @@ const main = async () => {
     app.use(cors({
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-        origin: function (origin, callback) {
-            const allowedOrigins = ['https://localhost:5173', 'https://sitedozahir.com', 'https://zahir-website.onrender.com'];
-    
-            if (!origin || allowedOrigins.includes(origin)) {
-                callback(null, true); // Permitido
-            } else {
-                callback(new Error('Acesso não permitido por CORS')); // Não permitido
-            }
-        }
+        origin: true
     }));
     
     // Config ejs
