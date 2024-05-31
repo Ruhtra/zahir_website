@@ -33,8 +33,8 @@ module.exports = {
                     httpOnly: true,
                     // domain: "localhost",
                     path: "/",
-                    nameSite: "strict",
-                    secure: false,
+                    sameSite: "strict",
+                    secure: true,
                 });
             }
     

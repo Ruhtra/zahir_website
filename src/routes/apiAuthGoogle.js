@@ -65,8 +65,8 @@ const accessTokenCookkieoptions = {
     //o doominio especificado deve ser o da api
     // domain: "sitedozahir.com, localhost",
     path: "/",
-    nameSize: "strict",
-    secure: false
+    sameSite: "strict",
+    secure: true
 }
 const refreshTokenCookieOptions = {
     ...accessTokenCookkieoptions,
