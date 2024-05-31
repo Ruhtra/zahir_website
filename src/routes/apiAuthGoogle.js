@@ -1,10 +1,10 @@
 const { Router } = require("express")
 const { stringify } = require("qs");
+const { createSession } = require("../services/sessionService");
 const axios = require("axios");
 // const jwt = require("jsonwebtoken");
-const { v4: uuidv4 } = require('uuid');
-const { createSession } = require("../services/sessionService");
 const { signJwt } = require("../utils/jwtUtil");
+const { findAndUpdateUserr } = require("./bdFake");
 
 
 const use = fn => (req, res, next) => {
@@ -56,22 +56,13 @@ async function getGoogleuser(id_token, access_token) {
 
 }
 
-// bduser
-const bd = []
-async function findAndUpdateUser(query, update) {
-    const index = bd.findIndex(e => e.email === query.email);
-
-    if (index === -1) bd.push({_id: uuidv4(), ...update})
-    else bd[index] = { ...bd[index], ...update };
-
-    return bd.find(e => e.email === query.email);
-}
 
 
 // cookie
 const accessTokenCookkieoptions = {
     maxAge: 15 * 60 * 1000, // 15 min
     httpOnly: true,
+    //o doominio especificado deve ser o da api
     // domain: "sitedozahir.com, localhost",
     path: "/",
     nameSize: "strict",
@@ -102,7 +93,7 @@ router.get('/oauth/google', use(async (req, res) => {
     
 
     // atualiza o usuário no banco de dados
-        const user = await findAndUpdateUser({ email: googleUser.email, }, {
+        const user = await findAndUpdateUserr({ email: googleUser.email, }, {
             email: googleUser.email,
             name: googleUser.name,
             picture: googleUser.picture,
@@ -128,10 +119,16 @@ router.get('/oauth/google', use(async (req, res) => {
 
     // Redirectiona para a página correta
 
-    
-    const mode = req.query.mode
-    if (mode == "dev") return res.redirect("https://localhost:5173/")
+    // return res.redirect("https://localhost:5173/")
     return res.redirect("https://sitedozahir.com/")
+}))
+
+router.get("/getUser", use((req, res, next) => {
+    const user = res.locals.user;
+
+    if (!user) return res.sendStatus(403);
+    
+    return res.send(res.locals.user);
 }))
 
 

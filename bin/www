@@ -6,7 +6,8 @@
 
 var a = require('../src/main.js');
 var debug = require('debug')('testee:server');
-var http = require('http');
+var https = require('https');
+const fs = require('fs')
 
 a.then(app => {
 
@@ -18,11 +19,20 @@ a.then(app => {
 var port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
 
+ // Carregar certificado e chave
+ const cert = {
+  key: fs.readFileSync('./key.pem'),
+  cert: fs.readFileSync('./cert.pem')
+};
+
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = https.createServer({
+  key: cert.key,
+  cert: cert.cert,
+}, app);
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -1,17 +1,18 @@
-// import { get } from "lodash";
-// import config from "config";
+const { get } = require("lodash");
+// const config = require("config");
 const { v4: uuidv4 } = require("uuid");
-// import { FilterQuery, UpdateQuery } from "mongoose";
-// import SessionModel, { SessionDocument } from "../models/session.model";
-// import { verifyJwt, signJwt } from "../utils/jwt.utils";
-// import { findUser } from "./user.service";
+// const { FilterQuery, UpdateQuery } = require("mongoose");
+// const SessionModel, { SessionDocument } = require("../models/session.model");
+const { verifyJwt, signJwt } = require("../utils/jwtUtil");
+const { findUser: findUserr } = require("../routes/bdFake");
+// const { findUser } from "./user.service";
 
 
 const bdSessions = []
 
 
-module.exports.createSession =  async function createSession(userId, userAgent) {
-//   const session = await SessionModel.create({ user: userId, userAgent });
+async function createSession(userId, userAgent) {
+    //   const session = await SessionModel.create({ user: userId, userAgent });
     const session = {
         _id: uuidv4(),
         user: userId,
@@ -19,7 +20,7 @@ module.exports.createSession =  async function createSession(userId, userAgent) 
     }
     bdSessions.push(session)
 
-  return session;
+    return session;
 }
 
 // export async function findSessions(query: string) {
@@ -33,27 +34,29 @@ module.exports.createSession =  async function createSession(userId, userAgent) 
 //   return SessionModel.updateOne(query, update);
 // }
 
-// export async function reIssueAccessToken({
-//   refreshToken,
-// }: {
-//   refreshToken: string;
-// }) {
-//   const { decoded } = verifyJwt(refreshToken);
+async function reIssueAccessToken({ refreshToken }) {
+    const { decoded } = verifyJwt(refreshToken);
 
-//   if (!decoded || !get(decoded, "session")) return false;
+    if (!decoded || !get(decoded, "session")) return false;
 
-//   const session = await SessionModel.findById(get(decoded, "session"));
+    //   const session = await SessionModel.findById(get(decoded, "session"));
+    const session = bdSessions.find(e => e._id == get(decoded, "session"));
 
-//   if (!session || !session.valid) return false;
+    if (!session /*|| !session.valid*/) return false;
 
-//   const user = await findUser({ _id: session.user });
+    const user = await findUserr(session.user);
 
-//   if (!user) return false;
+    if (!user) return false;
 
-//   const accessToken = signJwt(
-//     { ...user, session: session._id },
-//     { expiresIn: config.get("accessTokenTtl") } // 15 minutes
-//   );
+    const accessToken = signJwt(
+        { ...user, session: session._id },
+        { expiresIn: process.env.accessTokenTtl } // 15 minutes
+    );
 
-//   return accessToken;
-// }
+    return accessToken;
+}
+
+module.exports = {
+    createSession,
+    reIssueAccessToken
+}
