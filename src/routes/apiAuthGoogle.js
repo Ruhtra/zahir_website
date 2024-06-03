@@ -117,9 +117,7 @@ router.get('/oauth/google', use(async (req, res) => {
     res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions)
 
     // Redirectiona para a página correta
-
-    // return res.redirect("https://localhost:5173/")
-    return res.redirect("https://sitedozahir.com/")
+    return res.redirect(process.env.URL_FRONTEND)
 }))
 
 router.get("/getUser", use((req, res, next) => {
