@@ -289,6 +289,47 @@ const homePage = {
     }
 }
 
+const googleUser = {
+    model: function (data) {
+        return {
+            email: data.email,
+            name: data.name,
+            picture: data.picture,
+        }
+    },
+    findById: async function (id) {
+        const db = await connect();
+        return await db.collection("googleUser").findOne({ _id: new ObjectId(id) });
+    },
+    findByEmail: async function (email) {
+        const db = await connect();
+        return await db.collection("googleUser").findOne({ email: email });
+    },
+    updateUser: async function (id, user) {
+        const db = await connect();
+        let response = await db.collection('googleUser').updateOne(
+            { _id: new ObjectId(id) },
+            { "$set": this.model(user) }
+        );
+        return response;
+    },
+    createUser: async function (user) {
+        const userFound = await this.findByEmail(user.email);
+        if (userFound) throw new Error("Usuário já existe no banco");
+
+        const db = await connect();
+        return await db.collection('googleUser').insertOne(this.model(user));
+    },
+    createAndUpdateUser: async function (user) {
+        const userFound = await this.findByEmail(user.email);
+        if (userFound) this.updateUser(userFound._id, user);
+        else this.createUser(user);
+
+        return await this.findByEmail(user.email);
+    }
+};
+
+
 const promotions = {
     getAll: async () => {
         const db = await connect();
@@ -319,5 +360,6 @@ module.exports = {
     homePage,
     categories,
     promotions,
-    auth
+    auth,
+    googleUser
 }

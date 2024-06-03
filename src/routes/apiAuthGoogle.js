@@ -1,10 +1,11 @@
 const { Router } = require("express")
 const { stringify } = require("qs");
-const { createSession } = require("../services/sessionService");
+// const { createSession } = require("../services/sessionService");
 const axios = require("axios");
 // const jwt = require("jsonwebtoken");
-const { signJwt } = require("../utils/jwtUtil");
-const { findAndUpdateUserr } = require("./bdFake");
+// const { signJwt } = require("../utils/jwtUtil");
+// const { findAndUpdateUserr } = require("./bdFake");
+const { googleUser } = require("../functions/queryDB");
 
 
 const use = fn => (req, res, next) => {
@@ -59,73 +60,64 @@ async function getGoogleuser(id_token, access_token) {
 
 
 // cookie
-const accessTokenCookkieoptions = {
-    maxAge: 15 * 60 * 1000, // 15 min
-    httpOnly: true,
-    // domain: process.env.production ? "https://zahir-website.onrender.com": "localhost",
-    path: "/",
-    sameSite: "none",
-    secure: true
-}
-const refreshTokenCookieOptions = {
-    ...accessTokenCookkieoptions,
-    maxAge: 3.154e10 // 1 year
-}
+// const accessTokenCookkieoptions = {
+//     maxAge: 15 * 60 * 1000, // 15 min
+//     httpOnly: true,
+//     // domain: process.env.production ? "https://zahir-website.onrender.com": "localhost",
+//     path: "/",
+//     sameSite: "none",
+//     secure: true
+// }
+// const refreshTokenCookieOptions = {
+//     ...accessTokenCookkieoptions,
+//     maxAge: 3.154e10 // 1 year
+// }
 
 
 router.get('/oauth/google', use(async (req, res) => {
-
-
     // Obtém o token de acesso com o google
-        const code = req.query.code
-        if (!code) throw new Error("Code params not defined")
-        const { id_token, access_token } = await getGoogleOauthToken(code)
+    const code = req.query.code
+    if (!code) throw new Error("Code params not defined")
+    const { id_token, access_token } = await getGoogleOauthToken(code)
 
 
     // Obtém informações do usuario com o token
-        // const googleUser = jwt.decode(id_token)
-        const googleUser = await getGoogleuser(id_token, access_token)
+    // const googleUser = jwt.decode(id_token)
+    const googleUserResponse = await getGoogleuser(id_token, access_token)
 
 
     // filtra usuários que não tem email verificado
-        if (!googleUser.verified_email) return res.status(403).send("Google account is not verified")
-    
+    if (!googleUserResponse.verified_email) return res.status(403).send("Google account is not verified")
+
 
     // atualiza o usuário no banco de dados
-        const user = await findAndUpdateUserr({ email: googleUser.email, }, {
-            email: googleUser.email,
-            name: googleUser.name,
-            picture: googleUser.picture,
+    const user = await googleUser.createAndUpdateUser({
+        email: googleUserResponse.email,
+        name: googleUserResponse.name,
+        picture: googleUserResponse.picture,
+    })
+
+
+    req.session.regenerate(function (err) {
+        // if (err) next(err)
+        if (err) console.log(err);
+
+        req.session.userId  = user._id.toString()
+
+        req.session.save(function (err) {
+            // if (err) return next(err)
+            if (err) console.log(err);
+
+            return res.redirect(process.env.URL_FRONTEND)
         })
-
-    //Criando sessão
-    const session = await createSession(user._id, req.get("user-agent") || "")
-
-    const accessToken = signJwt(
-        { ...user, session: session._id },
-        { expiresIn: process.env.accessTokenTtl } // 15 minutes
-    );
-
-    const refreshToken = signJwt(
-        { ...user, session: session._id },
-        { expiresIn: process.env.refreshTokenTtl} // 1 year
-      );
-
-
-    // Retornar o access_token e o refresh_token
-    res.cookie("accessToken", accessToken, accessTokenCookkieoptions)
-    res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions)
-
-    // Redirectiona para a página correta
-    return res.redirect(process.env.URL_FRONTEND)
+    })
 }))
 
-router.get("/getUser", use((req, res, next) => {
-    const user = res.locals.user;
+router.get("/getUser", use(async (req, res, next) => {
+    console.log(req.session);
+    if (!req.session || !req.session.userId) return res.sendStatus(403);
 
-    if (!user) return res.sendStatus(403);
-    
-    return res.send(res.locals.user);
+    return res.send(await googleUser.findById(req.session.userId))
 }))
 
 
