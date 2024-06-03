@@ -20,7 +20,7 @@ a.then(app => {
 var port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
 
-if (process.env.production) {
+if (process.env.https != "true") {
   /**
    * Create HTTP server.
    */
