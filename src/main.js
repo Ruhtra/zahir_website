@@ -4,6 +4,7 @@ const express = require("express");
 const Joi = require('joi');
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
+const session = require('express-session')
 
 const configEngine = require("./config/viewEngine.js");
 const Database = require("./functions/queryDB.js");
@@ -40,6 +41,25 @@ const main = async () => {
     app.use(express.json())
     //config cookie
     app.use(cookieParser());
+
+    app.use(session({
+        name: 'accessTokenSession',
+        secret: process.env.SECRET,
+        cookie: {
+            maxAge: 15 * 60 * 1000, // 15 min
+            httpOnly: true,
+            // domain: process.env.production ? "https://zahir-website.onrender.com": "localhost",
+            path: "/",
+            sameSite: "none",
+            secure: true
+        },
+        saveUninitialized: false,
+        resave: true
+    }))
+
+    app.use((req, res, next) => {
+        next()
+    })
 
     // Routes
     app.use('/api', deserializeUser, require('./routes/apiAuthGoogle.js'))
