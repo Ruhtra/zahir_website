@@ -32,6 +32,7 @@ const main = async () => {
         origin: true
     }));
     
+    app.set('trust proxy', 1) // trust first proxy
     // Config ejs
     configEngine(app)
     // parse application
