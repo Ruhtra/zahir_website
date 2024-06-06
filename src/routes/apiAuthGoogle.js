@@ -114,8 +114,7 @@ router.get('/oauth/google', use(async (req, res) => {
 }))
 
 router.get("/getUser", use(async (req, res, next) => {
-    console.log(req.session);
-    if (!req.session || !req.session.userId) return res.sendStatus(403);
+    if (!req.session || !req.session.userId) return res.sendStatus(401);
 
     return res.send(await googleUser.findById(req.session.userId))
 }))
