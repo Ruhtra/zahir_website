@@ -21,17 +21,17 @@ const structure = (obj, typeFunction) => {
             whatsapp: obj.telephones.whatsapp,
             telephone: obj.telephones.telephone
         },
-        local: {
-            cep: obj.local.cep,
-            uf: obj.local.uf,
-            city: obj.local.city,
-            neighborhood: obj.local.neighborhood,
-            street: obj.local.street,
-            number: obj.local.number,
-            complement: obj.local.complement,
-            lat: obj.local.lat,
-            lng: obj.local.lng
-        },
+        // local: {
+        //     cep: obj.local.cep,
+        //     uf: obj.local.uf,
+        //     city: obj.local.city,
+        //     neighborhood: obj.local.neighborhood,
+        //     street: obj.local.street,
+        //     number: obj.local.number,
+        //     complement: obj.local.complement,
+        //     lat: obj.local.lat,
+        //     lng: obj.local.lng
+        // },
         movie: obj.movie,
         promotion: {
             title: obj.promotion.title,
@@ -45,6 +45,7 @@ const structure = (obj, typeFunction) => {
 
     if (obj.category.categories != undefined) data['category']['categories'] = obj.category.categories.map((e) => new ObjectId(e))
 
+    if (obj.local != undefined) data['local'] = obj.local
     return data
 }
 
@@ -113,9 +114,13 @@ const profile = {
                 }
             }
 
-            var lat_log = await getLocaleByCep(data.local.cep)
-            data.local.lat = lat_log.lat
-            data.local.lng = lat_log.lng
+            if (data.local != undefined) {
+                var lat_log = await getLocaleByCep(data.local.cep)
+                data.local.lat = lat_log.lat
+                data.local.lng = lat_log.lng
+            }
+
+          
 
             try {
                 // verified file
@@ -166,9 +171,11 @@ const profile = {
                 }
 
 
-                var lat_log = await getLocaleByCep(data.local.cep)
-                data.local.lat = lat_log.lat
-                data.local.lng = lat_log.lng
+                if (data.local != undefined) {
+                    var lat_log = await getLocaleByCep(data.local.cep)
+                    data.local.lat = lat_log.lat
+                    data.local.lng = lat_log.lng
+                }
 
                 //verified file
                 if (file) {
