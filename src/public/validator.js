@@ -36,7 +36,7 @@ const profileScheme = Joi.object().keys({
         street: Joi.string().max(100).required(),
         number: Joi.string().max(10).required(),
         complement: Joi.string().max(250)
-    }).required(),
+    }),
     movie: Joi.string().uri(),
     promotion: Joi.object().keys({
         title: Joi.string().max(20),

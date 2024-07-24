@@ -238,6 +238,10 @@ class Functions {
                 description: this.get.promotion.description().value
             }
         }
+        
+        if (Object.values(data.local).every(value => !value)) {
+            delete data.local;
+        }
         if (data.category.type == 'restaurante') data.category['categories'] = [ ... this.form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
         if (data.category.type == 'restaurante') data.category['newCategories'] = [ ... this.form.querySelectorAll('#category #newCategories input:checked') ].map(e => e.getAttribute('name'))
 
@@ -274,6 +278,10 @@ class Functions {
                 title: this.get.promotion.title().value,
                 description: this.get.promotion.description().value
             }
+        }
+
+        if (Object.values(data.local).every(value => !value)) {
+            delete data.local;
         }
         if (data.category.type == 'restaurante') data.category['categories'] = [ ... this.form.querySelectorAll('#category #categories input:checked') ].map(e => e.getAttribute('name'))
         if (data.category.type == 'restaurante') data.category['newCategories'] = [ ... this.form.querySelectorAll('#category #newCategories input:checked') ].map(e => e.getAttribute('name'))
