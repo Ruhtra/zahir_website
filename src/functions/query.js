@@ -27,6 +27,7 @@ module.exports.listProfile = () => { return [
           },
         },
       },
+      createdAt: 1,
       promotion: 1,
     }
   }
