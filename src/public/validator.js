@@ -11,7 +11,7 @@ const profileScheme = Joi.object().keys({
     name: Joi.string().max(100).required(),
     resume: Joi.string().max(500),
     category: Joi.object({
-        type: Joi.string().valid('hospedagem', 'restaurante', 'parque', 'lugares').required(),
+        type: Joi.string().valid('hospedagem', 'restaurante', 'parque', 'lugares', 'quadros').required(),
         categories: Joi.when('type', {
             is: 'restaurante',
             then: Joi.array().items(idScheme).required(),
