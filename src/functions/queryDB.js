@@ -34,6 +34,7 @@ const structure = (obj, typeFunction) => {
         // },
         movie: obj.movie,
         promotion: {
+            active: obj.promotion.active,
             title: obj.promotion.title,
             description: obj.promotion.description
         }

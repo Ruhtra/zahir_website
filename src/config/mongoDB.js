@@ -52,8 +52,8 @@ function configFunctions() {
         return;
       }
       case 'replace': {
-        if (change.fullDocument.promotion == undefined) verify.homePage.delete(deletedProfileId)
-        else if (change.fullDocument.promotion.title == undefined) verify.homePage.delete(deletedProfileId)
+        if (change.fullDocument.promotion.active == false) verify.homePage.delete(deletedProfileId)
+        // else if (change.fullDocument.promotion.title == undefined) verify.homePage.delete(deletedProfileId)
         // verify.categories.notUsed()
         return;
       }

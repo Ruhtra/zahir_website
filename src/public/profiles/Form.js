@@ -205,6 +205,7 @@ class Functions {
         },
         movie: () => this.form.querySelector('#movie input'),
         promotion: {
+            active: () => this.form.querySelector("#promotion #active input"),
             title: () => this.form.querySelector("#promotion #title input"),
             description: () => this.form.querySelector("#promotion #description textarea")
         },
@@ -234,6 +235,7 @@ class Functions {
             },
             movie: this.get.movie().value,
             promotion: {
+                active: this.get.promotion.active().checked,
                 title: this.get.promotion.title().value,
                 description: this.get.promotion.description().value
             }
@@ -275,6 +277,7 @@ class Functions {
             },
             movie: this.get.movie().value,
             promotion: {
+                active: this.get.promotion.active().checked,
                 title: this.get.promotion.title().value,
                 description: this.get.promotion.description().value
             }
@@ -318,17 +321,21 @@ class Functions {
             this.telephoneFunctions.add.whatsapp(e.slice(3))
         })
 
+
         // Local
-        this.get.local.cep().value = data.local.cep
-        this.get.local.uf().value = data.local.uf
-        this.get.local.city().value = data.local.city
-        this.get.local.neighborhood().value = data.local.neighborhood
-        this.get.local.street().value = data.local.street
-        this.get.local.number().value = data.local.number
-        if (data.local.complement)this.get.local.complement().value = data.local.complement
+        if (data.local) {
+            this.get.local.cep().value = data.local.cep
+            this.get.local.uf().value = data.local.uf
+            this.get.local.city().value = data.local.city
+            this.get.local.neighborhood().value = data.local.neighborhood
+            this.get.local.street().value = data.local.street
+            this.get.local.number().value = data.local.number
+            if (data.local.complement)this.get.local.complement().value = data.local.complement
+        }
 
         if (data.movie)this.get.movie().value = data.movie
         // Promotion
+        this.get.promotion.active().checked = data.promotion.active
         if (data.promotion.title) this.get.promotion.title().value = data.promotion.title
         if (data.promotion.description) this.get.promotion.description().value = data.promotion.description
     }
@@ -374,6 +381,7 @@ class Functions {
 
         
         this.get.movie().value = ''
+        this.get.promotion.active().checked = false
         this.get.promotion.title().value = ''
         this.get.promotion.description().value = ''
     }
