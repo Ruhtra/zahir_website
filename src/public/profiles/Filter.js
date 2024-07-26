@@ -18,7 +18,7 @@ class FilterSstructure {
     filterPromotion() {
         this.arrFilter = this.data.map((e, i) => {
             if (this.arrFilter[i] == 1) 
-                if (Object.keys(e['promotion']).length > 0) return 1
+                if (e.promotion.active) return 1
             return 0
         })
     }

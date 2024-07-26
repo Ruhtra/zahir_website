@@ -157,6 +157,7 @@
     /* categories */
         #form #category #categories {
             display: flex;
+            flex-wrap: wrap;
             gap: 1em;
         }
         /* items */
