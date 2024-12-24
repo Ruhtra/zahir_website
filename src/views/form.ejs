@@ -1,37 +1,56 @@
 <form action="POST" id="form">
-    <div id="id" style="display: none;">
-        <input type="hidden" name="id">
+  <div id="id" style="display: none">
+    <input type="hidden" name="id" />
+  </div>
+  <div id="name">
+    <input id="in_name" type="text" name="name" placeholder="Insira o nome" />
+  </div>
+  <div id="promotion">
+    <div id="active">
+      <label for="in_active">Promoção ativa</label>
+      <input type="checkbox" id="in_active" />
     </div>
-    <div id="name">
-        <input id="in_name" type="text" name="name" placeholder="Insira o nome">
+    <div id="title">
+      <input
+        id="in_title"
+        type="text"
+        name="title"
+        placeholder="Titulo da promoção"
+      />
     </div>
-    <div id="promotion">
-        <div id="active">
-            <label for="in_active">Promoção ativa</label>
-            <input type="checkbox" id="in_active" />
-        </div>
-        <div id="title">
-            <input id="in_title" type="text" name="title" placeholder="Titulo da promoção">
-        </div>
-        <div id="description">
-            <textarea id="in_description" name="description" placeholder="Descrição da promoção"></textarea>
-        </div>
+    <div id="description">
+      <textarea
+        id="in_description"
+        name="description"
+        placeholder="Descrição da promoção"
+      ></textarea>
     </div>
-    <div id="picture">
-        <label for="in_picture">
-            <img src="" alt="">
-            <span class="select msg">select img</span>
-            <span class="new msg">insira nova mensage</span>
-            <div class="options">
-                <button type="button" class="clear">clear</button>
-            </div>
-        </label>
-        <input id="in_picture" type="file" name="picture" accept=".png,.jpg,.jpeg" style="display: none;">
-    </div>
-    <div id="resume">
-        <textarea id="in_resume" name="resume" placeholder="Pequeno resumo"></textarea>
-    </div>
-    <div id="category">
+  </div>
+  <div id="picture">
+    <label for="in_picture">
+      <img src="" alt="" />
+      <span class="select msg">select img</span>
+      <span class="new msg">insira nova mensage</span>
+      <div class="options">
+        <button type="button" class="clear">clear</button>
+      </div>
+    </label>
+    <input
+      id="in_picture"
+      type="file"
+      name="picture"
+      accept=".png,.jpg,.jpeg"
+      style="display: none"
+    />
+  </div>
+  <div id="resume">
+    <textarea
+      id="in_resume"
+      name="resume"
+      placeholder="Pequeno resumo"
+    ></textarea>
+  </div>
+  <!-- <div id="category">
         <select name="type" id="type">
             <option value="restaurante" selected>restaurante</option>
             <option value="hospedagem">hospedagem</option>
@@ -45,72 +64,117 @@
                 <input type="text" id="in_new" placeholder="Adicionar" >
             </div>
         </div>
+    </div> -->
+  <div id="category">
+    <div id="type">
+      <p>!!! É necessário que pelo menos uma seja selecionada!!!</p>
+      <label name="hospedagem">
+        <input id="0" type="checkbox" name="hospedagem" value="hospedagem" />
+        Hospedagem
+      </label>
+      <label name="restaurante">
+        <input id="1" type="checkbox" name="restaurante" value="restaurante" />
+        Restaurante
+      </label>
+      <label name="parque">
+        <input id="2" type="checkbox" name="parque" value="parque" /> Parque
+      </label>
+      <label name="lugares">
+        <input id="3" type="checkbox" name="lugares" value="lugares" /> Lugares
+      </label>
+      <label name="quadros">
+        <input id="4" type="checkbox" name="quadros" value="quadros" /> Quadros
+      </label>
     </div>
-    <div id="movie">
-        <input id="in_movie" type="url" name="movie" placeholder="Url do video">
-    </div>  
-    <div id="informations">
-        <textarea id="in_informations" name="informations" cols="30" rows="10" placeholder="Informações"></textarea>
+    <p>Selecione as categorias:</p>
+    <div id="categories"></div>
+    <div id="newCategories">
+      <div id="new" class="item">
+        <input type="text" id="in_new" placeholder="Adicionar" />
+      </div>
     </div>
-    <div id="telephones">
-        <div class="insert-cell">
-            <input type="button" value="telephone">
-            <input type="button" value="whatsapp">
-        </div>
-    </div> 
-    <div id="local">
-        <div id="cep">
-            <input id="in_cep" type="text" name="cep" placeholder="cep">
-        </div>
-        <div id="uf">
-            <select name="uf">
-                <option value="" selected>None</option>
-                <option value="AC">AC</option>
-                <option value="AL">AL</option>
-                <option value="AM">AM</option>
-                <option value="AP">AP</option>
-                <option value="BA">BA</option>
-                <option value="CE">CE</option>
-                <option value="DF">DF</option>
-                <option value="ES">ES</option>
-                <option value="GO">GO</option>
-                <option value="MA">MA</option>
-                <option value="MG">MG</option>
-                <option value="MS">MS</option>
-                <option value="MT">MT</option>
-                <option value="PA">PA</option>
-                <option value="PB">PB</option>
-                <option value="PE">PE</option>
-                <option value="PI">PI</option>
-                <option value="PR">PR</option>
-                <option value="RJ">RJ</option>
-                <option value="RN">RN</option>
-                <option value="RO">RO</option>
-                <option value="RR">RR</option>
-                <option value="RS">RS</option>
-                <option value="SC">SC</option>
-                <option value="SE">SE</option>
-                <option value="SP">SP</option>
-                <option value="TO">TO</option>
-            </select>
-        </div>
-        <div id="city">
-            <input id="in_city" type="text" name="city" placeholder="city">
-        </div>
-        <div id="neighborhood">
-            <input id="in_neighborhood" type="text" name="neighborhood" placeholder="neighborhood">
-        </div>
-        <div id="number" maxlength="10">
-            <input id="in_number" type="text" name="number" placeholder="number">
-        </div>
-        <div id="street">
-            <input id="in_street" type="text" name="street" placeholder="street">
-        </div>
-        <div id="complement">
-            <textarea id="in_complement" name="complement" placeholder="complement"></textarea>
-        </div>
-    </div>
+  </div>
 
-    <input id="insert" type="button" value="insert">
-    <input id="update" type="button" value="update">
+  <div id="movie">
+    <input id="in_movie" type="url" name="movie" placeholder="Url do video" />
+  </div>
+  <div id="informations">
+    <textarea
+      id="in_informations"
+      name="informations"
+      cols="30"
+      rows="10"
+      placeholder="Informações"
+    ></textarea>
+  </div>
+  <div id="telephones">
+    <div class="insert-cell">
+      <input type="button" value="telephone" />
+      <input type="button" value="whatsapp" />
+    </div>
+  </div>
+  <div id="local">
+    <div id="cep">
+      <input id="in_cep" type="text" name="cep" placeholder="cep" />
+    </div>
+    <div id="uf">
+      <select name="uf">
+        <option value="" selected>None</option>
+        <option value="AC">AC</option>
+        <option value="AL">AL</option>
+        <option value="AM">AM</option>
+        <option value="AP">AP</option>
+        <option value="BA">BA</option>
+        <option value="CE">CE</option>
+        <option value="DF">DF</option>
+        <option value="ES">ES</option>
+        <option value="GO">GO</option>
+        <option value="MA">MA</option>
+        <option value="MG">MG</option>
+        <option value="MS">MS</option>
+        <option value="MT">MT</option>
+        <option value="PA">PA</option>
+        <option value="PB">PB</option>
+        <option value="PE">PE</option>
+        <option value="PI">PI</option>
+        <option value="PR">PR</option>
+        <option value="RJ">RJ</option>
+        <option value="RN">RN</option>
+        <option value="RO">RO</option>
+        <option value="RR">RR</option>
+        <option value="RS">RS</option>
+        <option value="SC">SC</option>
+        <option value="SE">SE</option>
+        <option value="SP">SP</option>
+        <option value="TO">TO</option>
+      </select>
+    </div>
+    <div id="city">
+      <input id="in_city" type="text" name="city" placeholder="city" />
+    </div>
+    <div id="neighborhood">
+      <input
+        id="in_neighborhood"
+        type="text"
+        name="neighborhood"
+        placeholder="neighborhood"
+      />
+    </div>
+    <div id="number" maxlength="10">
+      <input id="in_number" type="text" name="number" placeholder="number" />
+    </div>
+    <div id="street">
+      <input id="in_street" type="text" name="street" placeholder="street" />
+    </div>
+    <div id="complement">
+      <textarea
+        id="in_complement"
+        name="complement"
+        placeholder="complement"
+      ></textarea>
+    </div>
+  </div>
+
+  <input id="insert" type="button" value="insert" />
+  <input id="update" type="button" value="update" />
 </form>
