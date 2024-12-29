@@ -7,6 +7,9 @@
     "start": "node ./bin/www",
     "dev": "nodemon ./bin/www -e js,ejs"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Ruhtra/zahir_website.git"
