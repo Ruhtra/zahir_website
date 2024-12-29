@@ -1,0 +1,12 @@
+### Enviar Email
+POST http://localhost:4000/api/email/send
+Content-Type: application/json
+
+{
+  "nome": "Tamyris Rezende",
+  "email": "tamyris.rezende@gmail.com",
+  "arroba": "ruhtra",
+  "telefone": "84999221557",
+  "mensagem": "Vá pra cama, que eu vou te usar"
+
+}

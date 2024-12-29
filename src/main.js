@@ -10,7 +10,6 @@ const configEngine = require("./config/viewEngine.js");
 const Database = require("./functions/queryDB.js");
 const { includeJWTInHeader } = require('./middleware/jwt.js');
 const { deserializeUser } = require('./middleware/deserializeUser.js')
-
 async function startingModules() {
     console.log(" >. starting modules")
     console.log(await Database.testConnect())
