@@ -26,4 +26,6 @@ router.get('/promotions/getAll', use(controllerApi.promotions.getAll))
 router.post('/auth/login', use(controllerAuth.login))
 router.post('/auth/verifyJWT', use(controllerAuth.verifyJWT))
 
+router.post('/email/send', use(controllerApi.email.send))
+
 module.exports = router
