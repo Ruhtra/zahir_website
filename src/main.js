@@ -4,15 +4,52 @@ const express = require("express");
 const Joi = require('joi');
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
-const session = require('express-session')
+const session = require('express-session');
+const cron = require('node-cron'); // Importando o node-cron
 
 const configEngine = require("./config/viewEngine.js");
 const Database = require("./functions/queryDB.js");
 const { includeJWTInHeader } = require('./middleware/jwt.js');
-const { deserializeUser } = require('./middleware/deserializeUser.js')
+const { deserializeUser } = require('./middleware/deserializeUser.js');
+const { SocialMediaFollowers } = require('./packages/SocialMedia.js');
+const { followers } = require('./functions/queryDB.js')
+
+
+
+
 async function startingModules() {
+    const socialMediaFollowers = new SocialMediaFollowers({
+        instagram: 'dozahir',    // Instagram Username
+        tiktok: 'dozahir',       // TikTok Username
+        youtube: 'zahiryt',      // YouTube Username
+        sumTotal: true           // Se quiser a soma total de seguidores
+    });
+
+    // Verifica seguidores uma vez no início
     console.log(" >. starting modules")
     console.log(await Database.testConnect())
+
+
+    const hour = "10h00"
+    // Agendar tarefa para rodar todos os dias às 10 horas
+    console.log('> . Agendado próxima busca pelos seguidres as '+hour);
+    cron.schedule('0 10 * * *', async () => {
+        console.log('Executando a busca de seguidores às '+hour+'!');
+        
+        try {
+            // Obtendo os dados dos seguidores
+            const followersData = await socialMediaFollowers.getFollowers();
+            console.log('Dados de seguidores:', followersData);
+    
+            // Salvar no banco de dados
+            const { instagram, tiktok, youtube, total } = followersData;
+            await followers.setAll(instagram, tiktok, youtube, total);
+    
+            console.log('Dados de seguidores salvos com sucesso!');
+        } catch (error) {
+            console.error('Erro ao buscar ou salvar os dados de seguidores:', error);
+        }
+    });
 }
 
 const main = async () => {
@@ -86,4 +123,5 @@ const main = async () => {
     //    console.log(` >. Server running in: ${PORT}`)
     //})
 }
-module.exports = main()
+
+module.exports = main();

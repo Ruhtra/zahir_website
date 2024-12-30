@@ -263,5 +263,26 @@ module.exports = {
             res.status(500).json({ message: "Erro no servidor" });
           }
         },
-      }
+    },
+    followers: {
+        get: async (req, res) => {
+             try {
+                 // Chama a função get para buscar os dados de seguidores
+                 const followersData = await Database.followers.get();
+     
+                 // Verifica se os dados foram encontrados
+                 if (followersData) {
+                     // Retorna os dados de seguidores com sucesso
+                     res.status(200).json(followersData);
+                 } else {
+                     // Se não encontrar os dados de seguidores, retorna um erro
+                     res.status(404).json({ message: "Nenhum registro de seguidores encontrado." });
+                 }
+             } catch (err) {
+                 // Se ocorrer um erro durante a operação
+                 console.error("Erro ao buscar seguidores:", err);
+                 res.status(500).json({ message: "Erro no servidor" });
+             }
+         }
+     }
 }

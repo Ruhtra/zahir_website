@@ -366,6 +366,52 @@ const auth = {
     }
 }
 
+
+const followers = {
+    setAll: async (instagramFollowers, tiktokFollowers, youtubeFollowers, totalFollowers) => {
+        const db = await connect();  // Conectar ao banco de dados
+        const collection = db.collection('followers');  // Defina o nome da sua coleção
+
+        // Procurar o primeiro registro (se existir)
+        const existingRecord = await collection.findOne({});
+
+        if (existingRecord) {
+            // Se o registro já existir, atualize o registro
+            await collection.updateOne(
+                {},  // Para garantir que estamos atualizando o primeiro (único) registro
+                {
+                    $set: {
+                        instagram: instagramFollowers,
+                        tiktok: tiktokFollowers,
+                        youtube: youtubeFollowers,
+                        total: totalFollowers
+                    }
+                }
+            );
+            console.log('Registro de seguidores atualizado!');
+        } else {
+            // Caso não exista nenhum registro, cria um novo
+            await collection.insertOne({
+                instagram: instagramFollowers,
+                tiktok: tiktokFollowers,
+                youtube: youtubeFollowers,
+                total: totalFollowers
+            });
+            console.log('Novo registro de seguidores criado!');
+        }
+    },
+    get: async () => {
+        const db = await connect();  // Conectar ao banco de dados
+        const collection = db.collection('followers');  // Defina o nome da sua coleção
+
+        // Buscar o primeiro (único) registro na coleção
+        const record = await collection.findOne({});
+
+        if (record) return record;
+        return null; 
+    }
+};
+
 module.exports = {
     testConnect,
     getLogin,
@@ -374,5 +420,6 @@ module.exports = {
     categories,
     promotions,
     auth,
-    googleUser
+    googleUser,
+    followers
 }
