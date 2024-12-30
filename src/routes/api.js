@@ -28,4 +28,6 @@ router.post('/auth/verifyJWT', use(controllerAuth.verifyJWT))
 
 router.post('/email/send', use(controllerApi.email.send))
 
+router.get('/followers/get', use(controllerApi.followers.get))
+
 module.exports = router
