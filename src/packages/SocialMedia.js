@@ -85,7 +85,7 @@ class YouTube {
     _name = "";
     constructor(name) {
         if (!name) throw new Error("Name is required");
-        this._name = name;
+        this._name = '@' + name;
     }
 
     converterYoutubeFollowers(followers) {
@@ -119,9 +119,9 @@ class YouTube {
         await page.goto(`https://www.youtube.com/${this._name}`, { waitUntil: 'networkidle2' });
 
         try {
-            await page.waitForSelector('.yt-core-attributed-string.yt-content-metadata-view-model-wiz__metadata-text.yt-core-attributed-string--white-space-pre-wrap.yt-core-attributed-string--link-inherit-color:nth-child(1)', { timeout: 10000 });
+            await page.waitForSelector('.yt-core-attributed-string.yt-content-metadata-view-model__metadata-text.yt-core-attributed-string--white-space-pre-wrap.yt-core-attributed-string--link-inherit-color:nth-child(1)', { timeout: 10000 });
             const inscritos = await page.evaluate(() => {
-                const elements = document.querySelectorAll('.yt-core-attributed-string.yt-content-metadata-view-model-wiz__metadata-text.yt-core-attributed-string--white-space-pre-wrap.yt-core-attributed-string--link-inherit-color:nth-child(1)');
+                const elements = document.querySelectorAll('.yt-core-attributed-string.yt-content-metadata-view-model__metadata-text.yt-core-attributed-string--white-space-pre-wrap.yt-core-attributed-string--link-inherit-color:nth-child(1)');
                 const result = [];
                 elements.forEach((element) => {
                     const text = element.innerText.trim();
